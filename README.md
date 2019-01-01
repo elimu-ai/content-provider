@@ -1,4 +1,4 @@
-# content-provider
+# Content Provider
 
 Android application which downloads educational content to the tablet and provides it to other apps
 
