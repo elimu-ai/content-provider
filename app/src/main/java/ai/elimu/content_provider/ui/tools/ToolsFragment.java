@@ -23,8 +23,7 @@ public class ToolsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        toolsViewModel =
-                ViewModelProviders.of(this).get(ToolsViewModel.class);
+        toolsViewModel = ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tools, container, false);
         final TextView textView = root.findViewById(R.id.text_tools);
         toolsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

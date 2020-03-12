@@ -23,8 +23,7 @@ public class SendFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        sendViewModel =
-                ViewModelProviders.of(this).get(SendViewModel.class);
+        sendViewModel = ViewModelProviders.of(this).get(SendViewModel.class);
         View root = inflater.inflate(R.layout.fragment_send, container, false);
         final TextView textView = root.findViewById(R.id.text_send);
         sendViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
