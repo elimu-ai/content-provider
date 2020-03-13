@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_emojis" />
 
     <fragment
+        android:id="@+id/nav_images"
+        android:name="ai.elimu.content_provider.ui.image.ImageFragment"
+        android:label="@string/menu_images"
+        tools:layout="@layout/fragment_images" />
+
+    <fragment
         android:id="@+id/nav_storybooks"
         android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
         android:label="@string/menu_storybooks"
