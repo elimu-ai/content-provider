@@ -1,16 +1,16 @@
-package ai.elimu.content_provider.ui.share;
+package ai.elimu.content_provider.ui.storybook;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ShareViewModel extends ViewModel {
+public class StoryBooksViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ShareViewModel() {
+    public StoryBooksViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is share fragment");
+        mText.setValue("StoryBooksViewModel");
     }
 
     public LiveData<String> getText() {

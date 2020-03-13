@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="ai.elimu.content_provider.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
+        android:label="@string/menu_storybooks"
+        tools:layout="@layout/fragment_storybooks" />
 </navigation>

@@ -1,4 +1,4 @@
-package ai.elimu.content_provider.ui.share;
+package ai.elimu.content_provider.ui.storybook;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,18 +15,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import ai.elimu.content_provider.R;
 
-public class ShareFragment extends Fragment {
+public class StoryBooksFragment extends Fragment {
 
-    private ShareViewModel shareViewModel;
+    private StoryBooksViewModel storyBooksViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        shareViewModel = ViewModelProviders.of(this).get(ShareViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_share, container, false);
+        storyBooksViewModel = ViewModelProviders.of(this).get(StoryBooksViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
         final TextView textView = root.findViewById(R.id.text_share);
-        shareViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
