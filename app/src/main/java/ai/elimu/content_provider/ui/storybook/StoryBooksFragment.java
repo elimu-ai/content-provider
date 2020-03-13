@@ -25,7 +25,7 @@ public class StoryBooksFragment extends Fragment {
 
         storyBooksViewModel = ViewModelProviders.of(this).get(StoryBooksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
-        final TextView textView = root.findViewById(R.id.text_share);
+        final TextView textView = root.findViewById(R.id.text_storybooks);
         storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
