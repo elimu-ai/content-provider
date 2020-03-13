@@ -45,6 +45,10 @@
                     android:icon="@drawable/ic_menu_image"
                     android:title="@string/menu_images" />
                 <item
+                    android:id="@+id/nav_audios"
+                    android:icon="@drawable/ic_menu_audiotrack"
+                    android:title="@string/menu_audios" />
+                <item
                     android:id="@+id/nav_storybooks"
                     android:icon="@drawable/ic_menu_book"
                     android:title="@string/menu_storybooks" />
