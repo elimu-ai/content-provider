@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
                     R.id.nav_home,
                     R.id.nav_allophones,
+                    R.id.nav_letters,
                     R.id.nav_numbers,
                     R.id.nav_storybooks
                 )
