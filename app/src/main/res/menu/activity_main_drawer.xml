@@ -52,6 +52,10 @@
                     android:id="@+id/nav_storybooks"
                     android:icon="@drawable/ic_menu_book"
                     android:title="@string/menu_storybooks" />
+                <item
+                    android:id="@+id/nav_videos"
+                    android:icon="@drawable/ic_menu_movie"
+                    android:title="@string/menu_videos" />
             </group>
         </menu>
     </item>

@@ -58,4 +58,10 @@
         android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
         android:label="@string/menu_storybooks"
         tools:layout="@layout/fragment_storybooks" />
+
+    <fragment
+        android:id="@+id/nav_videos"
+        android:name="ai.elimu.content_provider.ui.video.VideosFragment"
+        android:label="@string/menu_videos"
+        tools:layout="@layout/fragment_videos" />
 </navigation>

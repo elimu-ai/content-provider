@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
                     R.id.nav_emojis,
                     R.id.nav_images,
                     R.id.nav_audios,
-                    R.id.nav_storybooks
+                    R.id.nav_storybooks,
+                    R.id.nav_videos
                 )
                 .setDrawerLayout(drawer)
                 .build();
