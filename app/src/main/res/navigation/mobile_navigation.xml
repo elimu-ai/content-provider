@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_allophones" />
 
     <fragment
+        android:id="@+id/nav_numbers"
+        android:name="ai.elimu.content_provider.ui.number.NumbersFragment"
+        android:label="@string/menu_numbers"
+        tools:layout="@layout/fragment_numbers" />
+
+    <fragment
         android:id="@+id/nav_storybooks"
         android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
         android:label="@string/menu_storybooks"

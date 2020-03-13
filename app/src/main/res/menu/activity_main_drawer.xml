@@ -17,6 +17,10 @@
                     android:id="@+id/nav_allophones"
                     android:icon="@drawable/ic_menu_record_voice_over"
                     android:title="@string/menu_allophones" />
+                <item
+                    android:id="@+id/nav_numbers"
+                    android:icon="@drawable/ic_menu_looks_one"
+                    android:title="@string/menu_numbers" />
             </group>
         </menu>
     </item>
