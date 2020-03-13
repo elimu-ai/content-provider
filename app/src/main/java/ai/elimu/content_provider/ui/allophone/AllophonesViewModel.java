@@ -1,16 +1,16 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.allophone;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class AllophonesViewModel extends ViewModel {
 
     private MutableLiveData<String> text;
 
-    public HomeViewModel() {
+    public AllophonesViewModel() {
         text = new MutableLiveData<>();
-        text.setValue("HomeViewModel");
+        text.setValue("AllophonesViewModel");
     }
 
     public LiveData<String> getText() {

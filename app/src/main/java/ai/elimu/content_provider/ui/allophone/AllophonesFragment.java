@@ -1,4 +1,4 @@
-package ai.elimu.content_provider.ui.storybook;
+package ai.elimu.content_provider.ui.allophone;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,17 +15,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import ai.elimu.content_provider.R;
 
-public class StoryBooksFragment extends Fragment {
+public class AllophonesFragment extends Fragment {
 
-    private StoryBooksViewModel storyBooksViewModel;
+    private AllophonesViewModel allophonesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        storyBooksViewModel = ViewModelProviders.of(this).get(StoryBooksViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
-        final TextView textView = root.findViewById(R.id.text_storybooks);
-        storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        allophonesViewModel = ViewModelProviders.of(this).get(AllophonesViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_allophones, container, false);
+        final TextView textView = root.findViewById(R.id.text_allophones);
+        allophonesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 Log.i(getClass().getName(), "onChanged");

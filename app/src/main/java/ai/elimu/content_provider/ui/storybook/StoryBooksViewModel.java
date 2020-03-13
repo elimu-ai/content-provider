@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel;
 
 public class StoryBooksViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<String> text;
 
     public StoryBooksViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("StoryBooksViewModel");
+        text = new MutableLiveData<>();
+        text.setValue("StoryBooksViewModel");
     }
 
     public LiveData<String> getText() {
-        return mText;
+        return text;
     }
 }
