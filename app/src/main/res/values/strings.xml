@@ -12,5 +12,6 @@
     <string name="menu_letters">Letters</string>
     <string name="menu_words">Words</string>
     <string name="menu_numbers">Numbers</string>
+    <string name="menu_emojis">Emojis</string>
     <string name="menu_storybooks">Storybooks</string>
 </resources>
