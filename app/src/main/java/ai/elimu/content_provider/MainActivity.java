@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     R.id.nav_home,
                     R.id.nav_allophones,
                     R.id.nav_letters,
+                    R.id.nav_words,
                     R.id.nav_numbers,
                     R.id.nav_storybooks
                 )
