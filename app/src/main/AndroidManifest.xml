@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ai.elimu.content_provider">
 
+    <permission android:name="${applicationId}.provider.READ" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -19,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <!--android:readPermission="${applicationId}.provider.READ"-->
+        <provider
+            android:name=".provider.StoryBookContentProvider"
+            android:authorities="${applicationId}.provider.storybook_provider"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
 </manifest>
