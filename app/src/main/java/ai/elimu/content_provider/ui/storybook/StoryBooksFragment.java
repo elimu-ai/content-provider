@@ -7,13 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.List;
+
 import ai.elimu.content_provider.R;
+import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.db.RoomDb;
+import ai.elimu.content_provider.room.entity.StoryBook;
 
 public class StoryBooksFragment extends Fragment {
 
@@ -33,5 +38,37 @@ public class StoryBooksFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        Log.i(getClass().getName(), "onStart");
+        super.onStart();
+
+        // Store dummy values in DB
+        // TODO: download from REST API
+        RoomDb roomDb = RoomDb.getDatabase(getContext());
+        StoryBookDao storyBookDao = roomDb.storyBookDao();
+
+        StoryBook storyBook1 = new StoryBook();
+        storyBook1.setTitle("7 Colours of a Rainbow");
+        storyBook1.setDescription("Look around! Do you see the seven colours of rainbow around you?");
+        RoomDb.databaseWriteExecutor.execute(() -> {
+            storyBookDao.insert(storyBook1);
+        });
+
+        StoryBook storyBook2 = new StoryBook();
+        storyBook2.setTitle("A Day at the Carnival");
+        storyBook2.setDescription("They ride toy cars, go on the Ferris wheel, and visit the balloon shop.");
+        RoomDb.databaseWriteExecutor.execute(() -> {
+            storyBookDao.insert(storyBook2);
+        });
+
+        // Update the UI
+        RoomDb.databaseWriteExecutor.execute(() -> {
+            List<StoryBook> storyBooks = storyBookDao.loadAll();
+            Log.i(getClass().getName(), "storyBooks.size(): " + storyBooks.size());
+            // TODO
+        });
     }
 }

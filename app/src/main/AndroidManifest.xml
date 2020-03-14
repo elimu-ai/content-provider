@@ -23,7 +23,6 @@
             </intent-filter>
         </activity>
 
-        <!--android:readPermission="${applicationId}.provider.READ"-->
         <provider
             android:name=".provider.StoryBookContentProvider"
             android:authorities="${applicationId}.provider.storybook_provider"

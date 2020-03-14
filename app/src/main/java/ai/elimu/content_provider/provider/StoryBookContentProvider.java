@@ -60,19 +60,17 @@ public class StoryBookContentProvider extends ContentProvider {
                 return null;
             }
 
-            final Cursor[] cursor = {null};
+            final Cursor cursor;
 
             // Get the Room Cursor
             RoomDb roomDb = RoomDb.getDatabase(context);
-            RoomDb.databaseWriteExecutor.execute(() -> {
-                StoryBookDao storyBookDao = roomDb.storyBookDao();
-                cursor[0] = storyBookDao.loadAllAsCursor();
-                Log.i(getClass().getName(), "cursor[0]: " + cursor[0]);
-            });
+            StoryBookDao storyBookDao = roomDb.storyBookDao();
+            cursor = storyBookDao.loadAllAsCursor();
+            Log.i(getClass().getName(), "cursor: " + cursor);
 
-            cursor[0].setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.getContentResolver(), uri);
 
-            return cursor[0];
+            return cursor;
         }
     }
 
