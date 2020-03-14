@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import ai.elimu.content_provider.BuildConfig;
+import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.db.RoomDb;
 
 public class StoryBookContentProvider extends ContentProvider {
 
@@ -58,14 +60,19 @@ public class StoryBookContentProvider extends ContentProvider {
                 return null;
             }
 
-            Cursor cursor = null;
+            final Cursor[] cursor = {null};
 
             // Get the Room Cursor
-            // TODO
+            RoomDb roomDb = RoomDb.getDatabase(context);
+            RoomDb.databaseWriteExecutor.execute(() -> {
+                StoryBookDao storyBookDao = roomDb.storyBookDao();
+                cursor[0] = storyBookDao.loadAllAsCursor();
+                Log.i(getClass().getName(), "cursor[0]: " + cursor[0]);
+            });
 
-//            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor[0].setNotificationUri(context.getContentResolver(), uri);
 
-            return cursor;
+            return cursor[0];
         }
     }
 
