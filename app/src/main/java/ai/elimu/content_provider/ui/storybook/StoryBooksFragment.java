@@ -51,6 +51,7 @@ public class StoryBooksFragment extends Fragment {
         StoryBookDao storyBookDao = roomDb.storyBookDao();
 
         StoryBook storyBook1 = new StoryBook();
+        storyBook1.setId(20L);
         storyBook1.setTitle("7 Colours of a Rainbow");
         storyBook1.setDescription("Look around! Do you see the seven colours of rainbow around you?");
         RoomDb.databaseWriteExecutor.execute(() -> {
@@ -58,6 +59,7 @@ public class StoryBooksFragment extends Fragment {
         });
 
         StoryBook storyBook2 = new StoryBook();
+        storyBook2.setId(21L);
         storyBook2.setTitle("A Day at the Carnival");
         storyBook2.setDescription("They ride toy cars, go on the Ferris wheel, and visit the balloon shop.");
         RoomDb.databaseWriteExecutor.execute(() -> {
