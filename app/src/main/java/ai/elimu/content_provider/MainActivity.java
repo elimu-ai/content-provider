@@ -3,6 +3,8 @@ package ai.elimu.content_provider;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -47,7 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View navigationViewHeaderLayoutView = navigationView.getHeaderView(0);
+        TextView navHeaderSubtitleTextView = navigationViewHeaderLayoutView.findViewById(R.id.navHeaderSubtitle);
+        navHeaderSubtitleTextView.setText(BuildConfig.BASE_URL);
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
