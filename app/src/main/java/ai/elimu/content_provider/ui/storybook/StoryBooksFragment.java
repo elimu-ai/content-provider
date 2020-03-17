@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -47,7 +47,7 @@ public class StoryBooksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        storyBooksViewModel = ViewModelProviders.of(this).get(StoryBooksViewModel.class);
+        storyBooksViewModel = new ViewModelProvider(this).get(StoryBooksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
         final TextView textView = root.findViewById(R.id.text_storybooks);
         storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

@@ -13,7 +13,7 @@ import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.entity.StoryBook;
 
-@Database(entities = {StoryBook.class}, version = BuildConfig.VERSION_CODE, exportSchema = true)
+@Database(entities = {StoryBook.class}, version = BuildConfig.VERSION_CODE)
 public abstract class RoomDb extends RoomDatabase {
 
     public abstract StoryBookDao storyBookDao();

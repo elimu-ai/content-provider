@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import ai.elimu.content_provider.R;
 
@@ -22,7 +22,7 @@ public class ImagesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        imagesViewModel = ViewModelProviders.of(this).get(ImagesViewModel.class);
+        imagesViewModel = new ViewModelProvider(this).get(ImagesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_letters, container, false);
         final TextView textView = root.findViewById(R.id.text_letters);
         imagesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
