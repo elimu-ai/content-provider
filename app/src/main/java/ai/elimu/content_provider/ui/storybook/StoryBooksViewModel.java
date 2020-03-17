@@ -15,7 +15,7 @@ public class StoryBooksViewModel extends ViewModel {
         text.setValue("StoryBooksViewModel");
     }
 
-    public LiveData<String> getText() {
+    public MutableLiveData<String> getText() {
         Log.i(getClass().getName(), "getText");
 
         return text;
