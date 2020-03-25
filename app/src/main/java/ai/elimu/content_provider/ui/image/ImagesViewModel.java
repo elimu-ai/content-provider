@@ -1,16 +1,16 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.image;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class ImagesViewModel extends ViewModel {
 
     private MutableLiveData<String> text;
 
-    public HomeViewModel() {
+    public ImagesViewModel() {
         text = new MutableLiveData<>();
-        text.setValue("HomeViewModel");
+        text.setValue("ImagesViewModel");
     }
 
     public LiveData<String> getText() {

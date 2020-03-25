@@ -8,30 +8,55 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Text">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_allophones"
+                    android:icon="@drawable/ic_menu_record_voice_over"
+                    android:title="@string/menu_allophones" />
+                <item
+                    android:id="@+id/nav_letters"
+                    android:icon="@drawable/ic_menu_text_format"
+                    android:title="@string/menu_letters" />
+                <item
+                    android:id="@+id/nav_words"
+                    android:icon="@drawable/ic_menu_sms"
+                    android:title="@string/menu_words" />
+                <item
+                    android:id="@+id/nav_numbers"
+                    android:icon="@drawable/ic_menu_looks_one"
+                    android:title="@string/menu_numbers" />
+                <item
+                    android:id="@+id/nav_emojis"
+                    android:icon="@drawable/ic_menu_insert_emoticon"
+                    android:title="@string/menu_emojis" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Multimedia">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_images"
+                    android:icon="@drawable/ic_menu_image"
+                    android:title="@string/menu_images" />
+                <item
+                    android:id="@+id/nav_audios"
+                    android:icon="@drawable/ic_menu_audiotrack"
+                    android:title="@string/menu_audios" />
+                <item
+                    android:id="@+id/nav_storybooks"
+                    android:icon="@drawable/ic_menu_book"
+                    android:title="@string/menu_storybooks" />
+                <item
+                    android:id="@+id/nav_videos"
+                    android:icon="@drawable/ic_menu_movie"
+                    android:title="@string/menu_videos" />
+            </group>
         </menu>
     </item>
 

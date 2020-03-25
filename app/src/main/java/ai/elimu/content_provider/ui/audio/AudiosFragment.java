@@ -1,4 +1,4 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.audio;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,17 +15,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import ai.elimu.content_provider.R;
 
-public class HomeFragment extends Fragment {
+public class AudiosFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private AudiosViewModel audiosViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        audiosViewModel = new ViewModelProvider(this).get(AudiosViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_audios, container, false);
+        final TextView textView = root.findViewById(R.id.text_audios);
+        audiosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 Log.i(getClass().getName(), "onChanged");

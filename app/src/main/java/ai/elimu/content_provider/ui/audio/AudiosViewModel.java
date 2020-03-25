@@ -1,16 +1,16 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.audio;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class AudiosViewModel extends ViewModel {
 
     private MutableLiveData<String> text;
 
-    public HomeViewModel() {
+    public AudiosViewModel() {
         text = new MutableLiveData<>();
-        text.setValue("HomeViewModel");
+        text.setValue("AudiosViewModel");
     }
 
     public LiveData<String> getText() {

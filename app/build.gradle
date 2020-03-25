@@ -10,10 +10,21 @@ android {
         versionCode 1000000
         versionName "1.0.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "${projectDir}/schemas".toString()]
+            }
+        }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            buildConfigField("String", "BASE_URL", '"http://test.elimu.ai/rest/v2/"')
+        }
         release {
             minifyEnabled false
+            buildConfigField("String", "BASE_URL", '"http://elimu.ai/rest/v2/"')
         }
     }
     compileOptions {
@@ -33,6 +44,15 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+
+    // Room components
+    implementation "androidx.room:room-runtime:2.2.4"
+    annotationProcessor "androidx.room:room-compiler:2.2.4"
+    androidTestImplementation "androidx.room:room-testing:2.2.4"
 
     testImplementation 'junit:junit:4.12'
 

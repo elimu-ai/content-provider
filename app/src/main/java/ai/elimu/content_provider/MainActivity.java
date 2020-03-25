@@ -3,6 +3,8 @@ package ai.elimu.content_provider;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +31,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        mAppBarConfiguration = new AppBarConfiguration
+        appBarConfiguration = new AppBarConfiguration
                 .Builder(
                     // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
                     R.id.nav_home,
-                    R.id.nav_gallery,
-                    R.id.nav_slideshow,
-                    R.id.nav_tools,
-                    R.id.nav_share,
-                    R.id.nav_send
+                    R.id.nav_allophones,
+                    R.id.nav_letters,
+                    R.id.nav_words,
+                    R.id.nav_numbers,
+                    R.id.nav_emojis,
+                    R.id.nav_images,
+                    R.id.nav_audios,
+                    R.id.nav_storybooks,
+                    R.id.nav_videos
                 )
                 .setDrawerLayout(drawer)
                 .build();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View navigationViewHeaderLayoutView = navigationView.getHeaderView(0);
+        TextView navHeaderSubtitleTextView = navigationViewHeaderLayoutView.findViewById(R.id.navHeaderSubtitle);
+        navHeaderSubtitleTextView.setText(BuildConfig.BASE_URL);
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
@@ -63,6 +74,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "onSupportNavigateUp");
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 }

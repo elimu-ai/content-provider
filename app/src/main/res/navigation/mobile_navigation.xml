@@ -12,32 +12,56 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="ai.elimu.content_provider.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_allophones"
+        android:name="ai.elimu.content_provider.ui.allophone.AllophonesFragment"
+        android:label="@string/menu_allophones"
+        tools:layout="@layout/fragment_allophones" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="ai.elimu.content_provider.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_letters"
+        android:name="ai.elimu.content_provider.ui.letter.LettersFragment"
+        android:label="@string/menu_letters"
+        tools:layout="@layout/fragment_letters" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="ai.elimu.content_provider.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_words"
+        android:name="ai.elimu.content_provider.ui.word.WordsFragment"
+        android:label="@string/menu_words"
+        tools:layout="@layout/fragment_words" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="ai.elimu.content_provider.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/nav_numbers"
+        android:name="ai.elimu.content_provider.ui.number.NumbersFragment"
+        android:label="@string/menu_numbers"
+        tools:layout="@layout/fragment_numbers" />
 
     <fragment
-        android:id="@+id/nav_send"
-        android:name="ai.elimu.content_provider.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:id="@+id/nav_emojis"
+        android:name="ai.elimu.content_provider.ui.emoji.EmojisFragment"
+        android:label="@string/menu_emojis"
+        tools:layout="@layout/fragment_emojis" />
+
+    <fragment
+        android:id="@+id/nav_images"
+        android:name="ai.elimu.content_provider.ui.image.ImagesFragment"
+        android:label="@string/menu_images"
+        tools:layout="@layout/fragment_images" />
+
+    <fragment
+        android:id="@+id/nav_audios"
+        android:name="ai.elimu.content_provider.ui.audio.AudiosFragment"
+        android:label="@string/menu_audios"
+        tools:layout="@layout/fragment_audios" />
+
+    <fragment
+        android:id="@+id/nav_storybooks"
+        android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
+        android:label="@string/menu_storybooks"
+        tools:layout="@layout/fragment_storybooks" />
+
+    <fragment
+        android:id="@+id/nav_videos"
+        android:name="ai.elimu.content_provider.ui.video.VideosFragment"
+        android:label="@string/menu_videos"
+        tools:layout="@layout/fragment_videos" />
 </navigation>

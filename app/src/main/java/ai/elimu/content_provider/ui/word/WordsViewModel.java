@@ -1,16 +1,16 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.word;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class WordsViewModel extends ViewModel {
 
     private MutableLiveData<String> text;
 
-    public HomeViewModel() {
+    public WordsViewModel() {
         text = new MutableLiveData<>();
-        text.setValue("HomeViewModel");
+        text.setValue("WordsViewModel");
     }
 
     public LiveData<String> getText() {

@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin">
 
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/text_words"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
