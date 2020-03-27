@@ -38,7 +38,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'ai.elimu:model:1.2.41'
+    implementation 'ai.elimu:model:1.2.44'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
@@ -52,9 +52,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
 
     // Room components
-    implementation "androidx.room:room-runtime:2.2.4"
-    annotationProcessor "androidx.room:room-compiler:2.2.4"
-    androidTestImplementation "androidx.room:room-testing:2.2.4"
+    implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    androidTestImplementation "androidx.room:room-testing:2.2.5"
 
     testImplementation 'junit:junit:4.12'
 
