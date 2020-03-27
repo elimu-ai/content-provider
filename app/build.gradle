@@ -20,11 +20,13 @@ android {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField("String", "BASE_URL", '"http://eng.test.elimu.ai/rest/v2/"')
+//            buildConfigField("String", "BASE_URL", '"http://eng.test.elimu.ai/rest/v2/"')
+            buildConfigField("String", "BASE_URL", '"http://fil.test.elimu.ai/rest/v2/"')
         }
         release {
             minifyEnabled false
-            buildConfigField("String", "BASE_URL", '"http://eng.elimu.ai/rest/v2/"')
+//            buildConfigField("String", "BASE_URL", '"http://eng.elimu.ai/rest/v2/"')
+            buildConfigField("String", "BASE_URL", '"http://fil.elimu.ai/rest/v2/"')
         }
     }
     compileOptions {
