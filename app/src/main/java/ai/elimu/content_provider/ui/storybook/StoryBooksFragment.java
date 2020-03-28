@@ -146,7 +146,7 @@ public class StoryBooksFragment extends Fragment {
                 // Update the UI
                 List<StoryBook> storyBooks = storyBookDao.loadAll();
                 Log.i(getClass().getName(), "storyBooks.size(): " + storyBooks.size());
-                storyBooksViewModel.getText().postValue("storyBooks.size(): " + storyBooks.size());
+//                storyBooksViewModel.getText().postValue("storyBooks.size(): " + storyBooks.size());
             }
         });
     }

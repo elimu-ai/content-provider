@@ -9,12 +9,15 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ai.elimu.content_provider.BuildConfig;
+import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 
-@Database(entities = {StoryBook.class}, version = BuildConfig.VERSION_CODE)
+@Database(entities = {Image.class, StoryBook.class}, version = 1)
 public abstract class RoomDb extends RoomDatabase {
+
+    public abstract ImageDao imageDao();
 
     public abstract StoryBookDao storyBookDao();
 
@@ -33,7 +36,7 @@ public abstract class RoomDb extends RoomDatabase {
                                     "content_provider_db"
                             )
 //                            .addMigrations(
-//                                    MIGRATION_1000000_1000001
+//                                    MIGRATION_1_2
 //                            )
                             .build();
                 }
@@ -42,10 +45,10 @@ public abstract class RoomDb extends RoomDatabase {
         return INSTANCE;
     }
 
-//    private static final Migration MIGRATION_1000000_1000001 = new Migration(1000000, 1000001) {
+//    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
 //        @Override
 //        public void migrate(@NonNull SupportSQLiteDatabase database) {
-//            Log.i(getClass().getName(), "migrate (1000000 --> 1000001)");
+//            Log.i(getClass().getName(), "migrate (1 --> 2)");
 //            Calendar timestamp = Calendar.getInstance();
 //            String sql = "ALTER TABLE StoryBookLearningEvent ADD COLUMN timestamp INTEGER NOT NULL DEFAULT " + timestamp.getTimeInMillis();
 //            Log.i(getClass().getName(), "sql: " + sql);

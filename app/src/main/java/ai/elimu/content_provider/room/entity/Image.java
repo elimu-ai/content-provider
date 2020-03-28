@@ -7,12 +7,10 @@ import androidx.room.Entity;
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
  */
 @Entity
-public class StoryBook extends Content {
+public class Image extends Content {
 
     @NonNull
     private String title;
-
-    private String description;
 
     public String getTitle() {
         return title;
@@ -20,13 +18,5 @@ public class StoryBook extends Content {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
