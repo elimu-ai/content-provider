@@ -3,16 +3,19 @@ package ai.elimu.content_provider.room.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+import ai.elimu.model.enums.content.ImageFormat;
+
 /**
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
  */
 @Entity
-public class StoryBook extends Content {
+public class Image extends Content {
 
     @NonNull
     private String title;
 
-    private String description;
+    @NonNull
+    private ImageFormat imageFormat;
 
     public String getTitle() {
         return title;
@@ -22,11 +25,11 @@ public class StoryBook extends Content {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public ImageFormat getImageFormat() {
+        return imageFormat;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setImageFormat(ImageFormat imageFormat) {
+        this.imageFormat = imageFormat;
     }
 }

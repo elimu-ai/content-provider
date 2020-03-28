@@ -1,20 +1,29 @@
 package ai.elimu.content_provider.room.db;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ai.elimu.content_provider.BuildConfig;
+import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 
-@Database(entities = {StoryBook.class}, version = BuildConfig.VERSION_CODE)
+@Database(entities = {Image.class, StoryBook.class}, version = 2)
+@TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
+
+    public abstract ImageDao imageDao();
 
     public abstract StoryBookDao storyBookDao();
 
@@ -32,9 +41,9 @@ public abstract class RoomDb extends RoomDatabase {
                                     RoomDb.class,
                                     "content_provider_db"
                             )
-//                            .addMigrations(
-//                                    MIGRATION_1000000_1000001
-//                            )
+                            .addMigrations(
+                                    MIGRATION_1_2
+                            )
                             .build();
                 }
             }
@@ -42,14 +51,13 @@ public abstract class RoomDb extends RoomDatabase {
         return INSTANCE;
     }
 
-//    private static final Migration MIGRATION_1000000_1000001 = new Migration(1000000, 1000001) {
-//        @Override
-//        public void migrate(@NonNull SupportSQLiteDatabase database) {
-//            Log.i(getClass().getName(), "migrate (1000000 --> 1000001)");
-//            Calendar timestamp = Calendar.getInstance();
-//            String sql = "ALTER TABLE StoryBookLearningEvent ADD COLUMN timestamp INTEGER NOT NULL DEFAULT " + timestamp.getTimeInMillis();
-//            Log.i(getClass().getName(), "sql: " + sql);
-//            database.execSQL(sql);
-//        }
-//    };
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (1 --> 2)");
+            String sql = "ALTER TABLE Image ADD COLUMN `imageFormat` TEXT NOT NULL DEFAULT 'PNG'";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
 }

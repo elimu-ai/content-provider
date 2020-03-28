@@ -16,7 +16,7 @@ public class BaseApplication extends Application {
         super.onCreate();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(BuildConfig.BASE_URL + BuildConfig.REST_URL + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
