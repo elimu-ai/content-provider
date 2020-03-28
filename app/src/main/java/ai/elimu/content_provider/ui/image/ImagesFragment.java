@@ -149,7 +149,7 @@ public class ImagesFragment extends Fragment {
                     }
 
                     // Check if the Image file has already been downloaded
-                    File imageFile = MultimediaHelper.getFile(image, getContext());
+                    File imageFile = MultimediaHelper.getFile(imageGson, getContext());
                     Log.i(getClass().getName(), "imageFile: " + imageFile);
                     Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
                     if (!imageFile.exists()) {
