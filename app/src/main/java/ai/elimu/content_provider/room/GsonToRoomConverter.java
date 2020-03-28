@@ -21,6 +21,7 @@ public class GsonToRoomConverter {
 
             // Image
             image.setTitle(imageGson.getTitle());
+            image.setImageFormat(imageGson.getImageFormat());
 
             return image;
         }
