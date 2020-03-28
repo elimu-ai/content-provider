@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.io.File;
 
-import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.model.gson.content.multimedia.ImageGson;
 
 /**
  * Helper class for determining folder paths of multimedia content.
@@ -20,12 +20,12 @@ public class MultimediaHelper {
         return imagesDirectory;
     }
 
-    public static File getFile(Image image, Context context) {
-        if (image == null) {
+    public static File getFile(ImageGson imageGson, Context context) {
+        if (imageGson == null) {
             return null;
         }
         File imagesDirectory = getImagesDirectory(context);
-        File file = new File(imagesDirectory, image.getId() + "_r" + image.getRevisionNumber() + "." + image.getImageFormat().toString().toLowerCase());
+        File file = new File(imagesDirectory, imageGson.getId() + "_r" + imageGson.getRevisionNumber() + "." + imageGson.getImageFormat().toString().toLowerCase());
         return file;
     }
 }
