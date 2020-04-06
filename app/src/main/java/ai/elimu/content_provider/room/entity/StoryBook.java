@@ -15,7 +15,7 @@ public class StoryBook extends Content {
     private String description;
 
     @NonNull
-    private Long coverImageId;
+    private long coverImageId;
 
     public String getTitle() {
         return title;
@@ -33,11 +33,11 @@ public class StoryBook extends Content {
         this.description = description;
     }
 
-    public Long getCoverImageId() {
+    public long getCoverImageId() {
         return coverImageId;
     }
 
-    public void setCoverImageId(Long coverImageId) {
+    public void setCoverImageId(long coverImageId) {
         this.coverImageId = coverImageId;
     }
 }
