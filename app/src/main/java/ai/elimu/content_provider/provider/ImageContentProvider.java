@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import java.util.List;
+
 import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.db.RoomDb;
@@ -19,6 +21,7 @@ public class ImageContentProvider extends ContentProvider {
 
     private static final String TABLE_IMAGE = "image";
     private static final int CODE_IMAGE_DIR = 3;
+    private static final int CODE_IMAGE_ID = 4;
     public static final Uri URI_IMAGE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_IMAGE);
 
     // The URI matcher
@@ -26,6 +29,7 @@ public class ImageContentProvider extends ContentProvider {
 
     static {
         MATCHER.addURI(AUTHORITY, TABLE_IMAGE, CODE_IMAGE_DIR);
+        MATCHER.addURI(AUTHORITY, TABLE_IMAGE + "/#", CODE_IMAGE_ID);
     }
 
     @Override
@@ -50,27 +54,46 @@ public class ImageContentProvider extends ContentProvider {
         Log.i(getClass().getName(), "selectionArgs: " + selectionArgs);
         Log.i(getClass().getName(), "sortOrder: " + sortOrder);
 
-        final int code = MATCHER.match(uri);
-        if (code != CODE_IMAGE_DIR) {
-            throw new IllegalArgumentException("Unknown URI: " + uri);
-        } else {
-            Context context = getContext();
-            Log.i(getClass().getName(), "context: " + context);
-            if (context == null) {
-                return null;
-            }
+        Context context = getContext();
+        Log.i(getClass().getName(), "context: " + context);
+        if (context == null) {
+            return null;
+        }
 
+        RoomDb roomDb = RoomDb.getDatabase(context);
+        ImageDao imageDao = roomDb.imageDao();
+
+        final int code = MATCHER.match(uri);
+        Log.i(getClass().getName(), "code: " + code);
+        if (code == CODE_IMAGE_DIR) {
             final Cursor cursor;
 
             // Get the Room Cursor
-            RoomDb roomDb = RoomDb.getDatabase(context);
-            ImageDao imageDao = roomDb.imageDao();
             cursor = imageDao.loadAllAsCursor();
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);
 
             return cursor;
+        } else if (code == CODE_IMAGE_ID) {
+            // Extract the Image ID from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
+            String imageIdAsString = pathSegments.get(1);
+            Long imageId = Long.valueOf(imageIdAsString);
+            Log.i(getClass().getName(), "imageId: " + imageId);
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            cursor = imageDao.loadAsCursor(imageId);
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else {
+            throw new IllegalArgumentException("Unknown URI: " + uri);
         }
     }
 

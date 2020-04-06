@@ -20,6 +20,9 @@ public interface ImageDao {
     @Query("SELECT * FROM Image i WHERE i.id = :id")
     Image load(Long id);
 
+    @Query("SELECT * FROM Image i WHERE i.id = :id")
+    Cursor loadAsCursor(Long id);
+
     @Query("SELECT * FROM Image")
     List<Image> loadAll();
 
