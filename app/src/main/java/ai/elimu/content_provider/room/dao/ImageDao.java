@@ -1,5 +1,7 @@
 package ai.elimu.content_provider.room.dao;
 
+import android.database.Cursor;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -20,6 +22,9 @@ public interface ImageDao {
 
     @Query("SELECT * FROM Image")
     List<Image> loadAll();
+
+    @Query("SELECT * FROM Image")
+    Cursor loadAllAsCursor();
 
     @Update
     void update(Image image);
