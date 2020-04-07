@@ -14,6 +14,9 @@ public class StoryBook extends Content {
 
     private String description;
 
+    @NonNull
+    private long coverImageId;
+
     public String getTitle() {
         return title;
     }
@@ -28,5 +31,13 @@ public class StoryBook extends Content {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getCoverImageId() {
+        return coverImageId;
+    }
+
+    public void setCoverImageId(long coverImageId) {
+        this.coverImageId = coverImageId;
     }
 }

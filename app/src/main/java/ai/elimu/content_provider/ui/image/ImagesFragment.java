@@ -16,13 +16,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -38,7 +35,6 @@ import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.util.MultimediaDownloader;
-import ai.elimu.content_provider.util.MultimediaHelper;
 import ai.elimu.model.gson.content.multimedia.ImageGson;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -138,34 +134,32 @@ public class ImagesFragment extends Fragment {
                     Log.i(getClass().getName(), "image: " + image);
                     if (image == null) {
                         // Store the new Image in the database
-                        image = GsonToRoomConverter.getImage(imageGson);
-                        imageDao.insert(image);
-                        Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
-                    } else {
-                        // Update the existing Image in the database
-                        image = GsonToRoomConverter.getImage(imageGson);
-                        imageDao.update(image);
-                        Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
-                    }
 
-                    // Check if the Image file has already been downloaded
-                    File imageFile = MultimediaHelper.getFile(image, getContext());
-                    Log.i(getClass().getName(), "imageFile: " + imageFile);
-                    Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
-                    if (!imageFile.exists()) {
+                        image = GsonToRoomConverter.getImage(imageGson);
+
                         // Download bytes
                         String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
                         Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
                         byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
                         Log.i(getClass().getName(), "bytes.length: " + bytes.length);
-                        try {
-                            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-                            IOUtils.write(bytes, fileOutputStream);
-                            fileOutputStream.close();
-                            Log.i(getClass().getName(), "Stored Image file at " + imageFile.getAbsolutePath());
-                        } catch (IOException e) {
-                            Log.e(getClass().getName(), null, e);
-                        }
+                        image.setBytes(bytes);
+
+                        imageDao.insert(image);
+                        Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
+                    } else if (image.getRevisionNumber() < imageGson.getRevisionNumber()) {
+                        // Update the existing Image in the database
+
+                        image = GsonToRoomConverter.getImage(imageGson);
+
+                        // Download bytes
+                        String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
+                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
+                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
+                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+                        image.setBytes(bytes);
+
+                        imageDao.update(image);
+                        Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
                     }
                 }
 

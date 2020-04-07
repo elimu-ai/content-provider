@@ -42,6 +42,7 @@ public class GsonToRoomConverter {
             // StoryBook
             storyBook.setTitle(storyBookGson.getTitle());
             storyBook.setDescription(storyBookGson.getDescription());
+            storyBook.setCoverImageId(storyBookGson.getCoverImage().getId());
 
             return storyBook;
         }
