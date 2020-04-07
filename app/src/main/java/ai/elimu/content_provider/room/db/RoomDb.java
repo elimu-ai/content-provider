@@ -19,7 +19,7 @@ import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 
-@Database(entities = {Image.class, StoryBook.class}, version = 3)
+@Database(version = 5, entities = {Image.class, StoryBook.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
