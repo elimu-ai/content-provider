@@ -21,9 +21,12 @@ import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.StoryBooksService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
+import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.StoryBook;
+import ai.elimu.content_provider.room.entity.StoryBookChapter;
+import ai.elimu.model.gson.v2.content.StoryBookChapterGson;
 import ai.elimu.model.gson.v2.content.StoryBookGson;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,6 +100,7 @@ public class StoryBooksFragment extends Fragment {
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 StoryBookDao storyBookDao = roomDb.storyBookDao();
+                StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
 
                 for (StoryBookGson storyBookGson : storyBookGsons) {
                     Log.i(getClass().getName(), "storyBookGson.getId(): " + storyBookGson.getId());
@@ -109,11 +113,29 @@ public class StoryBooksFragment extends Fragment {
                         storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
                         storyBookDao.insert(storyBook);
                         Log.i(getClass().getName(), "Stored StoryBook in database with ID " + storyBook.getId());
+
+                        List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
+                        Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
+                        for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
+                            StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
+                            storyBookChapter.setStoryBookId(storyBookGson.getId());
+                            storyBookChapterDao.insert(storyBookChapter);
+                            Log.i(getClass().getName(), "Stored StoryBookChapter in database with ID " + storyBookChapter.getId());
+                        }
                     } else {
                         // Update the existing StoryBook in the database
                         storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
                         storyBookDao.update(storyBook);
                         Log.i(getClass().getName(), "Updated StoryBook in database with ID " + storyBook.getId());
+
+                        List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
+                        Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
+                        for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
+                            StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
+                            storyBookChapter.setStoryBookId(storyBookGson.getId());
+                            storyBookChapterDao.update(storyBookChapter);
+                            Log.i(getClass().getName(), "Updated StoryBookChapter in database with ID " + storyBookChapter.getId());
+                        }
                     }
                 }
 

@@ -15,17 +15,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ai.elimu.content_provider.room.dao.ImageDao;
+import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
+import ai.elimu.content_provider.room.entity.StoryBookChapter;
 
-@Database(version = 5, entities = {Image.class, StoryBook.class})
+@Database(version = 6, entities = {Image.class, StoryBook.class, StoryBookChapter.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
     public abstract ImageDao imageDao();
 
     public abstract StoryBookDao storyBookDao();
+
+    public abstract StoryBookChapterDao storyBookChapterDao();
 
     private static volatile RoomDb INSTANCE;
 
@@ -46,6 +50,7 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_2_3,
                                     MIGRATION_3_4
                             )
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
