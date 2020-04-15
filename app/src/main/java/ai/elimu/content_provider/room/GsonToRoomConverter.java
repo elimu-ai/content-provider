@@ -2,8 +2,8 @@ package ai.elimu.content_provider.room;
 
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
-import ai.elimu.model.gson.content.StoryBookGson;
-import ai.elimu.model.gson.content.multimedia.ImageGson;
+import ai.elimu.model.gson.v2.content.ImageGson;
+import ai.elimu.model.gson.v2.content.StoryBookGson;
 
 public class GsonToRoomConverter {
 

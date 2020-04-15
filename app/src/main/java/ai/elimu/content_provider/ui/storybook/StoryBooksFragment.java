@@ -13,15 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,8 +24,7 @@ import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.StoryBook;
-import ai.elimu.model.gson.content.StoryBookGson;
-import okhttp3.ResponseBody;
+import ai.elimu.model.gson.v2.content.StoryBookGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,42 +59,26 @@ public class StoryBooksFragment extends Fragment {
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
         StoryBooksService storyBooksService = retrofit.create(StoryBooksService.class);
-        Call<ResponseBody> call = storyBooksService.listStoryBooks();
+        Call<List<StoryBookGson>> call = storyBooksService.listStoryBooks();
         Log.i(getClass().getName(), "call.request(): " + call.request());
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<List<StoryBookGson>>() {
 
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<List<StoryBookGson>> call, Response<List<StoryBookGson>> response) {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
 
-                try {
-                    String jsonResponse = response.body().string();
-                    Log.i(getClass().getName(), "jsonResponse: " + jsonResponse);
-                    JSONObject jsonObject = new JSONObject(jsonResponse);
-                    Log.i(getClass().getName(), "jsonObject: " + jsonObject);
+                List<StoryBookGson> storyBookGsons = response.body();
+                Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
 
-                    JSONArray storyBooksJsonArray = jsonObject.getJSONArray("storyBooks");
-                    Log.i(getClass().getName(), "storyBooksJsonArray.length(): " + storyBooksJsonArray.length());
-
-                    // Convert from JSON to GSON
-                    Type type = new TypeToken<List<StoryBookGson>>() {}.getType();
-                    List<StoryBookGson> storyBookGsons = new Gson().fromJson(storyBooksJsonArray.toString(), type);
-                    Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
-
-                    if (storyBookGsons.size() > 1) {
-                        processResponseBody(storyBookGsons);
-                    }
-                } catch (IOException e) {
-                    Log.e(getClass().getName(), null, e);
-                } catch (JSONException e) {
-                    Log.e(getClass().getName(), null, e);
+                if (storyBookGsons.size() > 1) {
+                    processResponseBody(storyBookGsons);
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<List<StoryBookGson>> call, Throwable t) {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
