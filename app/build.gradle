@@ -21,22 +21,22 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
 
-//            buildConfigField("String", "CONTENT_LANGUAGE", '"eng"')
-            buildConfigField("String", "CONTENT_LANGUAGE", '"fil"')
+//            buildConfigField("String", "CONTENT_LANGUAGE", '"fil"')
+            buildConfigField("String", "CONTENT_LANGUAGE", '"hin"')
 
-//            buildConfigField("String", "BASE_URL", '"http://eng.test.elimu.ai"')
-            buildConfigField("String", "BASE_URL", '"http://fil.test.elimu.ai"')
+//            buildConfigField("String", "BASE_URL", '"http://fil.test.elimu.ai"')
+            buildConfigField("String", "BASE_URL", '"http://hin.test.elimu.ai"')
 
             buildConfigField("String", "REST_URL", '"/rest/v2"')
         }
         release {
             minifyEnabled false
 
-//            buildConfigField("String", "CONTENT_LANGUAGE", '"eng"')
-            buildConfigField("String", "CONTENT_LANGUAGE", '"fil"')
+//            buildConfigField("String", "CONTENT_LANGUAGE", '"fil"')
+            buildConfigField("String", "CONTENT_LANGUAGE", '"hin"')
 
-//            buildConfigField("String", "BASE_URL", '"http://eng.elimu.ai"')
-            buildConfigField("String", "BASE_URL", '"http://fil.elimu.ai"')
+//            buildConfigField("String", "BASE_URL", '"http://fil.elimu.ai"')
+            buildConfigField("String", "BASE_URL", '"http://hin.elimu.ai"')
 
             buildConfigField("String", "REST_URL", '"/rest/v2"')
         }
@@ -50,7 +50,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'ai.elimu:model:1.2.44'
+    implementation 'ai.elimu:model:2.0.1'
     implementation 'commons-io:commons-io:2.5'
     implementation 'com.google.android.material:material:1.1.0'
 
