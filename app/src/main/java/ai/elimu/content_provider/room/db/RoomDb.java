@@ -23,7 +23,7 @@ import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 
-@Database(version = 7, entities = {Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class})
+@Database(version = 8, entities = {Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -54,7 +54,6 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_2_3,
                                     MIGRATION_3_4
                             )
-                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
