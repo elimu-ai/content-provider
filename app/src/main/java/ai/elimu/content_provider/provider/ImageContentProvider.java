@@ -19,17 +19,17 @@ public class ImageContentProvider extends ContentProvider {
     // The authority of this content provider
     public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.image_provider";
 
-    private static final String TABLE_IMAGE = "image";
-    private static final int CODE_IMAGE_DIR = 3;
-    private static final int CODE_IMAGE_ID = 4;
-    public static final Uri URI_IMAGE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_IMAGE);
+    private static final String TABLE_IMAGES = "images";
+    private static final int CODE_IMAGES = 1;
+    private static final int CODE_IMAGE_ID = 2;
+    public static final Uri URI_IMAGE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_IMAGES);
 
     // The URI matcher
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        MATCHER.addURI(AUTHORITY, TABLE_IMAGE, CODE_IMAGE_DIR);
-        MATCHER.addURI(AUTHORITY, TABLE_IMAGE + "/#", CODE_IMAGE_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES);
+        MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/#", CODE_IMAGE_ID);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ImageContentProvider extends ContentProvider {
 
         final int code = MATCHER.match(uri);
         Log.i(getClass().getName(), "code: " + code);
-        if (code == CODE_IMAGE_DIR) {
+        if (code == CODE_IMAGES) {
             final Cursor cursor;
 
             // Get the Room Cursor

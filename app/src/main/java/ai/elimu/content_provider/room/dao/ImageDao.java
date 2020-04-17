@@ -17,10 +17,10 @@ public interface ImageDao {
     @Insert
     void insert(Image image);
 
-    @Query("SELECT * FROM Image i WHERE i.id = :id")
+    @Query("SELECT * FROM Image WHERE id = :id")
     Image load(Long id);
 
-    @Query("SELECT * FROM Image i WHERE i.id = :id")
+    @Query("SELECT * FROM Image WHERE id = :id")
     Cursor loadAsCursor(Long id);
 
     @Query("SELECT * FROM Image")
