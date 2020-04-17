@@ -20,6 +20,9 @@ public interface StoryBookDao {
     @Query("SELECT * FROM StoryBook sb WHERE sb.id = :id")
     StoryBook load(Long id);
 
+    @Query("SELECT * FROM StoryBook sb WHERE sb.id = :id")
+    Cursor loadAsCursor(Long id);
+
     @Query("SELECT * FROM StoryBook")
     List<StoryBook> loadAll();
 
