@@ -17,10 +17,10 @@ public interface StoryBookChapterDao {
     @Insert
     void insert(StoryBookChapter storyBookChapter);
 
-    @Query("SELECT * FROM StoryBookChapter sbc WHERE sbc.id = :id")
+    @Query("SELECT * FROM StoryBookChapter WHERE id = :id")
     StoryBookChapter load(Long id);
 
-    @Query("SELECT * FROM StoryBookChapter sbc WHERE sbc.id = :id")
+    @Query("SELECT * FROM StoryBookChapter WHERE id = :id")
     Cursor loadAsCursor(Long id);
 
     @Query("SELECT * FROM StoryBookChapter WHERE storyBookId = :storyBookId")

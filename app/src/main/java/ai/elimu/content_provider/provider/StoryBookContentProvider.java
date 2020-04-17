@@ -13,6 +13,7 @@ import java.util.List;
 import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 
 public class StoryBookContentProvider extends ContentProvider {
@@ -24,6 +25,7 @@ public class StoryBookContentProvider extends ContentProvider {
     private static final int CODE_STORYBOOKS = 1;
     private static final int CODE_STORYBOOK_ID = 2;
     private static final int CODE_STORYBOOK_CHAPTERS = 3;
+    private static final int CODE_STORYBOOK_CHAPTER_PARAGRAPHS = 4;
     public static final Uri URI_STORYBOOK = Uri.parse("content://" + AUTHORITY + "/" + TABLE_STORYBOOKS);
 
     // The URI matcher
@@ -33,6 +35,7 @@ public class StoryBookContentProvider extends ContentProvider {
         MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS, CODE_STORYBOOKS);
         MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#", CODE_STORYBOOK_ID);
         MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters", CODE_STORYBOOK_CHAPTERS);
+        MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters/#/paragraphs", CODE_STORYBOOK_CHAPTER_PARAGRAPHS);
     }
 
     @Override
@@ -64,8 +67,6 @@ public class StoryBookContentProvider extends ContentProvider {
         }
 
         RoomDb roomDb = RoomDb.getDatabase(context);
-        StoryBookDao storyBookDao = roomDb.storyBookDao();
-        StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
 
         final int code = MATCHER.match(uri);
         Log.i(getClass().getName(), "code: " + code);
@@ -73,6 +74,7 @@ public class StoryBookContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
+            StoryBookDao storyBookDao = roomDb.storyBookDao();
             cursor = storyBookDao.loadAllAsCursor();
             Log.i(getClass().getName(), "cursor: " + cursor);
 
@@ -90,6 +92,7 @@ public class StoryBookContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
+            StoryBookDao storyBookDao = roomDb.storyBookDao();
             cursor = storyBookDao.loadAsCursor(storyBookId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
@@ -107,7 +110,25 @@ public class StoryBookContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
+            StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
             cursor = storyBookChapterDao.loadAllAsCursor(storyBookId);
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else if (code == CODE_STORYBOOK_CHAPTER_PARAGRAPHS) {
+            // Extract the StoryBookChapter ID from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            String storyBookChapterIdAsString = pathSegments.get(3);
+            Long storyBookChapterId = Long.valueOf(storyBookChapterIdAsString);
+            Log.i(getClass().getName(), "storyBookChapterId: " + storyBookChapterId);
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            StoryBookParagraphDao storyBookParagraphDao = roomDb.storyBookParagraphDao();
+            cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

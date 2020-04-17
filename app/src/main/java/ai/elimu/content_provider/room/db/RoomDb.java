@@ -17,11 +17,13 @@ import java.util.concurrent.Executors;
 import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
+import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
+import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 
-@Database(version = 6, entities = {Image.class, StoryBook.class, StoryBookChapter.class})
+@Database(version = 7, entities = {Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -30,6 +32,8 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract StoryBookDao storyBookDao();
 
     public abstract StoryBookChapterDao storyBookChapterDao();
+
+    public abstract StoryBookParagraphDao storyBookParagraphDao();
 
     private static volatile RoomDb INSTANCE;
 

@@ -3,9 +3,11 @@ package ai.elimu.content_provider.room;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
+import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.model.gson.v2.content.ImageGson;
 import ai.elimu.model.gson.v2.content.StoryBookChapterGson;
 import ai.elimu.model.gson.v2.content.StoryBookGson;
+import ai.elimu.model.gson.v2.content.StoryBookParagraphGson;
 
 public class GsonToRoomConverter {
 
@@ -67,6 +69,25 @@ public class GsonToRoomConverter {
             }
 
             return storyBookChapter;
+        }
+    }
+
+    public static StoryBookParagraph getStoryBookParagraph(StoryBookParagraphGson storyBookParagraphGson) {
+        if (storyBookParagraphGson == null) {
+            return null;
+        } else {
+            StoryBookParagraph storyBookParagraph = new StoryBookParagraph();
+
+            // BaseEntity
+            storyBookParagraph.setId(storyBookParagraphGson.getId());
+
+            // StoryBookParagraph
+//            storyBookParagraph.setStoryBookChapterId(storyBookParagraphGson.getStoryBookChapter().getId());
+            storyBookParagraph.setSortOrder(storyBookParagraphGson.getSortOrder());
+            storyBookParagraph.setOriginalText(storyBookParagraphGson.getOriginalText());
+            // TODO: setWords
+
+            return storyBookParagraph;
         }
     }
 }
