@@ -18,6 +18,7 @@ import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
+import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
 import ai.elimu.content_provider.room.dao.WordDao;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
@@ -39,6 +40,8 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract StoryBookChapterDao storyBookChapterDao();
 
     public abstract StoryBookParagraphDao storyBookParagraphDao();
+
+    public abstract StoryBookParagraph_WordDao storyBookParagraph_WordDao();
 
     private static volatile RoomDb INSTANCE;
 
