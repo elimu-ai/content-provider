@@ -18,14 +18,18 @@ import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
+import ai.elimu.content_provider.room.dao.WordDao;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
+import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 8, entities = {Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class})
+@Database(version = 9, entities = {Word.class, Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
+
+    public abstract WordDao wordDao();
 
     public abstract ImageDao imageDao();
 
@@ -52,7 +56,8 @@ public abstract class RoomDb extends RoomDatabase {
                             .addMigrations(
                                     MIGRATION_1_2,
                                     MIGRATION_2_3,
-                                    MIGRATION_3_4
+                                    MIGRATION_3_4,
+                                    MIGRATION_8_9
                             )
                             .build();
                 }
@@ -86,6 +91,16 @@ public abstract class RoomDb extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             Log.i(getClass().getName(), "migrate (3 --> 4)");
             String sql = "DELETE FROM StoryBook";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (8 --> 9)");
+            String sql = "CREATE TABLE IF NOT EXISTS `Word` (`text` TEXT NOT NULL, `revisionNumber` INTEGER NOT NULL, `id` INTEGER, PRIMARY KEY(`id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
