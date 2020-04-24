@@ -4,12 +4,33 @@ import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
-import ai.elimu.model.gson.v2.content.ImageGson;
-import ai.elimu.model.gson.v2.content.StoryBookChapterGson;
-import ai.elimu.model.gson.v2.content.StoryBookGson;
-import ai.elimu.model.gson.v2.content.StoryBookParagraphGson;
+import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.model.v2.gson.content.ImageGson;
+import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
+import ai.elimu.model.v2.gson.content.StoryBookGson;
+import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
+import ai.elimu.model.v2.gson.content.WordGson;
 
 public class GsonToRoomConverter {
+
+    public static Word getWord(WordGson wordGson) {
+        if (wordGson == null) {
+            return null;
+        } else {
+            Word word = new Word();
+
+            // BaseEntity
+            word.setId(wordGson.getId());
+
+            // Content
+            word.setRevisionNumber(wordGson.getRevisionNumber());
+
+            // Word
+            word.setText(wordGson.getText());
+
+            return word;
+        }
+    }
 
     public static Image getImage(ImageGson imageGson) {
         if (imageGson == null) {

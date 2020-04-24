@@ -18,8 +18,6 @@ public class StoryBookParagraph extends BaseEntity {
     @NonNull
     private String originalText;
 
-    // TODO: words
-
     public long getStoryBookChapterId() {
         return storyBookChapterId;
     }

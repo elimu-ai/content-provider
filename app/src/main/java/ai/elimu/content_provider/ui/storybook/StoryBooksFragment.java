@@ -24,13 +24,17 @@ import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
+import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
-import ai.elimu.model.gson.v2.content.StoryBookChapterGson;
-import ai.elimu.model.gson.v2.content.StoryBookGson;
-import ai.elimu.model.gson.v2.content.StoryBookParagraphGson;
+import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
+import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
+import ai.elimu.model.v2.gson.content.StoryBookGson;
+import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
+import ai.elimu.model.v2.gson.content.WordGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,6 +109,7 @@ public class StoryBooksFragment extends Fragment {
                 StoryBookDao storyBookDao = roomDb.storyBookDao();
                 StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
                 StoryBookParagraphDao storyBookParagraphDao = roomDb.storyBookParagraphDao();
+                StoryBookParagraph_WordDao storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao();
 
                 for (StoryBookGson storyBookGson : storyBookGsons) {
                     Log.i(getClass().getName(), "storyBookGson.getId(): " + storyBookGson.getId());
@@ -133,6 +138,22 @@ public class StoryBooksFragment extends Fragment {
                                 storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
                                 storyBookParagraphDao.insert(storyBookParagraph);
                                 Log.i(getClass().getName(), "Stored StoryBookParagraph in database with ID " + storyBookParagraph.getId());
+
+                                List<WordGson> wordGsons = storyBookParagraphGson.getWords();
+                                Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                                for (int i = 0; i < wordGsons.size(); i++) {
+                                    WordGson wordGson = wordGsons.get(i);
+                                    Word word = GsonToRoomConverter.getWord(wordGson);
+                                    Log.i(getClass().getName(), "word.getId(): " + word.getId());
+                                    if (word.getId() != null) {
+                                        StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
+                                        storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
+                                        storyBookParagraph_Word.setWords_id(wordGson.getId());
+                                        storyBookParagraph_Word.setWords_ORDER(i);
+                                        storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
+                                        Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -156,6 +177,22 @@ public class StoryBooksFragment extends Fragment {
                                 storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
                                 storyBookParagraphDao.update(storyBookParagraph);
                                 Log.i(getClass().getName(), "Updated StoryBookParagraph in database with ID " + storyBookParagraph.getId());
+
+                                List<WordGson> wordGsons = storyBookParagraphGson.getWords();
+                                Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                                for (int i = 0; i < wordGsons.size(); i++) {
+                                    WordGson wordGson = wordGsons.get(i);
+                                    Word word = GsonToRoomConverter.getWord(wordGson);
+                                    Log.i(getClass().getName(), "word.getId(): " + word.getId());
+                                    if (word.getId() != null) {
+                                        StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
+                                        storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
+                                        storyBookParagraph_Word.setWords_id(wordGson.getId());
+                                        storyBookParagraph_Word.setWords_ORDER(i);
+                                        storyBookParagraph_WordDao.update(storyBookParagraph_Word);
+                                        Log.i(getClass().getName(), "Updated StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
+                                    }
+                                }
                             }
                         }
                     }
