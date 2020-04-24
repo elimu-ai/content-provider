@@ -26,7 +26,7 @@ import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.util.MultimediaDownloader;
-import ai.elimu.model.gson.v2.content.ImageGson;
+import ai.elimu.model.v2.gson.content.ImageGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

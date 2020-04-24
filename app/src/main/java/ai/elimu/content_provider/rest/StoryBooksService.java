@@ -2,7 +2,7 @@ package ai.elimu.content_provider.rest;
 
 import java.util.List;
 
-import ai.elimu.model.gson.v2.content.StoryBookGson;
+import ai.elimu.model.v2.gson.content.StoryBookGson;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
