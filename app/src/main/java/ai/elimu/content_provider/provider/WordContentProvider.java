@@ -22,6 +22,7 @@ public class WordContentProvider extends ContentProvider {
     private static final String TABLE_WORDS = "words";
     private static final int CODE_WORDS = 1;
     private static final int CODE_WORD_ID = 2;
+    private static final int CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID = 3;
     public static final Uri URI_WORD = Uri.parse("content://" + AUTHORITY + "/" + TABLE_WORDS);
 
     // The URI matcher
@@ -30,6 +31,7 @@ public class WordContentProvider extends ContentProvider {
     static {
         MATCHER.addURI(AUTHORITY, TABLE_WORDS, CODE_WORDS);
         MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/#", CODE_WORD_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/by-paragraph-id/#", CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID);
     }
 
     @Override
@@ -70,6 +72,23 @@ public class WordContentProvider extends ContentProvider {
 
             // Get the Room Cursor
             cursor = wordDao.loadAllAsCursor();
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else if (code == CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID) {
+            // Extract the StoryBookParagraph ID from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
+            String storyBookParagraphIdAsString = pathSegments.get(2);
+            Long storyBookParagraphId = Long.valueOf(storyBookParagraphIdAsString);
+            Log.i(getClass().getName(), "storyBookParagraphId: " + storyBookParagraphId);
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            cursor = wordDao.loadAllAsCursor(storyBookParagraphId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);
