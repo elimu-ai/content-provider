@@ -28,13 +28,18 @@
         </activity>
 
         <provider
-            android:name=".provider.StoryBookContentProvider"
-            android:authorities="${applicationId}.provider.storybook_provider"
+            android:name=".provider.WordContentProvider"
+            android:authorities="${applicationId}.provider.word_provider"
             android:enabled="true"
             android:exported="true" />
         <provider
             android:name=".provider.ImageContentProvider"
             android:authorities="${applicationId}.provider.image_provider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
+            android:name=".provider.StoryBookContentProvider"
+            android:authorities="${applicationId}.provider.storybook_provider"
             android:enabled="true"
             android:exported="true" />
     </application>
