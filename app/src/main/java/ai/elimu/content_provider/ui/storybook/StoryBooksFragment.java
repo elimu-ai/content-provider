@@ -182,6 +182,10 @@ public class StoryBooksFragment extends Fragment {
                                 storyBookParagraphDao.update(storyBookParagraph);
                                 Log.i(getClass().getName(), "Updated StoryBookParagraph in database with ID " + storyBookParagraph.getId());
 
+                                // Delete all the StoryBookParagraph's Words (in case changes have been made on the server-side)
+                                storyBookParagraph_WordDao.delete(storyBookParagraph.getId());
+
+                                // Store all the StoryBookParagraph's Words in the database
                                 List<WordGson> wordGsons = storyBookParagraphGson.getWords();
                                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
                                 for (int i = 0; i < wordGsons.size(); i++) {
@@ -194,8 +198,8 @@ public class StoryBooksFragment extends Fragment {
                                         storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
                                         storyBookParagraph_Word.setWords_id(wordGson.getId());
                                         storyBookParagraph_Word.setWords_ORDER(i);
-                                        storyBookParagraph_WordDao.update(storyBookParagraph_Word);
-                                        Log.i(getClass().getName(), "Updated StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
+                                        storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
+                                        Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
                                     }
                                 }
                             }
