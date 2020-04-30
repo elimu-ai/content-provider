@@ -6,7 +6,7 @@ import androidx.room.Entity;
 /**
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
  */
-@Entity(primaryKeys = {"StoryBookParagraph_id", "words_id"})
+@Entity(primaryKeys = {"StoryBookParagraph_id", "words_ORDER"})
 public class StoryBookParagraph_Word {
 
     @NonNull

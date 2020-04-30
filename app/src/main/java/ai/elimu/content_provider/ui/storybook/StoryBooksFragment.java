@@ -143,9 +143,13 @@ public class StoryBooksFragment extends Fragment {
                                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
                                 for (int i = 0; i < wordGsons.size(); i++) {
                                     WordGson wordGson = wordGsons.get(i);
+                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
                                     Word word = GsonToRoomConverter.getWord(wordGson);
                                     Log.i(getClass().getName(), "word.getId(): " + word.getId());
                                     if (word.getId() != null) {
+                                        Log.i(getClass().getName(), "storyBookParagraphGson.getId(): " + storyBookParagraphGson.getId());
+                                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                                        Log.i(getClass().getName(), "i: " + i);
                                         StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
                                         storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
                                         storyBookParagraph_Word.setWords_id(wordGson.getId());
@@ -182,6 +186,7 @@ public class StoryBooksFragment extends Fragment {
                                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
                                 for (int i = 0; i < wordGsons.size(); i++) {
                                     WordGson wordGson = wordGsons.get(i);
+                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
                                     Word word = GsonToRoomConverter.getWord(wordGson);
                                     Log.i(getClass().getName(), "word.getId(): " + word.getId());
                                     if (word.getId() != null) {
