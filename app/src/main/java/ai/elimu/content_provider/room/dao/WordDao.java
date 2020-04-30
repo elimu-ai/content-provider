@@ -29,6 +29,9 @@ public interface WordDao {
     @Query("SELECT * FROM Word")
     Cursor loadAllAsCursor();
 
+    @Query("SELECT * FROM Word w WHERE w.id IN (SELECT words_id FROM StoryBookParagraph_Word WHERE StoryBookParagraph_id = :storyBookParagraphId)")
+    Cursor loadAllAsCursor(Long storyBookParagraphId);
+
     @Update
     void update(Word word);
 }

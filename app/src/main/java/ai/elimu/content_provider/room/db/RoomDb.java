@@ -64,7 +64,6 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_8_9,
                                     MIGRATION_9_10
                             )
-                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
