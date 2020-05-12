@@ -27,6 +27,7 @@ public class GsonToRoomConverter {
 
             // Word
             word.setText(wordGson.getText());
+            word.setWordType(wordGson.getWordType());
 
             return word;
         }

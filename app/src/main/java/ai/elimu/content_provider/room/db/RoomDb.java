@@ -27,7 +27,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 11, entities = {Word.class, Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 12, entities = {Word.class, Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -62,7 +62,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_2_3,
                                     MIGRATION_3_4,
                                     MIGRATION_8_9,
-                                    MIGRATION_9_10
+                                    MIGRATION_9_10,
+                                    MIGRATION_11_12
                             )
                             .build();
                 }
@@ -116,6 +117,16 @@ public abstract class RoomDb extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             Log.i(getClass().getName(), "migrate (9 --> 10)");
             String sql = "CREATE TABLE IF NOT EXISTS `StoryBookParagraph_Word` (`StoryBookParagraph_id` INTEGER NOT NULL, `words_id` INTEGER NOT NULL, `words_ORDER` INTEGER NOT NULL, PRIMARY KEY(`StoryBookParagraph_id`, `words_id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_11_12 = new Migration(11, 12) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (11 --> 12)");
+            String sql = "ALTER TABLE `Word` ADD COLUMN `wordType` TEXT";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
