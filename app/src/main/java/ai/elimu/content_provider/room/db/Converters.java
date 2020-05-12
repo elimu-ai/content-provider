@@ -39,7 +39,10 @@ public class Converters {
 
     @TypeConverter
     public static String toString(WordType wordType) {
-        String value = wordType.toString();
+        String value = null;
+        if (wordType != null) {
+            value = wordType.toString();
+        }
         return value;
     }
 }

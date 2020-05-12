@@ -120,20 +120,22 @@ public class ImagesFragment extends Fragment {
 
                         imageDao.insert(image);
                         Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
-                    } else if (image.getRevisionNumber() < imageGson.getRevisionNumber()) {
+                    } else {
                         // Update the existing Image in the database
 
-                        image = GsonToRoomConverter.getImage(imageGson);
+                        if (image.getRevisionNumber() < imageGson.getRevisionNumber()) {
+                            image = GsonToRoomConverter.getImage(imageGson);
 
-                        // Download bytes
-                        String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
-                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
-                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
-                        image.setBytes(bytes);
+                            // Download bytes
+                            String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
+                            Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
+                            byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
+                            Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+                            image.setBytes(bytes);
 
-                        imageDao.update(image);
-                        Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
+                            imageDao.update(image);
+                            Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
+                        }
                     }
                 }
 
