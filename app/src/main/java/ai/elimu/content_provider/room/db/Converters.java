@@ -13,7 +13,7 @@ import ai.elimu.model.enums.content.WordType;
 public class Converters {
 
     @TypeConverter
-    public static ImageFormat fromImageFormatAsString(String value) {
+    public static ImageFormat fromImageFormat(String value) {
         ImageFormat imageFormat = null;
         if (!TextUtils.isEmpty(value)) {
             imageFormat = ImageFormat.valueOf(value);
