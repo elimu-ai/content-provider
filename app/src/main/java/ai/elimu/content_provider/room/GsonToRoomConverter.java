@@ -24,6 +24,7 @@ public class GsonToRoomConverter {
 
             // Content
             word.setRevisionNumber(wordGson.getRevisionNumber());
+            word.setUsageCount(wordGson.getUsageCount());
 
             // Word
             word.setText(wordGson.getText());
@@ -44,6 +45,7 @@ public class GsonToRoomConverter {
 
             // Content
             image.setRevisionNumber(imageGson.getRevisionNumber());
+            image.setUsageCount(imageGson.getUsageCount());
 
             // Image
             image.setTitle(imageGson.getTitle());
@@ -64,6 +66,7 @@ public class GsonToRoomConverter {
 
             // Content
             storyBook.setRevisionNumber(storyBookGson.getRevisionNumber());
+            storyBook.setUsageCount(storyBookGson.getUsageCount());
 
             // StoryBook
             storyBook.setTitle(storyBookGson.getTitle());
