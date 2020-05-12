@@ -71,7 +71,7 @@ public class WordContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
-            cursor = wordDao.loadAllAsCursor();
+            cursor = wordDao.loadAllOrderedByUsageCountAsCursor();
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

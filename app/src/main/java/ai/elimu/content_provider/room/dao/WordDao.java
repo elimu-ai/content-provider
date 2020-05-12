@@ -23,11 +23,11 @@ public interface WordDao {
     @Query("SELECT * FROM Word WHERE id = :id")
     Cursor loadAsCursor(Long id);
 
-    @Query("SELECT * FROM Word")
-    List<Word> loadAll();
+    @Query("SELECT * FROM Word ORDER BY usageCount DESC")
+    List<Word> loadAllOrderedByUsageCount();
 
-    @Query("SELECT * FROM Word")
-    Cursor loadAllAsCursor();
+    @Query("SELECT * FROM Word ORDER BY usageCount DESC")
+    Cursor loadAllOrderedByUsageCountAsCursor();
 
     @Query("SELECT * FROM Word w WHERE w.id IN (SELECT words_id FROM StoryBookParagraph_Word WHERE StoryBookParagraph_id = :storyBookParagraphId)")
     Cursor loadAllAsCursor(Long storyBookParagraphId);

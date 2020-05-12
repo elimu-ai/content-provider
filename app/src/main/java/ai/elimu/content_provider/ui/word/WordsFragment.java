@@ -109,7 +109,7 @@ public class WordsFragment extends Fragment {
                         word = GsonToRoomConverter.getWord(wordGson);
                         wordDao.insert(word);
                         Log.i(getClass().getName(), "Stored Word in database with ID " + word.getId());
-                    } else if (word.getRevisionNumber() < wordGson.getRevisionNumber()) {
+                    } else {
                         // Update the existing Word in the database
                         word = GsonToRoomConverter.getWord(wordGson);
                         wordDao.update(word);
@@ -118,7 +118,7 @@ public class WordsFragment extends Fragment {
                 }
 
                 // Update the UI
-                List<Word> words = wordDao.loadAll();
+                List<Word> words = wordDao.loadAllOrderedByUsageCount();
                 Log.i(getClass().getName(), "words.size(): " + words.size());
 //                wordsViewModel.getText().postValue("words.size(): " + words.size());
             }
