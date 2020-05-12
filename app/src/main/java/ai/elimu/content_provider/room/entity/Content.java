@@ -10,11 +10,21 @@ public class Content extends BaseEntity {
     @NonNull
     private Integer revisionNumber;
 
+    private Integer usageCount;
+
     public Integer getRevisionNumber() {
         return revisionNumber;
     }
 
     public void setRevisionNumber(Integer revisionNumber) {
         this.revisionNumber = revisionNumber;
+    }
+
+    public Integer getUsageCount() {
+        return usageCount;
+    }
+
+    public void setUsageCount(Integer usageCount) {
+        this.usageCount = usageCount;
     }
 }

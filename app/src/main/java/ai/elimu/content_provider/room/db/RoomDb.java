@@ -27,7 +27,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 12, entities = {Word.class, Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 13, entities = {Word.class, Image.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -63,7 +63,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_3_4,
                                     MIGRATION_8_9,
                                     MIGRATION_9_10,
-                                    MIGRATION_11_12
+                                    MIGRATION_11_12,
+                                    MIGRATION_12_13
                             )
                             .build();
                 }
@@ -127,6 +128,25 @@ public abstract class RoomDb extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             Log.i(getClass().getName(), "migrate (11 --> 12)");
             String sql = "ALTER TABLE `Word` ADD COLUMN `wordType` TEXT";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_12_13 = new Migration(12, 13) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (12 --> 13)");
+
+            String sql = "ALTER TABLE `Image` ADD COLUMN `usageCount` INTEGER";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "ALTER TABLE `StoryBook` ADD COLUMN `usageCount` INTEGER";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "ALTER TABLE `Word` ADD COLUMN `usageCount` INTEGER";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
