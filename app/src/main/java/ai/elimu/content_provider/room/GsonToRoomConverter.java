@@ -66,7 +66,7 @@ public class GsonToRoomConverter {
 
             // Content
             storyBook.setRevisionNumber(storyBookGson.getRevisionNumber());
-            storyBook.setUsageCount(storyBook.getUsageCount());
+            storyBook.setUsageCount(storyBookGson.getUsageCount());
 
             // StoryBook
             storyBook.setTitle(storyBookGson.getTitle());
