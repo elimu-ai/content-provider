@@ -29,7 +29,7 @@ public class Converters {
 
 
     @TypeConverter
-    public static WordType fromWordTypeAsString(String value) {
+    public static WordType fromWordType(String value) {
         WordType wordType = null;
         if (!TextUtils.isEmpty(value)) {
             wordType = WordType.valueOf(value);
