@@ -30,7 +30,6 @@ import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
-import ai.elimu.content_provider.room.entity.Word;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
@@ -139,17 +138,14 @@ public class StoryBooksFragment extends Fragment {
                                 storyBookParagraphDao.insert(storyBookParagraph);
                                 Log.i(getClass().getName(), "Stored StoryBookParagraph in database with ID " + storyBookParagraph.getId());
 
+                                // Store all the StoryBookParagraph's Words in the database
                                 List<WordGson> wordGsons = storyBookParagraphGson.getWords();
                                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
                                 for (int i = 0; i < wordGsons.size(); i++) {
                                     WordGson wordGson = wordGsons.get(i);
-                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                    Word word = GsonToRoomConverter.getWord(wordGson);
-                                    Log.i(getClass().getName(), "word.getId(): " + word.getId());
-                                    if (word.getId() != null) {
-                                        Log.i(getClass().getName(), "storyBookParagraphGson.getId(): " + storyBookParagraphGson.getId());
+                                    Log.i(getClass().getName(), "wordGson: " + wordGson);
+                                    if (wordGson != null) {
                                         Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                        Log.i(getClass().getName(), "i: " + i);
                                         StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
                                         storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
                                         storyBookParagraph_Word.setWords_id(wordGson.getId());
@@ -190,10 +186,9 @@ public class StoryBooksFragment extends Fragment {
                                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
                                 for (int i = 0; i < wordGsons.size(); i++) {
                                     WordGson wordGson = wordGsons.get(i);
-                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                    Word word = GsonToRoomConverter.getWord(wordGson);
-                                    Log.i(getClass().getName(), "word.getId(): " + word.getId());
-                                    if (word.getId() != null) {
+                                    Log.i(getClass().getName(), "wordGson: " + wordGson);
+                                    if (wordGson != null) {
+                                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
                                         StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
                                         storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
                                         storyBookParagraph_Word.setWords_id(wordGson.getId());
