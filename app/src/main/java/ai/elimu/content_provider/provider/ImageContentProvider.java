@@ -16,27 +16,24 @@ import ai.elimu.content_provider.room.db.RoomDb;
 
 public class ImageContentProvider extends ContentProvider {
 
-    // The authority of this content provider
     public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.image_provider";
 
     private static final String TABLE_IMAGES = "images";
     private static final int CODE_IMAGES = 1;
     private static final int CODE_IMAGE_ID = 2;
-    public static final Uri URI_IMAGE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_IMAGES);
+    private static final int CODE_IMAGES_BY_WORD_LABEL_ID = 3;
 
-    // The URI matcher
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES);
         MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/#", CODE_IMAGE_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/by-word-label-id/#", CODE_IMAGES_BY_WORD_LABEL_ID);
     }
 
     @Override
     public boolean onCreate() {
         Log.i(getClass().getName(), "onCreate");
-
-        Log.i(getClass().getName(), "URI_IMAGE: " + URI_IMAGE);
 
         return true;
     }
@@ -87,6 +84,23 @@ public class ImageContentProvider extends ContentProvider {
 
             // Get the Room Cursor
             cursor = imageDao.loadAsCursor(imageId);
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else if (code == CODE_IMAGES_BY_WORD_LABEL_ID) {
+            // Extract the Word ID from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
+            String wordIdAsString = pathSegments.get(2);
+            Long wordId = Long.valueOf(wordIdAsString);
+            Log.i(getClass().getName(), "wordId: " + wordId);
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            cursor = imageDao.loadAllByWordLabel(wordId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

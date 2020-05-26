@@ -29,6 +29,9 @@ public interface ImageDao {
     @Query("SELECT * FROM Image")
     Cursor loadAllAsCursor();
 
+    @Query("SELECT * FROM Image i WHERE i.id IN (SELECT Image_id FROM Image_Word WHERE words_id = :wordId)")
+    Cursor loadAllByWordLabel(Long wordId);
+
     @Update
     void update(Image image);
 }
