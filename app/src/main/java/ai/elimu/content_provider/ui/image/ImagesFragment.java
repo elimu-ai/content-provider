@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,10 +24,13 @@ import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.ImagesService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.ImageDao;
+import ai.elimu.content_provider.room.dao.Image_WordDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.content_provider.room.entity.Image_Word;
 import ai.elimu.content_provider.util.MultimediaDownloader;
 import ai.elimu.model.v2.gson.content.ImageGson;
+import ai.elimu.model.v2.gson.content.WordGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,8 +44,8 @@ public class ImagesFragment extends Fragment {
         Log.i(getClass().getName(), "onCreateView");
 
         imagesViewModel = new ViewModelProvider(this).get(ImagesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_letters, container, false);
-        final TextView textView = root.findViewById(R.id.text_letters);
+        View root = inflater.inflate(R.layout.fragment_images, container, false);
+        final TextView textView = root.findViewById(R.id.text_images);
         imagesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -99,6 +103,7 @@ public class ImagesFragment extends Fragment {
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 ImageDao imageDao = roomDb.imageDao();
+                Image_WordDao image_WordDao = roomDb.image_WordDao();
 
                 for (ImageGson imageGson : imageGsons) {
                     Log.i(getClass().getName(), "imageGson.getId(): " + imageGson.getId());
@@ -120,6 +125,18 @@ public class ImagesFragment extends Fragment {
 
                         imageDao.insert(image);
                         Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
+
+                        // Store all the Image's Word labels in the database
+                        Set<WordGson> wordGsons = imageGson.getWords();
+                        Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                        for (WordGson wordGson : wordGsons) {
+                            Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                            Image_Word image_Word = new Image_Word();
+                            image_Word.setImage_id(imageGson.getId());
+                            image_Word.setWords_id(wordGson.getId());
+                            image_WordDao.insert(image_Word);
+                            Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
+                        }
                     } else {
                         // Update the existing Image in the database
 
@@ -135,6 +152,21 @@ public class ImagesFragment extends Fragment {
 
                             imageDao.update(image);
                             Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
+
+                            // Delete all the StoryBookParagraph's Words (in case deletions have been made on the server-side)
+                            image_WordDao.delete(imageGson.getId());
+
+                            // Store all the Image's Word labels in the database
+                            Set<WordGson> wordGsons = imageGson.getWords();
+                            Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                            for (WordGson wordGson : wordGsons) {
+                                Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                                Image_Word image_Word = new Image_Word();
+                                image_Word.setImage_id(imageGson.getId());
+                                image_Word.setWords_id(wordGson.getId());
+                                image_WordDao.insert(image_Word);
+                                Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
+                            }
                         }
                     }
                 }
