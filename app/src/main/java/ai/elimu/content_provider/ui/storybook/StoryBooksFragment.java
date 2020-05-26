@@ -178,8 +178,8 @@ public class StoryBooksFragment extends Fragment {
                                 storyBookParagraphDao.update(storyBookParagraph);
                                 Log.i(getClass().getName(), "Updated StoryBookParagraph in database with ID " + storyBookParagraph.getId());
 
-                                // Delete all the StoryBookParagraph's Words (in case changes have been made on the server-side)
-                                storyBookParagraph_WordDao.delete(storyBookParagraph.getId());
+                                // Delete all the StoryBookParagraph's Words (in case deletions have been made on the server-side)
+                                storyBookParagraph_WordDao.delete(storyBookParagraphGson.getId());
 
                                 // Store all the StoryBookParagraph's Words in the database
                                 List<WordGson> wordGsons = storyBookParagraphGson.getWords();
