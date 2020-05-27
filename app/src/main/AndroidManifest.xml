@@ -33,6 +33,11 @@
             android:enabled="true"
             android:exported="true" />
         <provider
+            android:name=".provider.EmojiContentProvider"
+            android:authorities="${applicationId}.provider.emoji_provider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
             android:name=".provider.ImageContentProvider"
             android:authorities="${applicationId}.provider.image_provider"
             android:enabled="true"
