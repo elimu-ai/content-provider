@@ -100,7 +100,7 @@ public class ImageContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
-            cursor = imageDao.loadAllByWordLabel(wordId);
+            cursor = imageDao.loadAllByWordLabelAsCursor(wordId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

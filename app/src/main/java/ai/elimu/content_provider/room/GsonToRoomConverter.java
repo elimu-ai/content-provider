@@ -1,10 +1,12 @@
 package ai.elimu.content_provider.room;
 
+import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
@@ -31,6 +33,28 @@ public class GsonToRoomConverter {
             word.setWordType(wordGson.getWordType());
 
             return word;
+        }
+    }
+
+    public static Emoji getEmoji(EmojiGson emojiGson) {
+        if (emojiGson == null) {
+            return null;
+        } else {
+            Emoji emoji = new Emoji();
+
+            // BaseEntity
+            emoji.setId(emojiGson.getId());
+
+            // Content
+            emoji.setRevisionNumber(emojiGson.getRevisionNumber());
+            emoji.setUsageCount(emojiGson.getUsageCount());
+
+            // Emoji
+            emoji.setGlyph(emojiGson.getGlyph());
+            emoji.setUnicodeVersion(emojiGson.getUnicodeVersion());
+            emoji.setUnicodeEmojiVersion(emojiGson.getUnicodeEmojiVersion());
+
+            return emoji;
         }
     }
 

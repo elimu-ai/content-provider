@@ -13,6 +13,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import ai.elimu.content_provider.room.dao.EmojiDao;
+import ai.elimu.content_provider.room.dao.Emoji_WordDao;
 import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.Image_WordDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
@@ -20,6 +22,8 @@ import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
 import ai.elimu.content_provider.room.dao.WordDao;
+import ai.elimu.content_provider.room.entity.Emoji;
+import ai.elimu.content_provider.room.entity.Emoji_Word;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.Image_Word;
 import ai.elimu.content_provider.room.entity.StoryBook;
@@ -28,11 +32,15 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 14, entities = {Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 15, entities = {Word.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
     public abstract WordDao wordDao();
+
+    public abstract EmojiDao emojiDao();
+
+    public abstract Emoji_WordDao emoji_WordDao();
 
     public abstract ImageDao imageDao();
 
@@ -68,7 +76,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_9_10,
                                     MIGRATION_11_12,
                                     MIGRATION_12_13,
-                                    MIGRATION_13_14
+                                    MIGRATION_13_14,
+                                    MIGRATION_14_15
                             )
                             .build();
                 }
@@ -162,6 +171,21 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (13 --> 14)");
 
             String sql = "CREATE TABLE IF NOT EXISTS `Image_Word` (`Image_id` INTEGER NOT NULL, `words_id` INTEGER NOT NULL, PRIMARY KEY(`Image_id`, `words_id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_14_15 = new Migration(14, 15) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (14 --> 15)");
+
+            String sql = "CREATE TABLE IF NOT EXISTS `Emoji` (`glyph` TEXT NOT NULL, `unicodeVersion` REAL NOT NULL, `unicodeEmojiVersion` REAL NOT NULL, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS `Emoji_Word` (`Emoji_id` INTEGER NOT NULL, `words_id` INTEGER NOT NULL, PRIMARY KEY(`Emoji_id`, `words_id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
