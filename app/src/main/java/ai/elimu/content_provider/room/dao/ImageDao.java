@@ -30,7 +30,7 @@ public interface ImageDao {
     Cursor loadAllAsCursor();
 
     @Query("SELECT * FROM Image i WHERE i.id IN (SELECT Image_id FROM Image_Word WHERE words_id = :wordId)")
-    Cursor loadAllByWordLabel(Long wordId);
+    Cursor loadAllByWordLabelAsCursor(Long wordId);
 
     @Update
     void update(Image image);

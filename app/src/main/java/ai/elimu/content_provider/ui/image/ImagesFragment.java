@@ -153,7 +153,7 @@ public class ImagesFragment extends Fragment {
                             imageDao.update(image);
                             Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
 
-                            // Delete all the StoryBookParagraph's Words (in case deletions have been made on the server-side)
+                            // Delete all the Image's Words (in case deletions have been made on the server-side)
                             image_WordDao.delete(imageGson.getId());
 
                             // Store all the Image's Word labels in the database
