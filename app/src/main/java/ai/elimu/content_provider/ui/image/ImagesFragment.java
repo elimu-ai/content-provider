@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.ImagesService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
@@ -117,7 +116,8 @@ public class ImagesFragment extends Fragment {
                         image = GsonToRoomConverter.getImage(imageGson);
 
                         // Download bytes
-                        String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
+                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+                        String downloadUrl = baseApplication.getBaseUrl() + imageGson.getDownloadUrl();
                         Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
                         byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
                         Log.i(getClass().getName(), "bytes.length: " + bytes.length);
@@ -144,7 +144,8 @@ public class ImagesFragment extends Fragment {
                             image = GsonToRoomConverter.getImage(imageGson);
 
                             // Download bytes
-                            String downloadUrl = BuildConfig.BASE_URL + imageGson.getDownloadUrl();
+                            BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+                            String downloadUrl = baseApplication.getBaseUrl() + imageGson.getDownloadUrl();
                             Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
                             byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
                             Log.i(getClass().getName(), "bytes.length: " + bytes.length);

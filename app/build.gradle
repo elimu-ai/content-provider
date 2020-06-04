@@ -20,15 +20,9 @@ android {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField("String", "CONTENT_LANGUAGE", '"hin"')
-            buildConfigField("String", "BASE_URL", '"http://hin.test.elimu.ai"')
-            buildConfigField("String", "REST_URL", '"/rest/v2"')
         }
         release {
             minifyEnabled false
-            buildConfigField("String", "CONTENT_LANGUAGE", '"hin"')
-            buildConfigField("String", "BASE_URL", '"http://hin.elimu.ai"')
-            buildConfigField("String", "REST_URL", '"/rest/v2"')
         }
     }
     compileOptions {
