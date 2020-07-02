@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class StoryBooksFragment extends Fragment {
 
     private StoryBooksViewModel storyBooksViewModel;
 
+    private ProgressBar progressBar;
+
     private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class StoryBooksFragment extends Fragment {
 
         storyBooksViewModel = new ViewModelProvider(this).get(StoryBooksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_storybooks);
         textView = root.findViewById(R.id.text_storybooks);
         storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -98,6 +102,7 @@ public class StoryBooksFragment extends Fragment {
 
                 // Handle error
                 Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -212,8 +217,11 @@ public class StoryBooksFragment extends Fragment {
                 // Update the UI
                 List<StoryBook> storyBooks = storyBookDao.loadAll();
                 Log.i(getClass().getName(), "storyBooks.size(): " + storyBooks.size());
-                textView.setText("storyBooks.size(): " + storyBooks.size());
-                Snackbar.make(textView, "storyBooks.size(): " + storyBooks.size(), Snackbar.LENGTH_LONG).show();
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("storyBooks.size(): " + storyBooks.size());
+                    Snackbar.make(textView, "storyBooks.size(): " + storyBooks.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }

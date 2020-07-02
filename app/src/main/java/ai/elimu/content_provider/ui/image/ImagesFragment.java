@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ public class ImagesFragment extends Fragment {
 
     private ImagesViewModel imagesViewModel;
 
+    private ProgressBar progressBar;
+
     private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class ImagesFragment extends Fragment {
 
         imagesViewModel = new ViewModelProvider(this).get(ImagesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_images, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_images);
         textView = root.findViewById(R.id.text_images);
         imagesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -94,6 +98,7 @@ public class ImagesFragment extends Fragment {
 
                 // Handle error
                 Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -182,8 +187,11 @@ public class ImagesFragment extends Fragment {
                 // Update the UI
                 List<Image> images = imageDao.loadAll();
                 Log.i(getClass().getName(), "images.size(): " + images.size());
-                textView.setText("images.size(): " + images.size());
-                Snackbar.make(textView, "images.size(): " + images.size(), Snackbar.LENGTH_LONG).show();
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("images.size(): " + images.size());
+                    Snackbar.make(textView, "images.size(): " + images.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }

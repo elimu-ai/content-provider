@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,8 @@ public class LettersFragment extends Fragment {
 
     private LettersViewModel lettersViewModel;
 
+    private ProgressBar progressBar;
+
     private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class LettersFragment extends Fragment {
 
         lettersViewModel = new ViewModelProvider(this).get(LettersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_letters, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_letters);
         textView = root.findViewById(R.id.text_letters);
         lettersViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -89,6 +93,7 @@ public class LettersFragment extends Fragment {
 
                 // Handle error
                 Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -127,8 +132,11 @@ public class LettersFragment extends Fragment {
                 // Update the UI
                 List<Letter> letters = letterDao.loadAllOrderedByUsageCount();
                 Log.i(getClass().getName(), "letters.size(): " + letters.size());
-                textView.setText("letters.size(): " + letters.size());
-                Snackbar.make(textView, "letters.size(): " + letters.size(), Snackbar.LENGTH_LONG).show();
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("letters.size(): " + letters.size());
+                    Snackbar.make(textView, "letters.size(): " + letters.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }

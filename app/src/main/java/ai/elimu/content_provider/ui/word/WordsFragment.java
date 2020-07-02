@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,8 @@ public class WordsFragment extends Fragment {
 
     private WordsViewModel wordsViewModel;
 
+    private ProgressBar progressBar;
+
     private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class WordsFragment extends Fragment {
 
         wordsViewModel = new ViewModelProvider(this).get(WordsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_words, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_words);
         textView = root.findViewById(R.id.text_words);
         wordsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -89,6 +93,7 @@ public class WordsFragment extends Fragment {
 
                 // Handle error
                 Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -127,8 +132,11 @@ public class WordsFragment extends Fragment {
                 // Update the UI
                 List<Word> words = wordDao.loadAllOrderedByUsageCount();
                 Log.i(getClass().getName(), "words.size(): " + words.size());
-                textView.setText("words.size(): " + words.size());
-                Snackbar.make(textView, "words.size(): " + words.size(), Snackbar.LENGTH_LONG).show();
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("words.size(): " + words.size());
+                    Snackbar.make(textView, "words.size(): " + words.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }
