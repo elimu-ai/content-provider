@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,12 +36,14 @@ public class WordsFragment extends Fragment {
 
     private WordsViewModel wordsViewModel;
 
+    private TextView textView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
         wordsViewModel = new ViewModelProvider(this).get(WordsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_words, container, false);
-        final TextView textView = root.findViewById(R.id.text_words);
+        textView = root.findViewById(R.id.text_words);
         wordsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -82,6 +86,9 @@ public class WordsFragment extends Fragment {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
+
+                // Handle error
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

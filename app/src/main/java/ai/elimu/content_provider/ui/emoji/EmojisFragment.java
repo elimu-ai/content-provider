@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -38,12 +40,14 @@ public class EmojisFragment extends Fragment {
 
     private EmojisViewModel emojisViewModel;
 
+    private TextView textView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
         emojisViewModel = new ViewModelProvider(this).get(EmojisViewModel.class);
         View root = inflater.inflate(R.layout.fragment_emojis, container, false);
-        final TextView textView = root.findViewById(R.id.text_emojis);
+        textView = root.findViewById(R.id.text_emojis);
         emojisViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -86,6 +90,9 @@ public class EmojisFragment extends Fragment {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
+
+                // Handle error
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
             }
         });
     }
