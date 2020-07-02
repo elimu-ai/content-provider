@@ -21,7 +21,7 @@ public interface LetterDao {
     Letter load(Long id);
 
     @Query("SELECT * FROM Letter WHERE id = :id")
-    Cursor loadAsCursor(Long id);
+    Cursor load_Cursor(Long id);
 
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
     List<Letter> loadAllOrderedByUsageCount();
