@@ -29,6 +29,11 @@
             android:name=".language.SelectLanguageActivity" />
 
         <provider
+            android:name=".provider.LetterContentProvider"
+            android:authorities="${applicationId}.provider.letter_provider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
             android:name=".provider.WordContentProvider"
             android:authorities="${applicationId}.provider.word_provider"
             android:enabled="true"
