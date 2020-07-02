@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Set;
@@ -38,12 +41,17 @@ public class EmojisFragment extends Fragment {
 
     private EmojisViewModel emojisViewModel;
 
+    private ProgressBar progressBar;
+
+    private TextView textView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
         emojisViewModel = new ViewModelProvider(this).get(EmojisViewModel.class);
         View root = inflater.inflate(R.layout.fragment_emojis, container, false);
-        final TextView textView = root.findViewById(R.id.text_emojis);
+        progressBar = root.findViewById(R.id.progress_bar_emojis);
+        textView = root.findViewById(R.id.text_emojis);
         emojisViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -86,6 +94,10 @@ public class EmojisFragment extends Fragment {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
+
+                // Handle error
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -154,7 +166,11 @@ public class EmojisFragment extends Fragment {
                 // Update the UI
                 List<Emoji> emojis = emojiDao.loadAll();
                 Log.i(getClass().getName(), "emojis.size(): " + emojis.size());
-//                emojisViewModel.getText().postValue("emojis.size(): " + emojis.size());
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("emojis.size(): " + emojis.size());
+                    Snackbar.make(textView, "emojis.size(): " + emojis.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }

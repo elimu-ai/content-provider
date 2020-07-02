@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Set;
@@ -39,12 +42,17 @@ public class ImagesFragment extends Fragment {
 
     private ImagesViewModel imagesViewModel;
 
+    private ProgressBar progressBar;
+
+    private TextView textView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
         imagesViewModel = new ViewModelProvider(this).get(ImagesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_images, container, false);
-        final TextView textView = root.findViewById(R.id.text_images);
+        progressBar = root.findViewById(R.id.progress_bar_images);
+        textView = root.findViewById(R.id.text_images);
         imagesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -87,6 +95,10 @@ public class ImagesFragment extends Fragment {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
+
+                // Handle error
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -175,7 +187,11 @@ public class ImagesFragment extends Fragment {
                 // Update the UI
                 List<Image> images = imageDao.loadAll();
                 Log.i(getClass().getName(), "images.size(): " + images.size());
-//                imagesViewModel.getText().postValue("images.size(): " + images.size());
+                getActivity().runOnUiThread(() -> {
+                    textView.setText("images.size(): " + images.size());
+                    Snackbar.make(textView, "images.size(): " + images.size(), Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                });
             }
         });
     }
