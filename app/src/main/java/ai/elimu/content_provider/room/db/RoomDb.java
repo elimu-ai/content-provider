@@ -81,7 +81,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_11_12,
                                     MIGRATION_12_13,
                                     MIGRATION_13_14,
-                                    MIGRATION_14_15
+                                    MIGRATION_14_15,
+                                    MIGRATION_15_16
                             )
                             .build();
                 }
@@ -190,6 +191,17 @@ public abstract class RoomDb extends RoomDatabase {
             database.execSQL(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS `Emoji_Word` (`Emoji_id` INTEGER NOT NULL, `words_id` INTEGER NOT NULL, PRIMARY KEY(`Emoji_id`, `words_id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_15_16 = new Migration(15, 16) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (15 --> 16)");
+
+            String sql = "CREATE TABLE IF NOT EXISTS `Letter` (`text` TEXT, `diacritic` INTEGER, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
