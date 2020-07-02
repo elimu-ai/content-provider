@@ -161,7 +161,8 @@ public class EmojisFragment extends Fragment {
                 // Update the UI
                 List<Emoji> emojis = emojiDao.loadAll();
                 Log.i(getClass().getName(), "emojis.size(): " + emojis.size());
-//                emojisViewModel.getText().postValue("emojis.size(): " + emojis.size());
+                textView.setText("emojis.size(): " + emojis.size());
+                Snackbar.make(textView, "emojis.size(): " + emojis.size(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

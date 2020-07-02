@@ -182,7 +182,8 @@ public class ImagesFragment extends Fragment {
                 // Update the UI
                 List<Image> images = imageDao.loadAll();
                 Log.i(getClass().getName(), "images.size(): " + images.size());
-//                imagesViewModel.getText().postValue("images.size(): " + images.size());
+                textView.setText("images.size(): " + images.size());
+                Snackbar.make(textView, "images.size(): " + images.size(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

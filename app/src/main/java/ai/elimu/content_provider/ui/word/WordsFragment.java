@@ -127,7 +127,8 @@ public class WordsFragment extends Fragment {
                 // Update the UI
                 List<Word> words = wordDao.loadAllOrderedByUsageCount();
                 Log.i(getClass().getName(), "words.size(): " + words.size());
-//                wordsViewModel.getText().postValue("words.size(): " + words.size());
+                textView.setText("words.size(): " + words.size());
+                Snackbar.make(textView, "words.size(): " + words.size(), Snackbar.LENGTH_LONG).show();
             }
         });
     }
