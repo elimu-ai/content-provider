@@ -2,18 +2,41 @@ package ai.elimu.content_provider.room;
 
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.content_provider.room.entity.Letter;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Word;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
+import ai.elimu.model.v2.gson.content.LetterGson;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
 import ai.elimu.model.v2.gson.content.WordGson;
 
 public class GsonToRoomConverter {
+
+    public static Letter getLetter(LetterGson letterGson) {
+        if (letterGson == null) {
+            return null;
+        } else {
+            Letter letter = new Letter();
+
+            // BaseEntity
+            letter.setId(letterGson.getId());
+
+            // Content
+            letter.setRevisionNumber(letterGson.getRevisionNumber());
+            letter.setUsageCount(letterGson.getUsageCount());
+
+            // Letter
+            letter.setText(letterGson.getText());
+            letter.setDiacritic(letterGson.getDiacritic());
+
+            return letter;
+        }
+    }
 
     public static Word getWord(WordGson wordGson) {
         if (wordGson == null) {

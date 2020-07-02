@@ -22,6 +22,10 @@ import java.util.concurrent.Executors;
 import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.LettersService;
+import ai.elimu.content_provider.room.GsonToRoomConverter;
+import ai.elimu.content_provider.room.dao.LetterDao;
+import ai.elimu.content_provider.room.db.RoomDb;
+import ai.elimu.content_provider.room.entity.Letter;
 import ai.elimu.model.v2.gson.content.LetterGson;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,38 +97,39 @@ public class LettersFragment extends Fragment {
         Log.i(getClass().getName(), "processResponseBody");
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-//        executorService.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i(getClass().getName(), "run");
-//
-//                RoomDb roomDb = RoomDb.getDatabase(getContext());
-//                LetterDao letterDao = roomDb.letterDao();
-//
-//                for (LetterGson letterGson : letterGsons) {
-//                    Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
-//
-//                    // Check if the Letter has already been stored in the database
-//                    Letter letter = letterDao.load(letterGson.getId());
-//                    Log.i(getClass().getName(), "letter: " + letter);
-//                    if (letter == null) {
-//                        // Store the new Letter in the database
-//                        letter = GsonToRoomConverter.getLetter(letterGson);
-//                        letterDao.insert(letter);
-//                        Log.i(getClass().getName(), "Stored Letter in database with ID " + letter.getId());
-//                    } else {
-//                        // Update the existing Letter in the database
-//                        letter = GsonToRoomConverter.getLetter(letterGson);
-//                        letterDao.update(letter);
-//                        Log.i(getClass().getName(), "Updated Letter in database with ID " + letter.getId());
-//                    }
-//                }
-//
-//                // Update the UI
-//                List<Letter> letters = letterDao.loadAllOrderedByUsageCount();
-//                Log.i(getClass().getName(), "letters.size(): " + letters.size());
-////                lettersViewModel.getText().postValue("letters.size(): " + letters.size());
-//            }
-//        });
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(getClass().getName(), "run");
+
+                RoomDb roomDb = RoomDb.getDatabase(getContext());
+                LetterDao letterDao = roomDb.letterDao();
+
+                for (LetterGson letterGson : letterGsons) {
+                    Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
+
+                    // Check if the Letter has already been stored in the database
+                    Letter letter = letterDao.load(letterGson.getId());
+                    Log.i(getClass().getName(), "letter: " + letter);
+                    if (letter == null) {
+                        // Store the new Letter in the database
+                        letter = GsonToRoomConverter.getLetter(letterGson);
+                        letterDao.insert(letter);
+                        Log.i(getClass().getName(), "Stored Letter in database with ID " + letter.getId());
+                    } else {
+                        // Update the existing Letter in the database
+                        letter = GsonToRoomConverter.getLetter(letterGson);
+                        letterDao.update(letter);
+                        Log.i(getClass().getName(), "Updated Letter in database with ID " + letter.getId());
+                    }
+                }
+
+                // Update the UI
+                List<Letter> letters = letterDao.loadAllOrderedByUsageCount();
+                Log.i(getClass().getName(), "letters.size(): " + letters.size());
+                textView.setText("letters.size(): " + letters.size());
+                Snackbar.make(textView, "letters.size(): " + letters.size(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 }

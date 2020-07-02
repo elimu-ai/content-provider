@@ -17,6 +17,7 @@ import ai.elimu.content_provider.room.dao.EmojiDao;
 import ai.elimu.content_provider.room.dao.Emoji_WordDao;
 import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.dao.Image_WordDao;
+import ai.elimu.content_provider.room.dao.LetterDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
@@ -26,15 +27,18 @@ import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Emoji_Word;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.Image_Word;
+import ai.elimu.content_provider.room.entity.Letter;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 15, entities = {Word.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 16, entities = {Letter.class, Word.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
+
+    public abstract LetterDao letterDao();
 
     public abstract WordDao wordDao();
 
