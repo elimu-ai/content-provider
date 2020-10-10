@@ -9,7 +9,7 @@ android {
         targetSdkVersion 29
         versionCode 1000004
         versionName "1.0.4-SNAPSHOT"
-        setProperty("archivesBaseName", "${applicationId}-${versionName}")
+        setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
