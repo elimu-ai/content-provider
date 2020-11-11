@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import androidx.room.TypeConverter;
 
+import ai.elimu.model.enums.ReadingLevel;
 import ai.elimu.model.enums.content.ImageFormat;
 import ai.elimu.model.enums.content.WordType;
 
@@ -42,6 +43,25 @@ public class Converters {
         String value = null;
         if (wordType != null) {
             value = wordType.toString();
+        }
+        return value;
+    }
+
+
+    @TypeConverter
+    public static ReadingLevel fromReadingLevel(String value) {
+        ReadingLevel readingLevel = null;
+        if (!TextUtils.isEmpty(value)) {
+            readingLevel = ReadingLevel.valueOf(value);
+        }
+        return readingLevel;
+    }
+
+    @TypeConverter
+    public static String toString(ReadingLevel readingLevel) {
+        String value = null;
+        if (readingLevel != null) {
+            value = readingLevel.toString();
         }
         return value;
     }
