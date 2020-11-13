@@ -3,6 +3,8 @@ package ai.elimu.content_provider.room.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+import ai.elimu.model.enums.ReadingLevel;
+
 /**
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
  */
@@ -16,6 +18,8 @@ public class StoryBook extends Content {
 
     @NonNull
     private long coverImageId;
+
+    private ReadingLevel readingLevel;
 
     public String getTitle() {
         return title;
@@ -39,5 +43,13 @@ public class StoryBook extends Content {
 
     public void setCoverImageId(long coverImageId) {
         this.coverImageId = coverImageId;
+    }
+
+    public ReadingLevel getReadingLevel() {
+        return readingLevel;
+    }
+
+    public void setReadingLevel(ReadingLevel readingLevel) {
+        this.readingLevel = readingLevel;
     }
 }

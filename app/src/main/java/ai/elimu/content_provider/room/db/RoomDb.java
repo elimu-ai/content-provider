@@ -34,7 +34,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 16, entities = {Letter.class, Word.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 17, entities = {Letter.class, Word.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -82,7 +82,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_12_13,
                                     MIGRATION_13_14,
                                     MIGRATION_14_15,
-                                    MIGRATION_15_16
+                                    MIGRATION_15_16,
+                                    MIGRATION_16_17
                             )
                             .build();
                 }
@@ -202,6 +203,17 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (15 --> 16)");
 
             String sql = "CREATE TABLE IF NOT EXISTS `Letter` (`text` TEXT, `diacritic` INTEGER, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_16_17 = new Migration(16, 17) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (16 --> 17)");
+
+            String sql = "ALTER TABLE `StoryBook` ADD COLUMN `readingLevel` TEXT";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
