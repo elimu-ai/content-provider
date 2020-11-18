@@ -12,7 +12,7 @@ android {
         targetSdkVersion 29
         versionCode 1000001
         versionName "1.0.1"
-        setProperty("archivesBaseName", "ai.elimu.content_provider.utils-${versionName}")
+        setProperty("archivesBaseName", "ai.elimu.content_provider.utils-${versionCode}")
     }
 
     buildTypes {
