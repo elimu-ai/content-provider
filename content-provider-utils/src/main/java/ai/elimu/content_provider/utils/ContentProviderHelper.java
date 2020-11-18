@@ -204,6 +204,37 @@ public class ContentProviderHelper {
         return storyBookGsons;
     }
 
+    public static StoryBookGson getStoryBookGson(Long storyBookId, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderHelper.class.getName(), "getStoryBookGson");
+
+        StoryBookGson storyBookGson = null;
+
+        Uri storyBookUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.storybook_provider/storybooks/" + storyBookId);
+        Log.i(ContentProviderHelper.class.getName(), "storyBookUri: " + storyBookUri);
+        Cursor storyBookCursor = context.getContentResolver().query(storyBookUri, null, null, null, null);
+        Log.i(ContentProviderHelper.class.getName(), "storyBookCursor: " + storyBookCursor);
+        if (storyBookCursor == null) {
+            Log.e(ContentProviderHelper.class.getName(), "storyBookCursor == null");
+            Toast.makeText(context, "storyBookCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderHelper.class.getName(), "storyBookCursor.getCount(): " + storyBookCursor.getCount());
+            if (storyBookCursor.getCount() == 0) {
+                Log.e(ContentProviderHelper.class.getName(), "storyBookCursor.getCount() == 0");
+            } else {
+                storyBookCursor.moveToFirst();
+
+                // Convert from Room to Gson
+                storyBookGson = CursorToStoryBookGsonConverter.getStoryBookGson(storyBookCursor);
+
+                storyBookCursor.close();
+                Log.i(ContentProviderHelper.class.getName(), "storyBookCursor.isClosed(): " + storyBookCursor.isClosed());
+            }
+        }
+        Log.i(ContentProviderHelper.class.getName(), "storyBookGson: " + storyBookGson);
+
+        return storyBookGson;
+    }
+
     public static List<StoryBookChapterGson> getStoryBookChapterGsons(Long storyBookId, Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderHelper.class.getName(), "getStoryBookChapterGsons");
 
@@ -211,11 +242,16 @@ public class ContentProviderHelper {
 
         // Prepend cover image and book title as its own chapter
         StoryBookChapterGson coverChapterGson = new StoryBookChapterGson();
-//        coverChapterGson.setImage(TODO);
+        StoryBookGson storyBookGson = getStoryBookGson(storyBookId, context, contentProviderApplicationId);
+        if (storyBookGson.getCoverImage() != null) {
+            ImageGson coverImageGson = getImageGson(storyBookGson.getCoverImage().getId(), context, contentProviderApplicationId);
+            coverChapterGson.setImage(coverImageGson);
+        }
         List<StoryBookParagraphGson> coverParagraphGsons = new ArrayList<>();
         StoryBookParagraphGson coverTitleParagraphGson = new StoryBookParagraphGson();
-        coverTitleParagraphGson.setOriginalText("Book title..."); // TODO
+        coverTitleParagraphGson.setOriginalText(storyBookGson.getTitle());
         coverParagraphGsons.add(coverTitleParagraphGson);
+        // TODO: add storybook description (if available)
         coverChapterGson.setStoryBookParagraphs(coverParagraphGsons);
         storyBookChapterGsons.add(coverChapterGson);
 
