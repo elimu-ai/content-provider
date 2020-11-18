@@ -1,2 +1,3 @@
 include ':app'
+include ':content-provider-utils'
 rootProject.name='elimu.ai Content Provider'
