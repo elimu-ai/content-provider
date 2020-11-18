@@ -10,9 +10,9 @@ android {
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 1000001
-        versionName "1.0.1"
-        setProperty("archivesBaseName", "ai.elimu.content_provider.utils-${versionCode}")
+        versionCode 1000002
+        versionName "1.0.2-SNAPSHOT"
+        setProperty("archivesBaseName", "content-provider-utils-${versionName}")
     }
 
     buildTypes {
@@ -36,8 +36,8 @@ publishing {
         utils(MavenPublication) {
             groupId 'ai.elimu'
             artifactId 'content-provider-utils'
-            version '1.0.1'
-            artifact("${buildDir}/outputs/aar/ai.elimu.content_provider.utils-${version}-release.aar")
+            version '1.0.2-SNAPSHOT'
+            artifact("${buildDir}/outputs/aar/content-provider-utils-${version}-release.aar")
         }
     }
     repositories {
