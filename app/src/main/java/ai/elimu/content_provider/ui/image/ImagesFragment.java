@@ -117,8 +117,8 @@ public class ImagesFragment extends Fragment {
                 Image_WordDao image_WordDao = roomDb.image_WordDao();
 
                 // Empty the database table before downloading up-to-date content
-                imageDao.deleteAll();
                 image_WordDao.deleteAll();
+                imageDao.deleteAll();
 
                 for (ImageGson imageGson : imageGsons) {
                     Log.i(getClass().getName(), "imageGson.getId(): " + imageGson.getId());

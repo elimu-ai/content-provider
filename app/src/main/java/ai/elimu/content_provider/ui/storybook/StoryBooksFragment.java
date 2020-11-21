@@ -122,92 +122,50 @@ public class StoryBooksFragment extends Fragment {
                 StoryBookParagraphDao storyBookParagraphDao = roomDb.storyBookParagraphDao();
                 StoryBookParagraph_WordDao storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao();
 
+                // Empty the database table before downloading up-to-date content
+                storyBookParagraph_WordDao.deleteAll();
+                storyBookParagraphDao.deleteAll();
+                storyBookChapterDao.deleteAll();
+                storyBookDao.deleteAll();
+
                 for (StoryBookGson storyBookGson : storyBookGsons) {
                     Log.i(getClass().getName(), "storyBookGson.getId(): " + storyBookGson.getId());
 
-                    // Check if the StoryBook has already been stored in the database
-                    StoryBook storyBook = storyBookDao.load(storyBookGson.getId());
-                    Log.i(getClass().getName(), "storyBook: " + storyBook);
-                    if (storyBook == null) {
-                        // Store the new StoryBook in the database
-                        storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
-                        storyBookDao.insert(storyBook);
-                        Log.i(getClass().getName(), "Stored StoryBook in database with ID " + storyBook.getId());
+                    // Store the StoryBook in the database
+                    StoryBook storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
+                    storyBookDao.insert(storyBook);
+                    Log.i(getClass().getName(), "Stored StoryBook in database with ID " + storyBook.getId());
 
-                        List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
-                        Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
-                        for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
-                            StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
-                            storyBookChapter.setStoryBookId(storyBookGson.getId());
-                            storyBookChapterDao.insert(storyBookChapter);
-                            Log.i(getClass().getName(), "Stored StoryBookChapter in database with ID " + storyBookChapter.getId());
+                    List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
+                    Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
+                    for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
+                        StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
+                        storyBookChapter.setStoryBookId(storyBookGson.getId());
+                        storyBookChapterDao.insert(storyBookChapter);
+                        Log.i(getClass().getName(), "Stored StoryBookChapter in database with ID " + storyBookChapter.getId());
 
-                            List<StoryBookParagraphGson> storyBookParagraphs = storyBookChapterGson.getStoryBookParagraphs();
-                            Log.i(getClass().getName(), "storyBookParagraphs.size(): " + storyBookParagraphs.size());
-                            for (StoryBookParagraphGson storyBookParagraphGson : storyBookParagraphs) {
-                                StoryBookParagraph storyBookParagraph = GsonToRoomConverter.getStoryBookParagraph(storyBookParagraphGson);
-                                storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
-                                storyBookParagraphDao.insert(storyBookParagraph);
-                                Log.i(getClass().getName(), "Stored StoryBookParagraph in database with ID " + storyBookParagraph.getId());
+                        List<StoryBookParagraphGson> storyBookParagraphs = storyBookChapterGson.getStoryBookParagraphs();
+                        Log.i(getClass().getName(), "storyBookParagraphs.size(): " + storyBookParagraphs.size());
+                        for (StoryBookParagraphGson storyBookParagraphGson : storyBookParagraphs) {
+                            StoryBookParagraph storyBookParagraph = GsonToRoomConverter.getStoryBookParagraph(storyBookParagraphGson);
+                            storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
+                            storyBookParagraphDao.insert(storyBookParagraph);
+                            Log.i(getClass().getName(), "Stored StoryBookParagraph in database with ID " + storyBookParagraph.getId());
 
-                                // Store all the StoryBookParagraph's Words in the database
-                                List<WordGson> wordGsons = storyBookParagraphGson.getWords();
-                                Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                                for (int i = 0; i < wordGsons.size(); i++) {
-                                    WordGson wordGson = wordGsons.get(i);
-                                    Log.i(getClass().getName(), "wordGson: " + wordGson);
-                                    if (wordGson != null) {
-                                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                        StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
-                                        storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
-                                        storyBookParagraph_Word.setWords_id(wordGson.getId());
-                                        storyBookParagraph_Word.setWords_ORDER(i);
-                                        storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
-                                        Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        // Update the existing StoryBook in the database
-                        storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
-                        storyBookDao.update(storyBook);
-                        Log.i(getClass().getName(), "Updated StoryBook in database with ID " + storyBook.getId());
-
-                        List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
-                        Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
-                        for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
-                            StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
-                            storyBookChapter.setStoryBookId(storyBookGson.getId());
-                            storyBookChapterDao.update(storyBookChapter);
-                            Log.i(getClass().getName(), "Updated StoryBookChapter in database with ID " + storyBookChapter.getId());
-
-                            List<StoryBookParagraphGson> storyBookParagraphs = storyBookChapterGson.getStoryBookParagraphs();
-                            Log.i(getClass().getName(), "storyBookParagraphs.size(): " + storyBookParagraphs.size());
-                            for (StoryBookParagraphGson storyBookParagraphGson : storyBookParagraphs) {
-                                StoryBookParagraph storyBookParagraph = GsonToRoomConverter.getStoryBookParagraph(storyBookParagraphGson);
-                                storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
-                                storyBookParagraphDao.update(storyBookParagraph);
-                                Log.i(getClass().getName(), "Updated StoryBookParagraph in database with ID " + storyBookParagraph.getId());
-
-                                // Delete all the StoryBookParagraph's Words (in case deletions have been made on the server-side)
-                                storyBookParagraph_WordDao.delete(storyBookParagraphGson.getId());
-
-                                // Store all the StoryBookParagraph's Words in the database
-                                List<WordGson> wordGsons = storyBookParagraphGson.getWords();
-                                Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                                for (int i = 0; i < wordGsons.size(); i++) {
-                                    WordGson wordGson = wordGsons.get(i);
-                                    Log.i(getClass().getName(), "wordGson: " + wordGson);
-                                    if (wordGson != null) {
-                                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                        StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
-                                        storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
-                                        storyBookParagraph_Word.setWords_id(wordGson.getId());
-                                        storyBookParagraph_Word.setWords_ORDER(i);
-                                        storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
-                                        Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
-                                    }
+                            // Store all the StoryBookParagraph's Words in the database
+                            List<WordGson> wordGsons = storyBookParagraphGson.getWords();
+                            Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                            for (int i = 0; i < wordGsons.size(); i++) {
+                                WordGson wordGson = wordGsons.get(i);
+                                Log.i(getClass().getName(), "wordGson: " + wordGson);
+                                if (wordGson != null) {
+                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                                    StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
+                                    storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
+                                    storyBookParagraph_Word.setWords_id(wordGson.getId());
+                                    storyBookParagraph_Word.setWords_ORDER(i);
+                                    storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
+                                    Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
                                 }
                             }
                         }

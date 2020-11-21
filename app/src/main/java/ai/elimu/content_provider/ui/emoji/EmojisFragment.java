@@ -116,8 +116,8 @@ public class EmojisFragment extends Fragment {
                 Emoji_WordDao emoji_WordDao = roomDb.emoji_WordDao();
 
                 // Empty the database table before downloading up-to-date content
-                emojiDao.deleteAll();
                 emoji_WordDao.deleteAll();
+                emojiDao.deleteAll();
 
                 for (EmojiGson emojiGson : emojiGsons) {
                     Log.i(getClass().getName(), "emojiGson.getId(): " + emojiGson.getId());
