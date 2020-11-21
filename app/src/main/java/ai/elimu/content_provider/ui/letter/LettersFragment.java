@@ -110,23 +110,16 @@ public class LettersFragment extends Fragment {
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 LetterDao letterDao = roomDb.letterDao();
 
+                // Empty the database table before downloading up-to-date content
+                letterDao.deleteAll();
+
                 for (LetterGson letterGson : letterGsons) {
                     Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
 
-                    // Check if the Letter has already been stored in the database
-                    Letter letter = letterDao.load(letterGson.getId());
-                    Log.i(getClass().getName(), "letter: " + letter);
-                    if (letter == null) {
-                        // Store the new Letter in the database
-                        letter = GsonToRoomConverter.getLetter(letterGson);
-                        letterDao.insert(letter);
-                        Log.i(getClass().getName(), "Stored Letter in database with ID " + letter.getId());
-                    } else {
-                        // Update the existing Letter in the database
-                        letter = GsonToRoomConverter.getLetter(letterGson);
-                        letterDao.update(letter);
-                        Log.i(getClass().getName(), "Updated Letter in database with ID " + letter.getId());
-                    }
+                    // Store the Letter in the database
+                    Letter letter = GsonToRoomConverter.getLetter(letterGson);
+                    letterDao.insert(letter);
+                    Log.i(getClass().getName(), "Stored Letter in database with ID " + letter.getId());
                 }
 
                 // Update the UI
