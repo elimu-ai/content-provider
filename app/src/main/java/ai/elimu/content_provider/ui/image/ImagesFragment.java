@@ -116,71 +116,37 @@ public class ImagesFragment extends Fragment {
                 ImageDao imageDao = roomDb.imageDao();
                 Image_WordDao image_WordDao = roomDb.image_WordDao();
 
+                // Empty the database table before downloading up-to-date content
+                imageDao.deleteAll();
+                image_WordDao.deleteAll();
+
                 for (ImageGson imageGson : imageGsons) {
                     Log.i(getClass().getName(), "imageGson.getId(): " + imageGson.getId());
 
-                    // Check if the Image has already been stored in the database
-                    Image image = imageDao.load(imageGson.getId());
-                    Log.i(getClass().getName(), "image: " + image);
-                    if (image == null) {
-                        // Store the new Image in the database
+                    Image image = GsonToRoomConverter.getImage(imageGson);
 
-                        image = GsonToRoomConverter.getImage(imageGson);
+                    // Download bytes
+                    BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+                    String downloadUrl = baseApplication.getBaseUrl() + imageGson.getDownloadUrl();
+                    Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
+                    byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
+                    Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+                    image.setBytes(bytes);
 
-                        // Download bytes
-                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                        String downloadUrl = baseApplication.getBaseUrl() + imageGson.getDownloadUrl();
-                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
-                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
-                        image.setBytes(bytes);
+                    // Store the Image in the database
+                    imageDao.insert(image);
+                    Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
 
-                        imageDao.insert(image);
-                        Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
-
-                        // Store all the Image's Word labels in the database
-                        Set<WordGson> wordGsons = imageGson.getWords();
-                        Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                        for (WordGson wordGson : wordGsons) {
-                            Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                            Image_Word image_Word = new Image_Word();
-                            image_Word.setImage_id(imageGson.getId());
-                            image_Word.setWords_id(wordGson.getId());
-                            image_WordDao.insert(image_Word);
-                            Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
-                        }
-                    } else {
-                        // Update the existing Image in the database
-
-                        if (image.getRevisionNumber() < imageGson.getRevisionNumber()) {
-                            image = GsonToRoomConverter.getImage(imageGson);
-
-                            // Download bytes
-                            BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                            String downloadUrl = baseApplication.getBaseUrl() + imageGson.getDownloadUrl();
-                            Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                            byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
-                            Log.i(getClass().getName(), "bytes.length: " + bytes.length);
-                            image.setBytes(bytes);
-
-                            imageDao.update(image);
-                            Log.i(getClass().getName(), "Updated Image in database with ID " + image.getId());
-
-                            // Delete all the Image's Words (in case deletions have been made on the server-side)
-                            image_WordDao.delete(imageGson.getId());
-
-                            // Store all the Image's Word labels in the database
-                            Set<WordGson> wordGsons = imageGson.getWords();
-                            Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                            for (WordGson wordGson : wordGsons) {
-                                Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                Image_Word image_Word = new Image_Word();
-                                image_Word.setImage_id(imageGson.getId());
-                                image_Word.setWords_id(wordGson.getId());
-                                image_WordDao.insert(image_Word);
-                                Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
-                            }
-                        }
+                    // Store all the Image's Word labels in the database
+                    Set<WordGson> wordGsons = imageGson.getWords();
+                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                    for (WordGson wordGson : wordGsons) {
+                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                        Image_Word image_Word = new Image_Word();
+                        image_Word.setImage_id(imageGson.getId());
+                        image_Word.setWords_id(wordGson.getId());
+                        image_WordDao.insert(image_Word);
+                        Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
                     }
                 }
 
