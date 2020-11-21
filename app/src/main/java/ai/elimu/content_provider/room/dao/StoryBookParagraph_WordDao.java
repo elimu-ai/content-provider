@@ -18,4 +18,7 @@ public interface StoryBookParagraph_WordDao {
 
     @Query("DELETE FROM StoryBookParagraph_Word WHERE StoryBookParagraph_id = :storyBookParagraphId")
     void delete(Long storyBookParagraphId);
+
+    @Query("DELETE FROM StoryBookParagraph_Word")
+    void deleteAll();
 }

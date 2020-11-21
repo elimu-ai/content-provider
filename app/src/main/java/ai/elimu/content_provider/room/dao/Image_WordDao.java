@@ -18,4 +18,7 @@ public interface Image_WordDao {
 
     @Query("DELETE FROM Image_Word WHERE Image_id = :imageId")
     void delete(Long imageId);
+
+    @Query("DELETE FROM Image_Word")
+    void deleteAll();
 }

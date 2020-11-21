@@ -34,4 +34,7 @@ public interface EmojiDao {
 
     @Update
     void update(Emoji emoji);
+
+    @Query("DELETE FROM Emoji")
+    void deleteAll();
 }

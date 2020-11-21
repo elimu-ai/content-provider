@@ -18,4 +18,7 @@ public interface Emoji_WordDao {
 
     @Query("DELETE FROM Emoji_Word WHERE Emoji_id = :emojiId")
     void delete(Long emojiId);
+
+    @Query("DELETE FROM Emoji_Word")
+    void deleteAll();
 }

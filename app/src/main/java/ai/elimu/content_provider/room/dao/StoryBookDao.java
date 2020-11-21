@@ -31,4 +31,7 @@ public interface StoryBookDao {
 
     @Update
     void update(StoryBook storyBook);
+
+    @Query("DELETE FROM StoryBook")
+    void deleteAll();
 }

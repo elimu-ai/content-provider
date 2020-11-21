@@ -31,4 +31,7 @@ public interface StoryBookParagraphDao {
 
     @Update
     void update(StoryBookParagraph storyBookParagraph);
+
+    @Query("DELETE FROM StoryBookParagraph")
+    void deleteAll();
 }

@@ -34,4 +34,7 @@ public interface ImageDao {
 
     @Update
     void update(Image image);
+
+    @Query("DELETE FROM Image")
+    void deleteAll();
 }

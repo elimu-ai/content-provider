@@ -80,7 +80,7 @@ public class WordsFragment extends Fragment {
                 List<WordGson> wordGsons = response.body();
                 Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
 
-                if (wordGsons.size() > 1) {
+                if (wordGsons.size() > 0) {
                     processResponseBody(wordGsons);
                 }
             }
@@ -110,23 +110,16 @@ public class WordsFragment extends Fragment {
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 WordDao wordDao = roomDb.wordDao();
 
+                // Empty the database table before downloading up-to-date content
+                wordDao.deleteAll();
+
                 for (WordGson wordGson : wordGsons) {
                     Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
 
-                    // Check if the Word has already been stored in the database
-                    Word word = wordDao.load(wordGson.getId());
-                    Log.i(getClass().getName(), "word: " + word);
-                    if (word == null) {
-                        // Store the new Word in the database
-                        word = GsonToRoomConverter.getWord(wordGson);
-                        wordDao.insert(word);
-                        Log.i(getClass().getName(), "Stored Word in database with ID " + word.getId());
-                    } else {
-                        // Update the existing Word in the database
-                        word = GsonToRoomConverter.getWord(wordGson);
-                        wordDao.update(word);
-                        Log.i(getClass().getName(), "Updated Word in database with ID " + word.getId());
-                    }
+                    // Store the Word in the database
+                    Word word = GsonToRoomConverter.getWord(wordGson);
+                    wordDao.insert(word);
+                    Log.i(getClass().getName(), "Stored Word in database with ID " + word.getId());
                 }
 
                 // Update the UI
