@@ -7,6 +7,7 @@ import ai.elimu.content_provider.room.entity.Number;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
+import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -15,6 +16,7 @@ import ai.elimu.model.v2.gson.content.NumberGson;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
+import ai.elimu.model.v2.gson.content.VideoGson;
 import ai.elimu.model.v2.gson.content.WordGson;
 
 public class GsonToRoomConverter {
@@ -184,6 +186,27 @@ public class GsonToRoomConverter {
             // TODO: setWords
 
             return storyBookParagraph;
+        }
+    }
+
+    public static Video getVideo(VideoGson videoGson) {
+        if (videoGson == null) {
+            return null;
+        } else {
+            Video video = new Video();
+
+            // BaseEntity
+            video.setId(videoGson.getId());
+
+            // Content
+            video.setRevisionNumber(videoGson.getRevisionNumber());
+            video.setUsageCount(videoGson.getUsageCount());
+
+            // Video
+            video.setTitle(videoGson.getTitle());
+            video.setVideoFormat(videoGson.getVideoFormat());
+
+            return video;
         }
     }
 }

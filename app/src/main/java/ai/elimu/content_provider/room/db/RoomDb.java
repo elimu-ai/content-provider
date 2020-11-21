@@ -23,6 +23,7 @@ import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
+import ai.elimu.content_provider.room.dao.VideoDao;
 import ai.elimu.content_provider.room.dao.WordDao;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Emoji_Word;
@@ -34,9 +35,10 @@ import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
+import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 18, entities = {Letter.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class})
+@Database(version = 19, entities = {Letter.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -61,6 +63,8 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract StoryBookParagraphDao storyBookParagraphDao();
 
     public abstract StoryBookParagraph_WordDao storyBookParagraph_WordDao();
+
+    public abstract VideoDao videoDao();
 
     private static volatile RoomDb INSTANCE;
 
@@ -88,7 +92,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_14_15,
                                     MIGRATION_15_16,
                                     MIGRATION_16_17,
-                                    MIGRATION_17_18
+                                    MIGRATION_17_18,
+                                    MIGRATION_18_19
                             )
                             .build();
                 }
@@ -230,6 +235,17 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (17 --> 18)");
 
             String sql = "CREATE TABLE IF NOT EXISTS `Number` (`value` INTEGER NOT NULL, `symbol` TEXT, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_18_19 = new Migration(18, 19) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (18 --> 19)");
+
+            String sql = "CREATE TABLE IF NOT EXISTS `Video` (`title` TEXT NOT NULL, `videoFormat` TEXT NOT NULL, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }

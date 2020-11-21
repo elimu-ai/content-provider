@@ -6,6 +6,7 @@ import androidx.room.TypeConverter;
 
 import ai.elimu.model.enums.ReadingLevel;
 import ai.elimu.model.enums.content.ImageFormat;
+import ai.elimu.model.enums.content.VideoFormat;
 import ai.elimu.model.enums.content.WordType;
 
 /**
@@ -25,6 +26,22 @@ public class Converters {
     @TypeConverter
     public static String toString(ImageFormat imageFormat) {
         String value = imageFormat.toString();
+        return value;
+    }
+
+
+    @TypeConverter
+    public static VideoFormat fromVideoFormat(String value) {
+        VideoFormat videoFormat = null;
+        if (!TextUtils.isEmpty(value)) {
+            videoFormat = VideoFormat.valueOf(value);
+        }
+        return videoFormat;
+    }
+
+    @TypeConverter
+    public static String toString(VideoFormat videoFormat) {
+        String value = videoFormat.toString();
         return value;
     }
 
