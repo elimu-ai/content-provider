@@ -115,51 +115,28 @@ public class EmojisFragment extends Fragment {
                 EmojiDao emojiDao = roomDb.emojiDao();
                 Emoji_WordDao emoji_WordDao = roomDb.emoji_WordDao();
 
+                // Empty the database table before downloading up-to-date content
+                emojiDao.deleteAll();
+                emoji_WordDao.deleteAll();
+
                 for (EmojiGson emojiGson : emojiGsons) {
                     Log.i(getClass().getName(), "emojiGson.getId(): " + emojiGson.getId());
 
-                    // Check if the Emoji has already been stored in the database
-                    Emoji emoji = emojiDao.load(emojiGson.getId());
-                    Log.i(getClass().getName(), "emoji: " + emoji);
-                    if (emoji == null) {
-                        // Store the new Emoji in the database
+                    // Store the Emoji in the database
+                    Emoji emoji = GsonToRoomConverter.getEmoji(emojiGson);
+                    emojiDao.insert(emoji);
+                    Log.i(getClass().getName(), "Stored Emoji in database with ID " + emoji.getId());
 
-                        emoji = GsonToRoomConverter.getEmoji(emojiGson);
-                        emojiDao.insert(emoji);
-                        Log.i(getClass().getName(), "Stored Emoji in database with ID " + emoji.getId());
-
-                        // Store all the Emoji's Word labels in the database
-                        Set<WordGson> wordGsons = emojiGson.getWords();
-                        Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                        for (WordGson wordGson : wordGsons) {
-                            Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                            Emoji_Word emoji_Word = new Emoji_Word();
-                            emoji_Word.setEmoji_id(emojiGson.getId());
-                            emoji_Word.setWords_id(wordGson.getId());
-                            emoji_WordDao.insert(emoji_Word);
-                            Log.i(getClass().getName(), "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.getEmoji_id() + ", words_id: " + emoji_Word.getWords_id());
-                        }
-                    } else {
-                        // Update the existing Emoji in the database
-
-                        emoji = GsonToRoomConverter.getEmoji(emojiGson);
-                        emojiDao.update(emoji);
-                        Log.i(getClass().getName(), "Updated Emoji in database with ID " + emoji.getId());
-
-                        // Delete all the Emoji's Words (in case deletions have been made on the server-side)
-                        emoji_WordDao.delete(emojiGson.getId());
-
-                        // Store all the Emoji's Word labels in the database
-                        Set<WordGson> wordGsons = emojiGson.getWords();
-                        Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                        for (WordGson wordGson : wordGsons) {
-                            Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                            Emoji_Word emoji_Word = new Emoji_Word();
-                            emoji_Word.setEmoji_id(emojiGson.getId());
-                            emoji_Word.setWords_id(wordGson.getId());
-                            emoji_WordDao.insert(emoji_Word);
-                            Log.i(getClass().getName(), "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.getEmoji_id() + ", words_id: " + emoji_Word.getWords_id());
-                        }
+                    // Store all the Emoji's Word labels in the database
+                    Set<WordGson> wordGsons = emojiGson.getWords();
+                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
+                    for (WordGson wordGson : wordGsons) {
+                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                        Emoji_Word emoji_Word = new Emoji_Word();
+                        emoji_Word.setEmoji_id(emojiGson.getId());
+                        emoji_Word.setWords_id(wordGson.getId());
+                        emoji_WordDao.insert(emoji_Word);
+                        Log.i(getClass().getName(), "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.getEmoji_id() + ", words_id: " + emoji_Word.getWords_id());
                     }
                 }
 
