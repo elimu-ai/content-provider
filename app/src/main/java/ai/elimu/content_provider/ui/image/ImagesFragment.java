@@ -85,7 +85,7 @@ public class ImagesFragment extends Fragment {
                 List<ImageGson> imageGsons = response.body();
                 Log.i(getClass().getName(), "imageGsons.size(): " + imageGsons.size());
 
-                if (imageGsons.size() > 1) {
+                if (imageGsons.size() > 0) {
                     processResponseBody(imageGsons);
                 }
             }

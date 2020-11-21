@@ -34,4 +34,7 @@ public interface WordDao {
 
     @Update
     void update(Word word);
+
+    @Query("DELETE FROM Word")
+    void deleteAll();
 }

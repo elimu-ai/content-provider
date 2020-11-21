@@ -80,7 +80,7 @@ public class LettersFragment extends Fragment {
                 List<LetterGson> letterGsons = response.body();
                 Log.i(getClass().getName(), "letterGsons.size(): " + letterGsons.size());
 
-                if (letterGsons.size() > 1) {
+                if (letterGsons.size() > 0) {
                     processResponseBody(letterGsons);
                 }
             }

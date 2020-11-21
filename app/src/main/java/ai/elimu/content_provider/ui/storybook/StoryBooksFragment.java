@@ -89,7 +89,7 @@ public class StoryBooksFragment extends Fragment {
                 List<StoryBookGson> storyBookGsons = response.body();
                 Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
 
-                if (storyBookGsons.size() > 1) {
+                if (storyBookGsons.size() > 0) {
                     processResponseBody(storyBookGsons);
                 }
             }

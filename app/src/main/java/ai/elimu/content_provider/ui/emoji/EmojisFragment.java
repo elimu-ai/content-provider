@@ -84,7 +84,7 @@ public class EmojisFragment extends Fragment {
                 List<EmojiGson> emojiGsons = response.body();
                 Log.i(getClass().getName(), "emojiGsons.size(): " + emojiGsons.size());
 
-                if (emojiGsons.size() > 1) {
+                if (emojiGsons.size() > 0) {
                     processResponseBody(emojiGsons);
                 }
             }
