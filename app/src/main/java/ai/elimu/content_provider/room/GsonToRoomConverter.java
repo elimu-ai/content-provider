@@ -3,6 +3,7 @@ package ai.elimu.content_provider.room;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.Letter;
+import ai.elimu.content_provider.room.entity.Number;
 import ai.elimu.content_provider.room.entity.StoryBook;
 import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
@@ -10,6 +11,7 @@ import ai.elimu.content_provider.room.entity.Word;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.LetterGson;
+import ai.elimu.model.v2.gson.content.NumberGson;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
@@ -56,6 +58,27 @@ public class GsonToRoomConverter {
             word.setWordType(wordGson.getWordType());
 
             return word;
+        }
+    }
+
+    public static Number getNumber(NumberGson numberGson) {
+        if (numberGson == null) {
+            return null;
+        } else {
+            Number number = new Number();
+
+            // BaseEntity
+            number.setId(numberGson.getId());
+
+            // Content
+            number.setRevisionNumber(numberGson.getRevisionNumber());
+            number.setUsageCount(numberGson.getUsageCount());
+
+            // Number
+            number.setValue(numberGson.getValue());
+            number.setSymbol(numberGson.getSymbol());
+
+            return number;
         }
     }
 
