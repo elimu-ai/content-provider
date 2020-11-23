@@ -27,11 +27,6 @@ public class CursorToImageGsonConverter {
         String title = cursor.getString(columnTitle);
         Log.i(CursorToImageGsonConverter.class.getName(), "title: \"" + title + "\"");
 
-        int columnBytes = cursor.getColumnIndex("bytes");
-        byte[] bytes = cursor.getBlob(columnBytes);
-        Log.i(CursorToImageGsonConverter.class.getName(), "bytes: " + bytes);
-        Log.i(CursorToImageGsonConverter.class.getName(), "bytes.length: " + bytes.length);
-
         int columnImageFormat = cursor.getColumnIndex("imageFormat");
         String imageFormatAsString = cursor.getString(columnImageFormat);
         Log.i(CursorToImageGsonConverter.class.getName(), "imageFormatAsString: " + imageFormatAsString);
@@ -42,7 +37,6 @@ public class CursorToImageGsonConverter {
         image.setId(id);
         image.setRevisionNumber(revisionNumber);
         image.setTitle(title);
-        image.setBytes(bytes);
         image.setImageFormat(imageFormat);
 
         return image;
