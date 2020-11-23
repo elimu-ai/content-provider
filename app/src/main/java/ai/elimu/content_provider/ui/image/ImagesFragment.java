@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +34,7 @@ import ai.elimu.content_provider.room.dao.Image_WordDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.Image_Word;
+import ai.elimu.content_provider.util.FileHelper;
 import ai.elimu.content_provider.util.MultimediaDownloader;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.WordGson;
@@ -119,19 +124,36 @@ public class ImagesFragment extends Fragment {
                 // Empty the database table before downloading up-to-date content
                 image_WordDao.deleteAll();
                 imageDao.deleteAll();
+                // TODO: also delete corresponding image files (only those that are no longer used)
 
                 for (ImageGson imageGson : imageGsons) {
                     Log.i(getClass().getName(), "imageGson.getId(): " + imageGson.getId());
 
                     Image image = GsonToRoomConverter.getImage(imageGson);
 
-                    // Download bytes
-                    BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                    String downloadUrl = baseApplication.getBaseUrl() + imageGson.getBytesUrl();
-                    Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                    byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
-                    Log.i(getClass().getName(), "bytes.length: " + bytes.length);
-                    image.setBytes(bytes);
+                    // Check if the corresponding image file has already been downloaded
+                    File imageFile = FileHelper.getImageFile(imageGson, getContext());
+                    Log.i(getClass().getName(), "imageFile: " + imageFile);
+                    Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
+                    if (!imageFile.exists()) {
+                        // Download file bytes
+                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+                        String downloadUrl = baseApplication.getBaseUrl() + imageGson.getBytesUrl();
+                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
+                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
+                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+
+                        // Store the downloaded file in the external storage directory
+                        try {
+                            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+                            fileOutputStream.write(bytes);
+                        } catch (FileNotFoundException e) {
+                            Log.e(getClass().getName(), null, e);
+                        } catch (IOException e) {
+                            Log.e(getClass().getName(), null, e);
+                        }
+                        Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
+                    }
 
                     // Store the Image in the database
                     imageDao.insert(image);

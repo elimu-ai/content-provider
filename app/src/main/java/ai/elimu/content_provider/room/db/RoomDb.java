@@ -38,7 +38,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 19, entities = {Letter.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 20, entities = {Letter.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -93,7 +93,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_15_16,
                                     MIGRATION_16_17,
                                     MIGRATION_17_18,
-                                    MIGRATION_18_19
+                                    MIGRATION_18_19,
+                                    MIGRATION_19_20
                             )
                             .build();
                 }
@@ -246,6 +247,21 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (18 --> 19)");
 
             String sql = "CREATE TABLE IF NOT EXISTS `Video` (`title` TEXT NOT NULL, `videoFormat` TEXT NOT NULL, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_19_20 = new Migration(19, 20) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (19 --> 20)");
+
+            String sql = "DROP TABLE Image";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS `Image` (`title` TEXT NOT NULL, `imageFormat` TEXT NOT NULL, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
