@@ -14,7 +14,7 @@ import java.net.URL;
 public class MultimediaDownloader {
 
     public static byte[] downloadFileBytes(String urlValue) {
-        Log.i(MultimediaDownloader.class.getName(), "downloadMultimedia");
+        Log.i(MultimediaDownloader.class.getName(), "downloadFileBytes");
 
         Log.i(MultimediaDownloader.class.getName(), "Downloading from " + urlValue);
 
