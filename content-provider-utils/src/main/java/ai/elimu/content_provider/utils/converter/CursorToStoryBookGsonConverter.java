@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+import ai.elimu.model.enums.ReadingLevel;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 
@@ -33,11 +34,17 @@ public class CursorToStoryBookGsonConverter {
         ImageGson coverImage = new ImageGson();
         coverImage.setId(coverImageId);
 
+        int columnReadingLevel = cursor.getColumnIndex("readingLevel");
+        String readingLevelName = cursor.getString(columnReadingLevel);
+        ReadingLevel readingLevel = ReadingLevel.valueOf(readingLevelName);
+        Log.i(CursorToStoryBookGsonConverter.class.getName(), "readingLevel: " + readingLevel);
+
         StoryBookGson storyBook = new StoryBookGson();
         storyBook.setId(id);
         storyBook.setTitle(title);
         storyBook.setDescription(description);
         storyBook.setCoverImage(coverImage);
+        storyBook.setReadingLevel(readingLevel);
 
         return storyBook;
     }
