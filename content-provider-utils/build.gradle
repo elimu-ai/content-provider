@@ -11,7 +11,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1001003
-        versionName "1.1.3-SNAPSHOT"
+        versionName "1.1.3"
         setProperty("archivesBaseName", "content-provider-utils-${versionName}")
     }
 
@@ -37,15 +37,14 @@ publishing {
         utils(MavenPublication) {
             groupId 'ai.elimu'
             artifactId 'content-provider-utils'
-            version '1.1.3-SNAPSHOT'
+            version '1.1.3'
             artifact("${buildDir}/outputs/aar/content-provider-utils-${version}-release.aar")
         }
     }
     repositories {
         maven {
             credentials(PasswordCredentials)
-            // See https://www.jfrog.com/confluence/display/BT/Bintray+REST+API#BintrayRESTAPI-MavenUpload
-            url "https://api.bintray.com/maven/elimu-ai/maven/content-provider-utils/;publish=1"
+            url "https://maven.pkg.github.com/elimu-ai/content-provider"
         }
     }
 }
