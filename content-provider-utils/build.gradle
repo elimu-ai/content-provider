@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation 'ai.elimu:model:2.0.27'
+    implementation 'com.github.elimu-ai:model:model-2.0.32'
 }
 
 // See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
