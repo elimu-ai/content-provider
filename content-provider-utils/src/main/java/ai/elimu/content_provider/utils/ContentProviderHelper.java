@@ -9,12 +9,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.elimu.content_provider.utils.converter.CursorToAudioGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToEmojiGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToImageGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter;
+import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.LetterGson;
@@ -164,6 +166,37 @@ public class ContentProviderHelper {
         Log.i(ContentProviderHelper.class.getName(), "imageGson: " + imageGson);
 
         return imageGson;
+    }
+
+    public static AudioGson getAudioGson(Long audioId, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderHelper.class.getName(), "getAudioGson");
+
+        AudioGson audioGson = null;
+
+        Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/" + audioId);
+        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
+        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        if (audioCursor == null) {
+            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            if (audioCursor.getCount() == 0) {
+                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+            } else {
+                audioCursor.moveToFirst();
+
+                // Convert from Room to Gson
+                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
+
+                audioCursor.close();
+                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+            }
+        }
+        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+
+        return audioGson;
     }
 
     public static List<StoryBookGson> getStoryBookGsons(Context context, String contentProviderApplicationId) {
