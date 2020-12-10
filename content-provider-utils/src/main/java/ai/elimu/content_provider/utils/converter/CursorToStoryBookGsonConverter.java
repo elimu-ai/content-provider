@@ -36,7 +36,10 @@ public class CursorToStoryBookGsonConverter {
 
         int columnReadingLevel = cursor.getColumnIndex("readingLevel");
         String readingLevelName = cursor.getString(columnReadingLevel);
-        ReadingLevel readingLevel = ReadingLevel.valueOf(readingLevelName);
+        ReadingLevel readingLevel = null;
+        if (readingLevelName != null) {
+             readingLevel = ReadingLevel.valueOf(readingLevelName);
+        }
         Log.i(CursorToStoryBookGsonConverter.class.getName(), "readingLevel: " + readingLevel);
 
         StoryBookGson storyBook = new StoryBookGson();
