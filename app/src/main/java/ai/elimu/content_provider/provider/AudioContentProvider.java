@@ -22,6 +22,7 @@ public class AudioContentProvider extends ContentProvider {
     private static final int CODE_AUDIOS = 1;
     private static final int CODE_AUDIO_ID = 2;
     private static final int CODE_AUDIO_TRANSCRIPTION = 3;
+    private static final int CODE_AUDIO_TITLE = 4;
 
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -29,6 +30,7 @@ public class AudioContentProvider extends ContentProvider {
         MATCHER.addURI(AUTHORITY, TABLE_AUDIOS, CODE_AUDIOS);
         MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/#", CODE_AUDIO_ID);
         MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/by-transcription/*", CODE_AUDIO_TRANSCRIPTION);
+        MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/by-title/*", CODE_AUDIO_TITLE);
     }
 
     @Override
@@ -100,6 +102,22 @@ public class AudioContentProvider extends ContentProvider {
 
             // Get the Room Cursor
             cursor = audioDao.loadByTranscriptionAsCursor(transcription);
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else if (code == CODE_AUDIO_TITLE) {
+            // Extract the transcription from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
+            String title = pathSegments.get(2);
+            Log.i(getClass().getName(), "title: \"" + title + "\"");
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            cursor = audioDao.loadByTitleAsCursor(title);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

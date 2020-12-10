@@ -29,6 +29,12 @@ public interface AudioDao {
     @Query("SELECT * FROM Audio WHERE transcription = :transcription")
     Cursor loadByTranscriptionAsCursor(String transcription);
 
+    @Query("SELECT * FROM Audio WHERE title = :title")
+    Audio loadByTitle(String title);
+
+    @Query("SELECT * FROM Audio WHERE title = :title")
+    Cursor loadByTitleAsCursor(String title);
+
     @Query("SELECT * FROM Audio")
     List<Audio> loadAll();
 

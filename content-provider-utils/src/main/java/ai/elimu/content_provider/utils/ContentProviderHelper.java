@@ -199,6 +199,68 @@ public class ContentProviderHelper {
         return audioGson;
     }
 
+    public static AudioGson getAudioGsonByTitle(String title, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderHelper.class.getName(), "getAudioGsonByTitle");
+
+        AudioGson audioGson = null;
+
+        Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/by-title/" + title);
+        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
+        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        if (audioCursor == null) {
+            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            if (audioCursor.getCount() == 0) {
+                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+            } else {
+                audioCursor.moveToFirst();
+
+                // Convert from Room to Gson
+                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
+
+                audioCursor.close();
+                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+            }
+        }
+        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+
+        return audioGson;
+    }
+
+    public static AudioGson getAudioGsonByTranscription(String transcription, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderHelper.class.getName(), "getAudioGsonByTranscription");
+
+        AudioGson audioGson = null;
+
+        Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/by-transcription/" + transcription);
+        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
+        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        if (audioCursor == null) {
+            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            if (audioCursor.getCount() == 0) {
+                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+            } else {
+                audioCursor.moveToFirst();
+
+                // Convert from Room to Gson
+                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
+
+                audioCursor.close();
+                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+            }
+        }
+        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+
+        return audioGson;
+    }
+
     public static List<StoryBookGson> getStoryBookGsons(Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderHelper.class.getName(), "getStoryBookGsons");
 
