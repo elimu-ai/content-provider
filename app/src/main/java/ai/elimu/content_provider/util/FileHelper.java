@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import java.io.File;
 
+import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.VideoGson;
 
@@ -19,6 +20,15 @@ public class FileHelper {
         }
         File imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File file = new File(imagesDirectory, imageGson.getId() + "_r" + imageGson.getRevisionNumber() + "." + imageGson.getImageFormat().toString().toLowerCase());
+        return file;
+    }
+
+    public static File getAudioFile(AudioGson audioGson, Context context) {
+        if ((audioGson.getId() == null) || (audioGson.getRevisionNumber() == null)) {
+            return null;
+        }
+        File audiosDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File file = new File(audiosDirectory, audioGson.getId() + "_r" + audioGson.getRevisionNumber() + "." + audioGson.getAudioFormat().toString().toLowerCase());
         return file;
     }
 
