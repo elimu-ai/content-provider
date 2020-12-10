@@ -28,7 +28,7 @@ public class AudioContentProvider extends ContentProvider {
     static {
         MATCHER.addURI(AUTHORITY, TABLE_AUDIOS, CODE_AUDIOS);
         MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/#", CODE_AUDIO_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/by-transcription/#", CODE_AUDIO_TRANSCRIPTION);
+        MATCHER.addURI(AUTHORITY, TABLE_AUDIOS + "/by-transcription/*", CODE_AUDIO_TRANSCRIPTION);
     }
 
     @Override
