@@ -99,6 +99,37 @@ public class ContentProviderHelper {
         return wordGsons;
     }
 
+    public static WordGson getWordGson(Long wordId, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderHelper.class.getName(), "getWordGson");
+
+        WordGson wordGson = null;
+
+        Uri wordUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.word_provider/words/" + wordId);
+        Log.i(ContentProviderHelper.class.getName(), "wordUri: " + wordUri);
+        Cursor wordCursor = context.getContentResolver().query(wordUri, null, null, null, null);
+        Log.i(ContentProviderHelper.class.getName(), "wordCursor: " + wordCursor);
+        if (wordCursor == null) {
+            Log.e(ContentProviderHelper.class.getName(), "wordCursor == null");
+            Toast.makeText(context, "wordCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderHelper.class.getName(), "wordCursor.getCount(): " + wordCursor.getCount());
+            if (wordCursor.getCount() == 0) {
+                Log.e(ContentProviderHelper.class.getName(), "wordCursor.getCount() == 0");
+            } else {
+                wordCursor.moveToFirst();
+
+                // Convert from Room to Gson
+                wordGson = CursorToWordGsonConverter.getWordGson(wordCursor);
+
+                wordCursor.close();
+                Log.i(ContentProviderHelper.class.getName(), "wordCursor.isClosed(): " + wordCursor.isClosed());
+            }
+        }
+        Log.i(ContentProviderHelper.class.getName(), "wordGson: " + wordGson);
+
+        return wordGson;
+    }
+
     public static List<EmojiGson> getEmojiGsons(Long wordId, Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderHelper.class.getName(), "getEmojiGsons");
 
