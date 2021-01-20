@@ -25,22 +25,22 @@ import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
 import ai.elimu.model.v2.gson.content.WordGson;
 
-public class ContentProviderHelper {
+public class ContentProviderUtil {
     
     public static List<LetterGson> getLetterGsons(Context context, String contentProviderApplicationId) {
         List<LetterGson> letterGsons = new ArrayList<>();
 
         Uri uri = Uri.parse("content://" + contentProviderApplicationId + ".provider.letter_provider/letters");
-        Log.i(ContentProviderHelper.class.getName(), "uri: " + uri);
+        Log.i(ContentProviderUtil.class.getName(), "uri: " + uri);
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "cursor: " + cursor);
+        Log.i(ContentProviderUtil.class.getName(), "cursor: " + cursor);
         if (cursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "cursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "cursor == null");
             Toast.makeText(context, "cursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "cursor.getCount(): " + cursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "cursor.getCount(): " + cursor.getCount());
             if (cursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "cursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "cursor.getCount() == 0");
             } else {
                 boolean isLast = false;
                 while (!isLast) {
@@ -54,7 +54,7 @@ public class ContentProviderHelper {
                     isLast = cursor.isLast();
                 }
                 cursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "cursor.isClosed(): " + cursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "cursor.isClosed(): " + cursor.isClosed());
             }
         }
 
@@ -62,21 +62,21 @@ public class ContentProviderHelper {
     }
 
     public static List<WordGson> getWordGsons(Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getWordGsons");
+        Log.i(ContentProviderUtil.class.getName(), "getWordGsons");
 
         List<WordGson> wordGsons = new ArrayList<>();
         
         Uri wordsUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.word_provider/words");
-        Log.i(ContentProviderHelper.class.getName(), "wordsUri: " + wordsUri);
+        Log.i(ContentProviderUtil.class.getName(), "wordsUri: " + wordsUri);
         Cursor wordsCursor = context.getContentResolver().query(wordsUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "wordsCursor: " + wordsCursor);
+        Log.i(ContentProviderUtil.class.getName(), "wordsCursor: " + wordsCursor);
         if (wordsCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "wordsCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "wordsCursor == null");
             Toast.makeText(context, "wordsCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "wordsCursor.getCount(): " + wordsCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "wordsCursor.getCount(): " + wordsCursor.getCount());
             if (wordsCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "wordsCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "wordsCursor.getCount() == 0");
             } else {
                 boolean isLast = false;
                 while (!isLast) {
@@ -91,30 +91,30 @@ public class ContentProviderHelper {
                 }
 
                 wordsCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "wordsCursor.isClosed(): " + wordsCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "wordsCursor.isClosed(): " + wordsCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "wordGsons.size(): " + wordGsons.size());
+        Log.i(ContentProviderUtil.class.getName(), "wordGsons.size(): " + wordGsons.size());
 
         return wordGsons;
     }
 
     public static WordGson getWordGson(Long wordId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getWordGson");
+        Log.i(ContentProviderUtil.class.getName(), "getWordGson");
 
         WordGson wordGson = null;
 
         Uri wordUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.word_provider/words/" + wordId);
-        Log.i(ContentProviderHelper.class.getName(), "wordUri: " + wordUri);
+        Log.i(ContentProviderUtil.class.getName(), "wordUri: " + wordUri);
         Cursor wordCursor = context.getContentResolver().query(wordUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "wordCursor: " + wordCursor);
+        Log.i(ContentProviderUtil.class.getName(), "wordCursor: " + wordCursor);
         if (wordCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "wordCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "wordCursor == null");
             Toast.makeText(context, "wordCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "wordCursor.getCount(): " + wordCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "wordCursor.getCount(): " + wordCursor.getCount());
             if (wordCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "wordCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "wordCursor.getCount() == 0");
             } else {
                 wordCursor.moveToFirst();
 
@@ -122,30 +122,30 @@ public class ContentProviderHelper {
                 wordGson = CursorToWordGsonConverter.getWordGson(wordCursor);
 
                 wordCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "wordCursor.isClosed(): " + wordCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "wordCursor.isClosed(): " + wordCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "wordGson: " + wordGson);
+        Log.i(ContentProviderUtil.class.getName(), "wordGson: " + wordGson);
 
         return wordGson;
     }
 
     public static List<EmojiGson> getEmojiGsons(Long wordId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getEmojiGsons");
+        Log.i(ContentProviderUtil.class.getName(), "getEmojiGsons");
 
         List<EmojiGson> emojiGsons = new ArrayList<>();
         
         Uri emojisUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.emoji_provider/emojis/by-word-label-id/" + wordId);
-        Log.i(ContentProviderHelper.class.getName(), "emojisUri: " + emojisUri);
+        Log.i(ContentProviderUtil.class.getName(), "emojisUri: " + emojisUri);
         Cursor emojisCursor = context.getContentResolver().query(emojisUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "emojisCursor: " + emojisCursor);
+        Log.i(ContentProviderUtil.class.getName(), "emojisCursor: " + emojisCursor);
         if (emojisCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "emojisCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "emojisCursor == null");
             Toast.makeText(context, "emojisCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "emojisCursor.getCount(): " + emojisCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "emojisCursor.getCount(): " + emojisCursor.getCount());
             if (emojisCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "emojisCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "emojisCursor.getCount() == 0");
             } else {
                 boolean isLast = false;
                 while (!isLast) {
@@ -160,30 +160,30 @@ public class ContentProviderHelper {
                 }
 
                 emojisCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "emojisCursor.isClosed(): " + emojisCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "emojisCursor.isClosed(): " + emojisCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "emojiGsons.size(): " + emojiGsons.size());
+        Log.i(ContentProviderUtil.class.getName(), "emojiGsons.size(): " + emojiGsons.size());
 
         return emojiGsons;
     }
 
     public static ImageGson getImageGson(Long imageId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getImageGson");
+        Log.i(ContentProviderUtil.class.getName(), "getImageGson");
 
         ImageGson imageGson = null;
 
         Uri imageUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.image_provider/images/" + imageId);
-        Log.i(ContentProviderHelper.class.getName(), "imageUri: " + imageUri);
+        Log.i(ContentProviderUtil.class.getName(), "imageUri: " + imageUri);
         Cursor imageCursor = context.getContentResolver().query(imageUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "imageCursor: " + imageCursor);
+        Log.i(ContentProviderUtil.class.getName(), "imageCursor: " + imageCursor);
         if (imageCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "imageCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "imageCursor == null");
             Toast.makeText(context, "imageCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "imageCursor.getCount(): " + imageCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "imageCursor.getCount(): " + imageCursor.getCount());
             if (imageCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "imageCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "imageCursor.getCount() == 0");
             } else {
                 imageCursor.moveToFirst();
 
@@ -191,30 +191,30 @@ public class ContentProviderHelper {
                 imageGson = CursorToImageGsonConverter.getImageGson(imageCursor);
 
                 imageCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "imageCursor.isClosed(): " + imageCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "imageCursor.isClosed(): " + imageCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "imageGson: " + imageGson);
+        Log.i(ContentProviderUtil.class.getName(), "imageGson: " + imageGson);
 
         return imageGson;
     }
 
     public static AudioGson getAudioGson(Long audioId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getAudioGson");
+        Log.i(ContentProviderUtil.class.getName(), "getAudioGson");
 
         AudioGson audioGson = null;
 
         Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/" + audioId);
-        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Log.i(ContentProviderUtil.class.getName(), "audioUri: " + audioUri);
         Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        Log.i(ContentProviderUtil.class.getName(), "audioCursor: " + audioCursor);
         if (audioCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "audioCursor == null");
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
             if (audioCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "audioCursor.getCount() == 0");
             } else {
                 audioCursor.moveToFirst();
 
@@ -222,30 +222,30 @@ public class ContentProviderHelper {
                 audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
 
                 audioCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+        Log.i(ContentProviderUtil.class.getName(), "audioGson: " + audioGson);
 
         return audioGson;
     }
 
     public static AudioGson getAudioGsonByTitle(String title, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getAudioGsonByTitle");
+        Log.i(ContentProviderUtil.class.getName(), "getAudioGsonByTitle");
 
         AudioGson audioGson = null;
 
         Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/by-title/" + title);
-        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Log.i(ContentProviderUtil.class.getName(), "audioUri: " + audioUri);
         Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        Log.i(ContentProviderUtil.class.getName(), "audioCursor: " + audioCursor);
         if (audioCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "audioCursor == null");
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
             if (audioCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "audioCursor.getCount() == 0");
             } else {
                 audioCursor.moveToFirst();
 
@@ -253,30 +253,30 @@ public class ContentProviderHelper {
                 audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
 
                 audioCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+        Log.i(ContentProviderUtil.class.getName(), "audioGson: " + audioGson);
 
         return audioGson;
     }
 
     public static AudioGson getAudioGsonByTranscription(String transcription, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getAudioGsonByTranscription");
+        Log.i(ContentProviderUtil.class.getName(), "getAudioGsonByTranscription");
 
         AudioGson audioGson = null;
 
         Uri audioUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.audio_provider/audios/by-transcription/" + transcription);
-        Log.i(ContentProviderHelper.class.getName(), "audioUri: " + audioUri);
+        Log.i(ContentProviderUtil.class.getName(), "audioUri: " + audioUri);
         Cursor audioCursor = context.getContentResolver().query(audioUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "audioCursor: " + audioCursor);
+        Log.i(ContentProviderUtil.class.getName(), "audioCursor: " + audioCursor);
         if (audioCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "audioCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "audioCursor == null");
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "audioCursor.getCount(): " + audioCursor.getCount());
             if (audioCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "audioCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "audioCursor.getCount() == 0");
             } else {
                 audioCursor.moveToFirst();
 
@@ -284,30 +284,30 @@ public class ContentProviderHelper {
                 audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor);
 
                 audioCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "audioCursor.isClosed(): " + audioCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "audioGson: " + audioGson);
+        Log.i(ContentProviderUtil.class.getName(), "audioGson: " + audioGson);
 
         return audioGson;
     }
 
     public static List<StoryBookGson> getStoryBookGsons(Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getStoryBookGsons");
+        Log.i(ContentProviderUtil.class.getName(), "getStoryBookGsons");
 
         List<StoryBookGson> storyBookGsons = new ArrayList<>();
 
         Uri storyBooksUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.storybook_provider/storybooks");
-        Log.i(ContentProviderHelper.class.getName(), "storyBooksUri: " + storyBooksUri);
+        Log.i(ContentProviderUtil.class.getName(), "storyBooksUri: " + storyBooksUri);
         Cursor storyBooksCursor = context.getContentResolver().query(storyBooksUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "storyBooksCursor: " + storyBooksCursor);
+        Log.i(ContentProviderUtil.class.getName(), "storyBooksCursor: " + storyBooksCursor);
         if (storyBooksCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "storyBooksCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "storyBooksCursor == null");
             Toast.makeText(context, "storyBooksCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "storyBooksCursor.getCount(): " + storyBooksCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "storyBooksCursor.getCount(): " + storyBooksCursor.getCount());
             if (storyBooksCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "storyBooksCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "storyBooksCursor.getCount() == 0");
             } else {
                 boolean isLast = false;
                 while (!isLast) {
@@ -322,30 +322,30 @@ public class ContentProviderHelper {
                 }
 
                 storyBooksCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "storyBooksCursor.isClosed(): " + storyBooksCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "storyBooksCursor.isClosed(): " + storyBooksCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "storyBookGsons.size(): " + storyBookGsons.size());
+        Log.i(ContentProviderUtil.class.getName(), "storyBookGsons.size(): " + storyBookGsons.size());
 
         return storyBookGsons;
     }
 
     public static StoryBookGson getStoryBookGson(Long storyBookId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getStoryBookGson");
+        Log.i(ContentProviderUtil.class.getName(), "getStoryBookGson");
 
         StoryBookGson storyBookGson = null;
 
         Uri storyBookUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.storybook_provider/storybooks/" + storyBookId);
-        Log.i(ContentProviderHelper.class.getName(), "storyBookUri: " + storyBookUri);
+        Log.i(ContentProviderUtil.class.getName(), "storyBookUri: " + storyBookUri);
         Cursor storyBookCursor = context.getContentResolver().query(storyBookUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "storyBookCursor: " + storyBookCursor);
+        Log.i(ContentProviderUtil.class.getName(), "storyBookCursor: " + storyBookCursor);
         if (storyBookCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "storyBookCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "storyBookCursor == null");
             Toast.makeText(context, "storyBookCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "storyBookCursor.getCount(): " + storyBookCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "storyBookCursor.getCount(): " + storyBookCursor.getCount());
             if (storyBookCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "storyBookCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "storyBookCursor.getCount() == 0");
             } else {
                 storyBookCursor.moveToFirst();
 
@@ -353,16 +353,16 @@ public class ContentProviderHelper {
                 storyBookGson = CursorToStoryBookGsonConverter.getStoryBookGson(storyBookCursor);
 
                 storyBookCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "storyBookCursor.isClosed(): " + storyBookCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "storyBookCursor.isClosed(): " + storyBookCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "storyBookGson: " + storyBookGson);
+        Log.i(ContentProviderUtil.class.getName(), "storyBookGson: " + storyBookGson);
 
         return storyBookGson;
     }
 
     public static List<StoryBookChapterGson> getStoryBookChapterGsons(Long storyBookId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderHelper.class.getName(), "getStoryBookChapterGsons");
+        Log.i(ContentProviderUtil.class.getName(), "getStoryBookChapterGsons");
 
         List<StoryBookChapterGson> storyBookChapterGsons = new ArrayList<>();
 
@@ -382,16 +382,16 @@ public class ContentProviderHelper {
         storyBookChapterGsons.add(coverChapterGson);
 
         Uri storyBookChaptersUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.storybook_provider/storybooks/" + storyBookId + "/chapters");
-        Log.i(ContentProviderHelper.class.getName(), "storyBookChaptersUri: " + storyBookChaptersUri);
+        Log.i(ContentProviderUtil.class.getName(), "storyBookChaptersUri: " + storyBookChaptersUri);
         Cursor storyBookChaptersCursor = context.getContentResolver().query(storyBookChaptersUri, null, null, null, null);
-        Log.i(ContentProviderHelper.class.getName(), "storyBookChaptersCursor: " + storyBookChaptersCursor);
+        Log.i(ContentProviderUtil.class.getName(), "storyBookChaptersCursor: " + storyBookChaptersCursor);
         if (storyBookChaptersCursor == null) {
-            Log.e(ContentProviderHelper.class.getName(), "storyBookChaptersCursor == null");
+            Log.e(ContentProviderUtil.class.getName(), "storyBookChaptersCursor == null");
             Toast.makeText(context, "storyBookChaptersCursor == null", Toast.LENGTH_LONG).show();
         } else {
-            Log.i(ContentProviderHelper.class.getName(), "storyBookChaptersCursor.getCount(): " + storyBookChaptersCursor.getCount());
+            Log.i(ContentProviderUtil.class.getName(), "storyBookChaptersCursor.getCount(): " + storyBookChaptersCursor.getCount());
             if (storyBookChaptersCursor.getCount() == 0) {
-                Log.e(ContentProviderHelper.class.getName(), "storyBookChaptersCursor.getCount() == 0");
+                Log.e(ContentProviderUtil.class.getName(), "storyBookChaptersCursor.getCount() == 0");
             } else {
                 boolean isLast = false;
                 while (!isLast) {
@@ -406,10 +406,10 @@ public class ContentProviderHelper {
                 }
 
                 storyBookChaptersCursor.close();
-                Log.i(ContentProviderHelper.class.getName(), "storyBookChaptersCursor.isClosed(): " + storyBookChaptersCursor.isClosed());
+                Log.i(ContentProviderUtil.class.getName(), "storyBookChaptersCursor.isClosed(): " + storyBookChaptersCursor.isClosed());
             }
         }
-        Log.i(ContentProviderHelper.class.getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
+        Log.i(ContentProviderUtil.class.getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
 
         return storyBookChapterGsons;
     }
