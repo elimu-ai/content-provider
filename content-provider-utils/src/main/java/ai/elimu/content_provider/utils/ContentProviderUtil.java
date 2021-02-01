@@ -9,6 +9,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.elimu.analytics.utils.EventProviderUtil;
+import ai.elimu.analytics.utils.logic.MasteryHelper;
 import ai.elimu.content_provider.utils.converter.CursorToAudioGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToEmojiGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToImageGsonConverter;
@@ -16,6 +18,7 @@ import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter;
+import ai.elimu.model.v2.gson.analytics.LetterAssessmentEventGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -26,8 +29,43 @@ import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
 import ai.elimu.model.v2.gson.content.WordGson;
 
 public class ContentProviderUtil {
-    
-    public static List<LetterGson> getLetterGsons(Context context, String contentProviderApplicationId) {
+
+    /**
+     * Returns a list of letters currently available to the student.
+     * <p />
+     * If the student has not yet mastered any letters, only the first letter will be returned.
+     * <p />
+     * If the student has already mastered one or more letters, those will be returned, plus one
+     * additional letter to be mastered next.
+     */
+    public static List<LetterGson> getAvailableLetterGsons(Context context, String contentProviderApplicationId, String analyticsApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAvailableLetterGsons");
+
+        List<LetterGson> letterGsons = new ArrayList<>();
+
+        List<LetterGson> allLetterGsons = getAllLetterGsons(context, contentProviderApplicationId);
+        Log.i(ContentProviderUtil.class.getName(), "allLetterGsons.size(): " + allLetterGsons.size());
+        for (LetterGson letterGson : allLetterGsons) {
+            Log.i(ContentProviderUtil.class.getName(), "letterGson.getText(): \"" + letterGson.getText() + "\"");
+            List<LetterAssessmentEventGson> letterAssessmentEventGsons = EventProviderUtil.getLetterAssessmentEventGsonsByLetter(letterGson, context, analyticsApplicationId);
+            Log.i(ContentProviderUtil.class.getName(), "letterAssessmentEventGsons.size(): " + letterAssessmentEventGsons.size());
+            boolean isLetterMastered = MasteryHelper.isLetterMastered(letterAssessmentEventGsons);
+            Log.i(ContentProviderUtil.class.getName(), "isLetterMastered: " + isLetterMastered);
+            letterGsons.add(letterGson);
+            if (!isLetterMastered) {
+                break;
+            }
+        }
+
+        return letterGsons;
+    }
+
+    /**
+     * This method is only meant to be used for testing purposes during development.
+     */
+    public static List<LetterGson> getAllLetterGsons(Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAllLetterGsons");
+
         List<LetterGson> letterGsons = new ArrayList<>();
 
         Uri uri = Uri.parse("content://" + contentProviderApplicationId + ".provider.letter_provider/letters");
@@ -61,8 +99,8 @@ public class ContentProviderUtil {
         return letterGsons;
     }
 
-    public static List<WordGson> getWordGsons(Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderUtil.class.getName(), "getWordGsons");
+    public static List<WordGson> getAllWordGsons(Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAllWordGsons");
 
         List<WordGson> wordGsons = new ArrayList<>();
         
@@ -130,8 +168,8 @@ public class ContentProviderUtil {
         return wordGson;
     }
 
-    public static List<EmojiGson> getEmojiGsons(Long wordId, Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderUtil.class.getName(), "getEmojiGsons");
+    public static List<EmojiGson> getAllEmojiGsons(Long wordId, Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAllEmojiGsons");
 
         List<EmojiGson> emojiGsons = new ArrayList<>();
         
@@ -292,8 +330,8 @@ public class ContentProviderUtil {
         return audioGson;
     }
 
-    public static List<StoryBookGson> getStoryBookGsons(Context context, String contentProviderApplicationId) {
-        Log.i(ContentProviderUtil.class.getName(), "getStoryBookGsons");
+    public static List<StoryBookGson> getAllStoryBookGsons(Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAllStoryBookGsons");
 
         List<StoryBookGson> storyBookGsons = new ArrayList<>();
 

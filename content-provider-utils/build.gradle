@@ -27,7 +27,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.elimu-ai:model:model-2.0.33'
+    implementation 'com.github.elimu-ai:model:model-2.0.34' // See https://jitpack.io/#elimu-ai/model
+    implementation 'com.github.elimu-ai:analytics:3.1.2@aar' // See https://jitpack.io/#elimu-ai/analytics
 }
 
 // See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
@@ -38,7 +39,7 @@ publishing {
             groupId 'ai.elimu'
             artifactId 'content-provider-utils'
             version '1.2.2-SNAPSHOT'
-            artifact("${buildDir}/outputs/aar/content-provider-utils-${version}-release.aar")
+            artifact("${buildDir}/outputs/aar/content-provider-utils-${version}.aar")
         }
     }
     repositories {
