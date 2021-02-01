@@ -11,8 +11,8 @@ android {
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1002002
-        versionName "1.2.2-SNAPSHOT"
-        setProperty("archivesBaseName", "content-provider-utils-${versionName}")
+        versionName "1.2.2"
+        setProperty("archivesBaseName", "utils-${versionName}")
     }
 
     buildTypes {
@@ -36,10 +36,10 @@ dependencies {
 publishing {
     publications {
         utils(MavenPublication) {
-            groupId 'ai.elimu'
-            artifactId 'content-provider-utils'
-            version '1.2.2-SNAPSHOT'
-            artifact("${buildDir}/outputs/aar/content-provider-utils-${version}.aar")
+            groupId 'ai.elimu.content-provider'
+            artifactId 'utils'
+            version '1.2.2'
+            artifact("${buildDir}/outputs/aar/utils-${version}.aar")
         }
     }
     repositories {
