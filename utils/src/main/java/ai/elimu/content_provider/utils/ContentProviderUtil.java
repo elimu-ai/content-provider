@@ -19,6 +19,7 @@ import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonCon
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter;
 import ai.elimu.model.v2.gson.analytics.LetterAssessmentEventGson;
+import ai.elimu.model.v2.gson.analytics.WordAssessmentEventGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -97,6 +98,36 @@ public class ContentProviderUtil {
         }
 
         return letterGsons;
+    }
+
+    /**
+     * Returns a list of words currently available to the student.
+     * <p />
+     * If the student has not yet mastered any words, only the first word will be returned.
+     * <p />
+     * If the student has already mastered one or more words, those will be returned, plus one
+     * additional word to be mastered next.
+     */
+    public static List<WordGson> getAvailableWordGsons(Context context, String contentProviderApplicationId, String analyticsApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAvailableWordGsons");
+
+        List<WordGson> wordGsons = new ArrayList<>();
+
+        List<WordGson> allWordGsons = getAllWordGsons(context, contentProviderApplicationId);
+        Log.i(ContentProviderUtil.class.getName(), "allWordGsons.size(): " + allWordGsons.size());
+        for (WordGson wordGson : allWordGsons) {
+            Log.i(ContentProviderUtil.class.getName(), "wordGson.getText(): \"" + wordGson.getText() + "\"");
+            List<WordAssessmentEventGson> wordAssessmentEventGsons = EventProviderUtil.getWordAssessmentEventGsonsByWord(wordGson, context, analyticsApplicationId);
+            Log.i(ContentProviderUtil.class.getName(), "wordAssessmentEventGsons.size(): " + wordAssessmentEventGsons.size());
+            boolean isWordMastered = MasteryHelper.isWordMastered(wordAssessmentEventGsons);
+            Log.i(ContentProviderUtil.class.getName(), "isWordMastered: " + isWordMastered);
+            wordGsons.add(wordGson);
+            if (!isWordMastered) {
+                break;
+            }
+        }
+
+        return wordGsons;
     }
 
     public static List<WordGson> getAllWordGsons(Context context, String contentProviderApplicationId) {
