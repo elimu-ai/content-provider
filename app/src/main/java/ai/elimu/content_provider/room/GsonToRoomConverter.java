@@ -1,5 +1,6 @@
 package ai.elimu.content_provider.room;
 
+import ai.elimu.content_provider.room.entity.Allophone;
 import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
@@ -10,6 +11,7 @@ import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.model.v2.gson.content.AllophoneGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -41,6 +43,27 @@ public class GsonToRoomConverter {
             letter.setDiacritic(letterGson.getDiacritic());
 
             return letter;
+        }
+    }
+
+    public static Allophone getAllophone(AllophoneGson allophoneGson) {
+        if (allophoneGson == null) {
+            return null;
+        } else {
+            Allophone allophone = new Allophone();
+
+            // BaseEntity
+            allophone.setId(allophoneGson.getId());
+
+            // Content
+            allophone.setRevisionNumber(allophoneGson.getRevisionNumber());
+            allophone.setUsageCount(allophoneGson.getUsageCount());
+
+            // Allophone
+            allophone.setValueIpa(allophoneGson.getValueIpa());
+            allophone.setDiacritic(allophoneGson.getDiacritic());
+
+            return allophone;
         }
     }
 
