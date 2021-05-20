@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1002008
         versionName "1.2.8-SNAPSHOT"
         setProperty("archivesBaseName", "utils-${versionName}")
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.elimu-ai:model:model-2.0.34' // See https://jitpack.io/#elimu-ai/model
+    implementation 'com.github.elimu-ai:model:model-2.0.37' // See https://jitpack.io/#elimu-ai/model
     implementation 'com.github.elimu-ai:analytics:3.1.5@aar' // See https://jitpack.io/#elimu-ai/analytics
 }
 
