@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import ai.elimu.model.enums.analytics.LearningEventType;
+import ai.elimu.model.v2.enums.analytics.LearningEventType;
 import ai.elimu.model.v2.gson.analytics.WordLearningEventGson;
 
 public class CursorToWordLearningEventGsonConverter {

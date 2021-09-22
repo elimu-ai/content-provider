@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-import ai.elimu.model.enums.content.AudioFormat;
+import ai.elimu.model.v2.enums.content.AudioFormat;
 import ai.elimu.model.v2.gson.content.AudioGson;
 
 public class CursorToAudioGsonConverter {

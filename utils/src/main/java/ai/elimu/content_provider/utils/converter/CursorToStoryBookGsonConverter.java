@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-import ai.elimu.model.enums.ReadingLevel;
+import ai.elimu.model.v2.enums.ReadingLevel;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 

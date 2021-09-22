@@ -4,11 +4,11 @@ import android.text.TextUtils;
 
 import androidx.room.TypeConverter;
 
-import ai.elimu.model.enums.ReadingLevel;
-import ai.elimu.model.enums.content.AudioFormat;
-import ai.elimu.model.enums.content.ImageFormat;
-import ai.elimu.model.enums.content.VideoFormat;
-import ai.elimu.model.enums.content.WordType;
+import ai.elimu.model.v2.enums.ReadingLevel;
+import ai.elimu.model.v2.enums.content.AudioFormat;
+import ai.elimu.model.v2.enums.content.ImageFormat;
+import ai.elimu.model.v2.enums.content.VideoFormat;
+import ai.elimu.model.v2.enums.content.WordType;
 
 /**
  * See https://developer.android.com/training/data-storage/room/referencing-data

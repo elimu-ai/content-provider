@@ -3,7 +3,7 @@ package ai.elimu.content_provider.room.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
-import ai.elimu.model.enums.content.ImageFormat;
+import ai.elimu.model.v2.enums.content.ImageFormat;
 
 /**
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
