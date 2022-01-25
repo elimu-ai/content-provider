@@ -11,7 +11,7 @@ import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
-import ai.elimu.model.v2.gson.content.AllophoneGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -46,7 +46,7 @@ public class GsonToRoomConverter {
         }
     }
 
-    public static Allophone getAllophone(AllophoneGson allophoneGson) {
+    public static Allophone getAllophone(SoundGson allophoneGson) {
         if (allophoneGson == null) {
             return null;
         } else {

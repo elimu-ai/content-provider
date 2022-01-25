@@ -27,7 +27,7 @@ import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.AllophoneDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Allophone;
-import ai.elimu.model.v2.gson.content.AllophoneGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,17 +67,17 @@ public class AllophonesFragment extends Fragment {
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
         AllophonesService allophonesService = retrofit.create(AllophonesService.class);
-        Call<List<AllophoneGson>> allophoneGsonsCall = allophonesService.listAllophones();
+        Call<List<SoundGson>> allophoneGsonsCall = allophonesService.listAllophones();
         Log.i(getClass().getName(), "allophoneGsonsCall.request(): " + allophoneGsonsCall.request());
-        allophoneGsonsCall.enqueue(new Callback<List<AllophoneGson>>() {
+        allophoneGsonsCall.enqueue(new Callback<List<SoundGson>>() {
 
             @Override
-            public void onResponse(Call<List<AllophoneGson>> call, Response<List<AllophoneGson>> response) {
+            public void onResponse(Call<List<SoundGson>> call, Response<List<SoundGson>> response) {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
 
-                List<AllophoneGson> allophoneGsons = response.body();
+                List<SoundGson> allophoneGsons = response.body();
                 Log.i(getClass().getName(), "allophoneGsons.size(): " + allophoneGsons.size());
 
                 if (allophoneGsons.size() > 0) {
@@ -86,7 +86,7 @@ public class AllophonesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<AllophoneGson>> call, Throwable t) {
+            public void onFailure(Call<List<SoundGson>> call, Throwable t) {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
@@ -98,7 +98,7 @@ public class AllophonesFragment extends Fragment {
         });
     }
 
-    private void processResponseBody(List<AllophoneGson> allophoneGsons) {
+    private void processResponseBody(List<SoundGson> allophoneGsons) {
         Log.i(getClass().getName(), "processResponseBody");
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -113,7 +113,7 @@ public class AllophonesFragment extends Fragment {
                 // Empty the database table before downloading up-to-date content
                 allophoneDao.deleteAll();
 
-                for (AllophoneGson allophoneGson : allophoneGsons) {
+                for (SoundGson allophoneGson : allophoneGsons) {
                     Log.i(getClass().getName(), "allophoneGson.getId(): " + allophoneGson.getId());
 
                     // Store the Allophone in the database
