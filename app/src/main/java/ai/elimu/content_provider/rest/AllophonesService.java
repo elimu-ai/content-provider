@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 
 public interface AllophonesService {
 
-    @GET("content/allophones")
+    @GET("content/sounds")
     Call<List<SoundGson>> listAllophones();
 }
