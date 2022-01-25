@@ -1,5 +1,6 @@
 package ai.elimu.content_provider.ui.allophone;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,12 +77,19 @@ public class AllophonesFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<AllophoneGson> allophoneGsons = response.body();
+                    Log.i(getClass().getName(), "allophoneGsons.size(): " + allophoneGsons.size());
 
-                List<AllophoneGson> allophoneGsons = response.body();
-                Log.i(getClass().getName(), "allophoneGsons.size(): " + allophoneGsons.size());
-
-                if (allophoneGsons.size() > 0) {
-                    processResponseBody(allophoneGsons);
+                    if (allophoneGsons.size() > 0) {
+                        processResponseBody(allophoneGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

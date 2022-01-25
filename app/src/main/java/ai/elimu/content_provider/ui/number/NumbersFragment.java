@@ -76,12 +76,19 @@ public class NumbersFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<NumberGson> numberGsons = response.body();
+                    Log.i(getClass().getName(), "numberGsons.size(): " + numberGsons.size());
 
-                List<NumberGson> numberGsons = response.body();
-                Log.i(getClass().getName(), "numberGsons.size(): " + numberGsons.size());
-
-                if (numberGsons.size() > 0) {
-                    processResponseBody(numberGsons);
+                    if (numberGsons.size() > 0) {
+                        processResponseBody(numberGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

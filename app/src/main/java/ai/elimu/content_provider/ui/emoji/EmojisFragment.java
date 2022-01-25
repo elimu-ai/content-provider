@@ -80,12 +80,19 @@ public class EmojisFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<EmojiGson> emojiGsons = response.body();
+                    Log.i(getClass().getName(), "emojiGsons.size(): " + emojiGsons.size());
 
-                List<EmojiGson> emojiGsons = response.body();
-                Log.i(getClass().getName(), "emojiGsons.size(): " + emojiGsons.size());
-
-                if (emojiGsons.size() > 0) {
-                    processResponseBody(emojiGsons);
+                    if (emojiGsons.size() > 0) {
+                        processResponseBody(emojiGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

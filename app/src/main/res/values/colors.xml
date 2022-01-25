@@ -26,4 +26,6 @@
     <color name="amber">#FFC107</color>
     <color name="orange">#FF9800</color>
     <color name="deep_orange">#FF5722</color>
+    <color name="deep_orange_darken_2">#E64A19</color>
+    <color name="deep_orange_darken_4">#BF360C</color>
 </resources>

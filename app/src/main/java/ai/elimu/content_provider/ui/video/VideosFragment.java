@@ -85,12 +85,19 @@ public class VideosFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<VideoGson> videoGsons = response.body();
+                    Log.i(getClass().getName(), "videoGsons.size(): " + videoGsons.size());
 
-                List<VideoGson> videoGsons = response.body();
-                Log.i(getClass().getName(), "videoGsons.size(): " + videoGsons.size());
-
-                if (videoGsons.size() > 0) {
-                    processResponseBody(videoGsons);
+                    if (videoGsons.size() > 0) {
+                        processResponseBody(videoGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

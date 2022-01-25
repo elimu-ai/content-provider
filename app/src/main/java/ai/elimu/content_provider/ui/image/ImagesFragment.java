@@ -86,12 +86,19 @@ public class ImagesFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<ImageGson> imageGsons = response.body();
+                    Log.i(getClass().getName(), "imageGsons.size(): " + imageGsons.size());
 
-                List<ImageGson> imageGsons = response.body();
-                Log.i(getClass().getName(), "imageGsons.size(): " + imageGsons.size());
-
-                if (imageGsons.size() > 0) {
-                    processResponseBody(imageGsons);
+                    if (imageGsons.size() > 0) {
+                        processResponseBody(imageGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
