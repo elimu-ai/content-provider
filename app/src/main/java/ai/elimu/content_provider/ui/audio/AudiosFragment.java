@@ -82,12 +82,19 @@ public class AudiosFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<AudioGson> audioGsons = response.body();
+                    Log.i(getClass().getName(), "audioGsons.size(): " + audioGsons.size());
 
-                List<AudioGson> audioGsons = response.body();
-                Log.i(getClass().getName(), "audioGsons.size(): " + audioGsons.size());
-
-                if (audioGsons.size() > 0) {
-                    processResponseBody(audioGsons);
+                    if (audioGsons.size() > 0) {
+                        processResponseBody(audioGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -98,7 +105,9 @@ public class AudiosFragment extends Fragment {
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                        .show();
                 progressBar.setVisibility(View.GONE);
             }
         });
