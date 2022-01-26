@@ -8,8 +8,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_allophones">Allophones</string>
     <string name="menu_letters">Letters</string>
+    <string name="menu_sounds">Sounds</string>
     <string name="menu_words">Words</string>
     <string name="menu_numbers">Numbers</string>
     <string name="menu_emojis">Emojis</string>

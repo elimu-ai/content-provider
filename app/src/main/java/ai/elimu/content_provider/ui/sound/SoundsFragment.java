@@ -1,6 +1,5 @@
-package ai.elimu.content_provider.ui.allophone;
+package ai.elimu.content_provider.ui.sound;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,20 +22,20 @@ import java.util.concurrent.Executors;
 
 import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.AllophonesService;
+import ai.elimu.content_provider.rest.SoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.AllophoneDao;
+import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Allophone;
-import ai.elimu.model.v2.gson.content.AllophoneGson;
+import ai.elimu.content_provider.room.entity.Sound;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AllophonesFragment extends Fragment {
+public class SoundsFragment extends Fragment {
 
-    private AllophonesViewModel allophonesViewModel;
+    private SoundsViewModel soundsViewModel;
 
     private ProgressBar progressBar;
 
@@ -45,11 +44,11 @@ public class AllophonesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(getClass().getName(), "onCreateView");
 
-        allophonesViewModel = new ViewModelProvider(this).get(AllophonesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_allophones, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_allophones);
-        textView = root.findViewById(R.id.text_allophones);
-        allophonesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        soundsViewModel = new ViewModelProvider(this).get(SoundsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_sounds, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_sounds);
+        textView = root.findViewById(R.id.text_sounds);
+        soundsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 Log.i(getClass().getName(), "onChanged");
@@ -64,25 +63,25 @@ public class AllophonesFragment extends Fragment {
         Log.i(getClass().getName(), "onStart");
         super.onStart();
 
-        // Download Allophones from REST API, and store them in the database
+        // Download Sounds from REST API, and store them in the database
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
-        AllophonesService allophonesService = retrofit.create(AllophonesService.class);
-        Call<List<AllophoneGson>> allophoneGsonsCall = allophonesService.listAllophones();
-        Log.i(getClass().getName(), "allophoneGsonsCall.request(): " + allophoneGsonsCall.request());
-        allophoneGsonsCall.enqueue(new Callback<List<AllophoneGson>>() {
+        SoundsService soundsService = retrofit.create(SoundsService.class);
+        Call<List<SoundGson>> soundGsonsCall = soundsService.listSounds();
+        Log.i(getClass().getName(), "soundGsonsCall.request(): " + soundGsonsCall.request());
+        soundGsonsCall.enqueue(new Callback<List<SoundGson>>() {
 
             @Override
-            public void onResponse(Call<List<AllophoneGson>> call, Response<List<AllophoneGson>> response) {
+            public void onResponse(Call<List<SoundGson>> call, Response<List<SoundGson>> response) {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
                 if (response.isSuccessful()) {
-                    List<AllophoneGson> allophoneGsons = response.body();
-                    Log.i(getClass().getName(), "allophoneGsons.size(): " + allophoneGsons.size());
+                    List<SoundGson> soundGsons = response.body();
+                    Log.i(getClass().getName(), "soundGsons.size(): " + soundGsons.size());
 
-                    if (allophoneGsons.size() > 0) {
-                        processResponseBody(allophoneGsons);
+                    if (soundGsons.size() > 0) {
+                        processResponseBody(soundGsons);
                     }
                 } else {
                     // Handle error
@@ -94,7 +93,7 @@ public class AllophonesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<AllophoneGson>> call, Throwable t) {
+            public void onFailure(Call<List<SoundGson>> call, Throwable t) {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
@@ -108,7 +107,7 @@ public class AllophonesFragment extends Fragment {
         });
     }
 
-    private void processResponseBody(List<AllophoneGson> allophoneGsons) {
+    private void processResponseBody(List<SoundGson> soundGsons) {
         Log.i(getClass().getName(), "processResponseBody");
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -118,26 +117,26 @@ public class AllophonesFragment extends Fragment {
                 Log.i(getClass().getName(), "run");
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
-                AllophoneDao allophoneDao = roomDb.allophoneDao();
+                SoundDao soundDao = roomDb.soundDao();
 
                 // Empty the database table before downloading up-to-date content
-                allophoneDao.deleteAll();
+                soundDao.deleteAll();
 
-                for (AllophoneGson allophoneGson : allophoneGsons) {
-                    Log.i(getClass().getName(), "allophoneGson.getId(): " + allophoneGson.getId());
+                for (SoundGson soundGson : soundGsons) {
+                    Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
 
-                    // Store the Allophone in the database
-                    Allophone allophone = GsonToRoomConverter.getAllophone(allophoneGson);
-                    allophoneDao.insert(allophone);
-                    Log.i(getClass().getName(), "Stored Allophone in database with ID " + allophone.getId());
+                    // Store the Sound in the database
+                    Sound sound = GsonToRoomConverter.getSound(soundGson);
+                    soundDao.insert(sound);
+                    Log.i(getClass().getName(), "Stored Sound in database with ID " + sound.getId());
                 }
 
                 // Update the UI
-                List<Allophone> allophones = allophoneDao.loadAllOrderedByUsageCount();
-                Log.i(getClass().getName(), "allophones.size(): " + allophones.size());
+                List<Sound> sounds = soundDao.loadAllOrderedByUsageCount();
+                Log.i(getClass().getName(), "sounds.size(): " + sounds.size());
                 getActivity().runOnUiThread(() -> {
-                    textView.setText("allophones.size(): " + allophones.size());
-                    Snackbar.make(textView, "allophones.size(): " + allophones.size(), Snackbar.LENGTH_LONG).show();
+                    textView.setText("sounds.size(): " + sounds.size());
+                    Snackbar.make(textView, "sounds.size(): " + sounds.size(), Snackbar.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                 });
             }

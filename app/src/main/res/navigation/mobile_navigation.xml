@@ -12,16 +12,16 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_allophones"
-        android:name="ai.elimu.content_provider.ui.allophone.AllophonesFragment"
-        android:label="@string/menu_allophones"
-        tools:layout="@layout/fragment_allophones" />
-
-    <fragment
         android:id="@+id/nav_letters"
         android:name="ai.elimu.content_provider.ui.letter.LettersFragment"
         android:label="@string/menu_letters"
         tools:layout="@layout/fragment_letters" />
+
+    <fragment
+        android:id="@+id/nav_sounds"
+        android:name="ai.elimu.content_provider.ui.sound.SoundsFragment"
+        android:label="@string/menu_sounds"
+        tools:layout="@layout/fragment_sounds" />
 
     <fragment
         android:id="@+id/nav_words"

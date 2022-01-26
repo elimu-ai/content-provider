@@ -14,13 +14,13 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_allophones"
-                    android:icon="@drawable/ic_menu_record_voice_over"
-                    android:title="@string/menu_allophones" />
-                <item
                     android:id="@+id/nav_letters"
-                    android:icon="@drawable/ic_menu_text_format"
+                    android:icon="@drawable/ic_menu_text_fields"
                     android:title="@string/menu_letters" />
+                <item
+                    android:id="@+id/nav_sounds"
+                    android:icon="@drawable/ic_menu_music_note"
+                    android:title="@string/menu_sounds" />
                 <item
                     android:id="@+id/nav_words"
                     android:icon="@drawable/ic_menu_sms"

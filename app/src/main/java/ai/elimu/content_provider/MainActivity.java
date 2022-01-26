@@ -49,18 +49,18 @@ public class MainActivity extends AppCompatActivity {
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
             appBarConfiguration = new AppBarConfiguration
                     .Builder(
-                    // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-                    R.id.nav_home,
-                    R.id.nav_allophones,
-                    R.id.nav_letters,
-                    R.id.nav_words,
-                    R.id.nav_numbers,
-                    R.id.nav_emojis,
-                    R.id.nav_images,
-                    R.id.nav_audios,
-                    R.id.nav_storybooks,
-                    R.id.nav_videos
-            )
+                            // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
+                            R.id.nav_home,
+                            R.id.nav_letters,
+                            R.id.nav_sounds,
+                            R.id.nav_words,
+                            R.id.nav_numbers,
+                            R.id.nav_emojis,
+                            R.id.nav_images,
+                            R.id.nav_audios,
+                            R.id.nav_storybooks,
+                            R.id.nav_videos
+                    )
                     .setDrawerLayout(drawer)
                     .build();
 

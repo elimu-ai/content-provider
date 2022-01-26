@@ -1,6 +1,6 @@
 package ai.elimu.content_provider.room;
 
-import ai.elimu.content_provider.room.entity.Allophone;
+import ai.elimu.content_provider.room.entity.Sound;
 import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
@@ -11,7 +11,7 @@ import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
-import ai.elimu.model.v2.gson.content.AllophoneGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
@@ -46,24 +46,24 @@ public class GsonToRoomConverter {
         }
     }
 
-    public static Allophone getAllophone(AllophoneGson allophoneGson) {
-        if (allophoneGson == null) {
+    public static Sound getSound(SoundGson soundGson) {
+        if (soundGson == null) {
             return null;
         } else {
-            Allophone allophone = new Allophone();
+            Sound sound = new Sound();
 
             // BaseEntity
-            allophone.setId(allophoneGson.getId());
+            sound.setId(soundGson.getId());
 
             // Content
-            allophone.setRevisionNumber(allophoneGson.getRevisionNumber());
-            allophone.setUsageCount(allophoneGson.getUsageCount());
+            sound.setRevisionNumber(soundGson.getRevisionNumber());
+            sound.setUsageCount(soundGson.getUsageCount());
 
-            // Allophone
-            allophone.setValueIpa(allophoneGson.getValueIpa());
-            allophone.setDiacritic(allophoneGson.getDiacritic());
+            // Sound
+            sound.setValueIpa(soundGson.getValueIpa());
+            sound.setDiacritic(soundGson.getDiacritic());
 
-            return allophone;
+            return sound;
         }
     }
 
