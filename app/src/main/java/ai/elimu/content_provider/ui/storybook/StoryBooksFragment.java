@@ -85,12 +85,19 @@ public class StoryBooksFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<StoryBookGson> storyBookGsons = response.body();
+                    Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
 
-                List<StoryBookGson> storyBookGsons = response.body();
-                Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
-
-                if (storyBookGsons.size() > 0) {
-                    processResponseBody(storyBookGsons);
+                    if (storyBookGsons.size() > 0) {
+                        processResponseBody(storyBookGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -101,7 +108,9 @@ public class StoryBooksFragment extends Fragment {
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                        .show();
                 progressBar.setVisibility(View.GONE);
             }
         });

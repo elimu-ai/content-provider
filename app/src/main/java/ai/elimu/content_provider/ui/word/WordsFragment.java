@@ -76,12 +76,19 @@ public class WordsFragment extends Fragment {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
+                if (response.isSuccessful()) {
+                    List<WordGson> wordGsons = response.body();
+                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
 
-                List<WordGson> wordGsons = response.body();
-                Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-
-                if (wordGsons.size() > 0) {
-                    processResponseBody(wordGsons);
+                    if (wordGsons.size() > 0) {
+                        processResponseBody(wordGsons);
+                    }
+                } else {
+                    // Handle error
+                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                            .show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -92,7 +99,9 @@ public class WordsFragment extends Fragment {
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                        .show();
                 progressBar.setVisibility(View.GONE);
             }
         });
