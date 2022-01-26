@@ -46,22 +46,22 @@ public class GsonToRoomConverter {
         }
     }
 
-    public static Allophone getAllophone(SoundGson allophoneGson) {
-        if (allophoneGson == null) {
+    public static Allophone getAllophone(SoundGson soundGson) {
+        if (soundGson == null) {
             return null;
         } else {
             Allophone allophone = new Allophone();
 
             // BaseEntity
-            allophone.setId(allophoneGson.getId());
+            allophone.setId(soundGson.getId());
 
             // Content
-            allophone.setRevisionNumber(allophoneGson.getRevisionNumber());
-            allophone.setUsageCount(allophoneGson.getUsageCount());
+            allophone.setRevisionNumber(soundGson.getRevisionNumber());
+            allophone.setUsageCount(soundGson.getUsageCount());
 
             // Allophone
-            allophone.setValueIpa(allophoneGson.getValueIpa());
-            allophone.setDiacritic(allophoneGson.getDiacritic());
+            allophone.setValueIpa(soundGson.getValueIpa());
+            allophone.setDiacritic(soundGson.getDiacritic());
 
             return allophone;
         }

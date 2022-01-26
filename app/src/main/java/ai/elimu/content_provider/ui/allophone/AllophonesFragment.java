@@ -1,6 +1,5 @@
 package ai.elimu.content_provider.ui.allophone;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +22,12 @@ import java.util.concurrent.Executors;
 
 import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.AllophonesService;
+import ai.elimu.content_provider.rest.SoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.AllophoneDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Allophone;
-import ai.elimu.model.v2.gson.content.AllophoneGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,22 +66,22 @@ public class AllophonesFragment extends Fragment {
         // Download Allophones from REST API, and store them in the database
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
-        AllophonesService allophonesService = retrofit.create(AllophonesService.class);
-        Call<List<AllophoneGson>> allophoneGsonsCall = allophonesService.listAllophones();
-        Log.i(getClass().getName(), "allophoneGsonsCall.request(): " + allophoneGsonsCall.request());
-        allophoneGsonsCall.enqueue(new Callback<List<AllophoneGson>>() {
+        SoundsService soundsService = retrofit.create(SoundsService.class);
+        Call<List<SoundGson>> soundGsonsCall = soundsService.listAllophones();
+        Log.i(getClass().getName(), "soundGsonsCall.request(): " + soundGsonsCall.request());
+        soundGsonsCall.enqueue(new Callback<List<SoundGson>>() {
 
             @Override
-            public void onResponse(Call<List<AllophoneGson>> call, Response<List<AllophoneGson>> response) {
+            public void onResponse(Call<List<SoundGson>> call, Response<List<SoundGson>> response) {
                 Log.i(getClass().getName(), "onResponse");
 
                 Log.i(getClass().getName(), "response: " + response);
                 if (response.isSuccessful()) {
-                    List<AllophoneGson> allophoneGsons = response.body();
-                    Log.i(getClass().getName(), "allophoneGsons.size(): " + allophoneGsons.size());
+                    List<SoundGson> soundGsons = response.body();
+                    Log.i(getClass().getName(), "soundGsons.size(): " + soundGsons.size());
 
-                    if (allophoneGsons.size() > 0) {
-                        processResponseBody(allophoneGsons);
+                    if (soundGsons.size() > 0) {
+                        processResponseBody(soundGsons);
                     }
                 } else {
                     // Handle error
@@ -94,7 +93,7 @@ public class AllophonesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<AllophoneGson>> call, Throwable t) {
+            public void onFailure(Call<List<SoundGson>> call, Throwable t) {
                 Log.e(getClass().getName(), "onFailure", t);
 
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
@@ -108,7 +107,7 @@ public class AllophonesFragment extends Fragment {
         });
     }
 
-    private void processResponseBody(List<AllophoneGson> allophoneGsons) {
+    private void processResponseBody(List<SoundGson> soundGsons) {
         Log.i(getClass().getName(), "processResponseBody");
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -123,11 +122,11 @@ public class AllophonesFragment extends Fragment {
                 // Empty the database table before downloading up-to-date content
                 allophoneDao.deleteAll();
 
-                for (AllophoneGson allophoneGson : allophoneGsons) {
-                    Log.i(getClass().getName(), "allophoneGson.getId(): " + allophoneGson.getId());
+                for (SoundGson soundGson : soundGsons) {
+                    Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
 
                     // Store the Allophone in the database
-                    Allophone allophone = GsonToRoomConverter.getAllophone(allophoneGson);
+                    Allophone allophone = GsonToRoomConverter.getAllophone(soundGson);
                     allophoneDao.insert(allophone);
                     Log.i(getClass().getName(), "Stored Allophone in database with ID " + allophone.getId());
                 }
