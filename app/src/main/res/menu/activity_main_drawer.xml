@@ -16,7 +16,7 @@
                 <item
                     android:id="@+id/nav_allophones"
                     android:icon="@drawable/ic_menu_record_voice_over"
-                    android:title="@string/menu_allophones" />
+                    android:title="@string/menu_sounds" />
                 <item
                     android:id="@+id/nav_letters"
                     android:icon="@drawable/ic_menu_text_format"

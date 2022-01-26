@@ -33,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AllophonesFragment extends Fragment {
+public class SoundsFragment extends Fragment {
 
     private AllophonesViewModel allophonesViewModel;
 
@@ -47,7 +47,7 @@ public class AllophonesFragment extends Fragment {
         allophonesViewModel = new ViewModelProvider(this).get(AllophonesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_allophones, container, false);
         progressBar = root.findViewById(R.id.progress_bar_allophones);
-        textView = root.findViewById(R.id.text_allophones);
+        textView = root.findViewById(R.id.text_sounds);
         allophonesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
