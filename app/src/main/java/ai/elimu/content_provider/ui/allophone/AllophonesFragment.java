@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.AllophonesService;
+import ai.elimu.content_provider.rest.SoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.AllophoneDao;
 import ai.elimu.content_provider.room.db.RoomDb;
@@ -66,8 +66,8 @@ public class AllophonesFragment extends Fragment {
         // Download Allophones from REST API, and store them in the database
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
-        AllophonesService allophonesService = retrofit.create(AllophonesService.class);
-        Call<List<SoundGson>> allophoneGsonsCall = allophonesService.listAllophones();
+        SoundsService soundsService = retrofit.create(SoundsService.class);
+        Call<List<SoundGson>> allophoneGsonsCall = soundsService.listAllophones();
         Log.i(getClass().getName(), "allophoneGsonsCall.request(): " + allophoneGsonsCall.request());
         allophoneGsonsCall.enqueue(new Callback<List<SoundGson>>() {
 

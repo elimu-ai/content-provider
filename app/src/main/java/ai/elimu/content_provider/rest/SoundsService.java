@@ -6,7 +6,7 @@ import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface AllophonesService {
+public interface SoundsService {
 
     @GET("content/sounds")
     Call<List<SoundGson>> listAllophones();
