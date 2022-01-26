@@ -100,7 +100,9 @@ public class AllophonesFragment extends Fragment {
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                        .show();
                 progressBar.setVisibility(View.GONE);
             }
         });
