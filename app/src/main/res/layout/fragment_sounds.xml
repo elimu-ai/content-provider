@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin">
 
     <ProgressBar
-        android:id="@+id/progress_bar_allophones"
+        android:id="@+id/progress_bar_sounds"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

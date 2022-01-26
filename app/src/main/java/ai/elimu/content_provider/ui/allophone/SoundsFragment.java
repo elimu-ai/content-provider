@@ -45,8 +45,8 @@ public class SoundsFragment extends Fragment {
         Log.i(getClass().getName(), "onCreateView");
 
         soundsViewModel = new ViewModelProvider(this).get(SoundsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_allophones, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_allophones);
+        View root = inflater.inflate(R.layout.fragment_sounds, container, false);
+        progressBar = root.findViewById(R.id.progress_bar_sounds);
         textView = root.findViewById(R.id.text_sounds);
         soundsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
