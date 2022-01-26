@@ -12,7 +12,7 @@ import java.util.List;
 import ai.elimu.content_provider.room.entity.Allophone;
 
 @Dao
-public interface AllophoneDao {
+public interface SoundDao {
 
     @Insert
     void insert(Allophone allophone);

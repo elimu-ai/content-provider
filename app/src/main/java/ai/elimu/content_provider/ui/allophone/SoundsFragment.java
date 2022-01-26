@@ -24,7 +24,7 @@ import ai.elimu.content_provider.BaseApplication;
 import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.SoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.AllophoneDao;
+import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.Allophone;
 import ai.elimu.model.v2.gson.content.SoundGson;
@@ -117,22 +117,22 @@ public class SoundsFragment extends Fragment {
                 Log.i(getClass().getName(), "run");
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
-                AllophoneDao allophoneDao = roomDb.allophoneDao();
+                SoundDao soundDao = roomDb.soundDao();
 
                 // Empty the database table before downloading up-to-date content
-                allophoneDao.deleteAll();
+                soundDao.deleteAll();
 
                 for (SoundGson soundGson : soundGsons) {
                     Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
 
                     // Store the Allophone in the database
                     Allophone allophone = GsonToRoomConverter.getAllophone(soundGson);
-                    allophoneDao.insert(allophone);
+                    soundDao.insert(allophone);
                     Log.i(getClass().getName(), "Stored Allophone in database with ID " + allophone.getId());
                 }
 
                 // Update the UI
-                List<Allophone> allophones = allophoneDao.loadAllOrderedByUsageCount();
+                List<Allophone> allophones = soundDao.loadAllOrderedByUsageCount();
                 Log.i(getClass().getName(), "allophones.size(): " + allophones.size());
                 getActivity().runOnUiThread(() -> {
                     textView.setText("allophones.size(): " + allophones.size());
