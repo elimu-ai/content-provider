@@ -96,7 +96,7 @@ public class ImagesFragment extends Fragment {
                 } else {
                     // Handle error
                     Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_2))
+                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
                             .show();
                     progressBar.setVisibility(View.GONE);
                 }
@@ -109,7 +109,9 @@ public class ImagesFragment extends Fragment {
                 Log.e(getClass().getName(), "t.getCause():", t.getCause());
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
+                        .show();
                 progressBar.setVisibility(View.GONE);
             }
         });
