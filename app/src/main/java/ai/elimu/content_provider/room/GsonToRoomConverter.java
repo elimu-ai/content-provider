@@ -1,6 +1,6 @@
 package ai.elimu.content_provider.room;
 
-import ai.elimu.content_provider.room.entity.Allophone;
+import ai.elimu.content_provider.room.entity.Sound;
 import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
@@ -46,24 +46,24 @@ public class GsonToRoomConverter {
         }
     }
 
-    public static Allophone getAllophone(SoundGson soundGson) {
+    public static Sound getSound(SoundGson soundGson) {
         if (soundGson == null) {
             return null;
         } else {
-            Allophone allophone = new Allophone();
+            Sound sound = new Sound();
 
             // BaseEntity
-            allophone.setId(soundGson.getId());
+            sound.setId(soundGson.getId());
 
             // Content
-            allophone.setRevisionNumber(soundGson.getRevisionNumber());
-            allophone.setUsageCount(soundGson.getUsageCount());
+            sound.setRevisionNumber(soundGson.getRevisionNumber());
+            sound.setUsageCount(soundGson.getUsageCount());
 
-            // Allophone
-            allophone.setValueIpa(soundGson.getValueIpa());
-            allophone.setDiacritic(soundGson.getDiacritic());
+            // Sound
+            sound.setValueIpa(soundGson.getValueIpa());
+            sound.setDiacritic(soundGson.getDiacritic());
 
-            return allophone;
+            return sound;
         }
     }
 

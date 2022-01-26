@@ -6,7 +6,7 @@ import androidx.room.Entity;
  * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
  */
 @Entity
-public class Allophone extends Content {
+public class Sound extends Content {
 
     private String valueIpa;
 

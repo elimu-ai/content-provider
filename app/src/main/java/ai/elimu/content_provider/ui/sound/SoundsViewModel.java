@@ -1,4 +1,4 @@
-package ai.elimu.content_provider.ui.allophone;
+package ai.elimu.content_provider.ui.sound;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

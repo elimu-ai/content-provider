@@ -9,5 +9,5 @@ import retrofit2.http.GET;
 public interface SoundsService {
 
     @GET("content/sounds")
-    Call<List<SoundGson>> listAllophones();
+    Call<List<SoundGson>> listSounds();
 }

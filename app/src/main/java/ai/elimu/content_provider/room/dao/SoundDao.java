@@ -9,29 +9,29 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import ai.elimu.content_provider.room.entity.Allophone;
+import ai.elimu.content_provider.room.entity.Sound;
 
 @Dao
 public interface SoundDao {
 
     @Insert
-    void insert(Allophone allophone);
+    void insert(Sound sound);
 
-    @Query("SELECT * FROM Allophone WHERE id = :id")
-    Allophone load(Long id);
+    @Query("SELECT * FROM Sound WHERE id = :id")
+    Sound load(Long id);
 
-    @Query("SELECT * FROM Allophone WHERE id = :id")
+    @Query("SELECT * FROM Sound WHERE id = :id")
     Cursor load_Cursor(Long id);
 
-    @Query("SELECT * FROM Allophone ORDER BY usageCount DESC")
-    List<Allophone> loadAllOrderedByUsageCount();
+    @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
+    List<Sound> loadAllOrderedByUsageCount();
 
-    @Query("SELECT * FROM Allophone ORDER BY usageCount DESC")
+    @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
     Cursor loadAllOrderedByUsageCount_Cursor();
 
     @Update
-    void update(Allophone allophone);
+    void update(Sound sound);
 
-    @Query("DELETE FROM Allophone")
+    @Query("DELETE FROM Sound")
     void deleteAll();
 }

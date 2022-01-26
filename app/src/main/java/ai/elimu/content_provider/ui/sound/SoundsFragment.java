@@ -1,4 +1,4 @@
-package ai.elimu.content_provider.ui.allophone;
+package ai.elimu.content_provider.ui.sound;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +26,7 @@ import ai.elimu.content_provider.rest.SoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Allophone;
+import ai.elimu.content_provider.room.entity.Sound;
 import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,11 +63,11 @@ public class SoundsFragment extends Fragment {
         Log.i(getClass().getName(), "onStart");
         super.onStart();
 
-        // Download Allophones from REST API, and store them in the database
+        // Download Sounds from REST API, and store them in the database
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         Retrofit retrofit = baseApplication.getRetrofit();
         SoundsService soundsService = retrofit.create(SoundsService.class);
-        Call<List<SoundGson>> soundGsonsCall = soundsService.listAllophones();
+        Call<List<SoundGson>> soundGsonsCall = soundsService.listSounds();
         Log.i(getClass().getName(), "soundGsonsCall.request(): " + soundGsonsCall.request());
         soundGsonsCall.enqueue(new Callback<List<SoundGson>>() {
 
@@ -125,18 +125,18 @@ public class SoundsFragment extends Fragment {
                 for (SoundGson soundGson : soundGsons) {
                     Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
 
-                    // Store the Allophone in the database
-                    Allophone allophone = GsonToRoomConverter.getAllophone(soundGson);
-                    soundDao.insert(allophone);
-                    Log.i(getClass().getName(), "Stored Allophone in database with ID " + allophone.getId());
+                    // Store the Sound in the database
+                    Sound sound = GsonToRoomConverter.getSound(soundGson);
+                    soundDao.insert(sound);
+                    Log.i(getClass().getName(), "Stored Sound in database with ID " + sound.getId());
                 }
 
                 // Update the UI
-                List<Allophone> allophones = soundDao.loadAllOrderedByUsageCount();
-                Log.i(getClass().getName(), "allophones.size(): " + allophones.size());
+                List<Sound> sounds = soundDao.loadAllOrderedByUsageCount();
+                Log.i(getClass().getName(), "sounds.size(): " + sounds.size());
                 getActivity().runOnUiThread(() -> {
-                    textView.setText("allophones.size(): " + allophones.size());
-                    Snackbar.make(textView, "allophones.size(): " + allophones.size(), Snackbar.LENGTH_LONG).show();
+                    textView.setText("sounds.size(): " + sounds.size());
+                    Snackbar.make(textView, "sounds.size(): " + sounds.size(), Snackbar.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                 });
             }
