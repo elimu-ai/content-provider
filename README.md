@@ -30,6 +30,13 @@ Here is how to use the `utils` library in another Android app:
 
 See https://jitpack.io/#elimu-ai/content-provider/
 
+### Usage Example
+
+For an example of another Android app using the `utils` library, see the Vitabu app's Gradle configuration:
+
+  1. https://github.com/elimu-ai/vitabu/blob/master/build.gradle
+  1. https://github.com/elimu-ai/vitabu/blob/master/app/build.gradle
+
 ---
 
 ## About the elimu.ai Community
