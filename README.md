@@ -7,6 +7,27 @@ device and provides it to other elimu.ai apps.
 
 See software architecture diagram at https://github.com/elimu-ai/model/blob/master/README.md
 
+## Utils Library 📦
+
+The Content Provider comes with a [utils](`utils`) library (`.aar`) which makes it easier for other Android apps to fetch content from the Content Provider.
+
+Here is how to use the `utils` library in another Android app:
+
+ 1. Add repository:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  
+  1. Add dependency:
+  
+	dependencies {
+	        implementation 'com.github.elimu-ai:content-provider:<version>@aar'
+	}
+
 ---
 
 ## About the elimu.ai Community
