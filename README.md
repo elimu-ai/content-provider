@@ -13,20 +13,22 @@ The Content Provider comes with a [utils](`utils`) library (`.aar`) which makes 
 
 Here is how to use the `utils` library in another Android app:
 
- 1. Add repository:
+  1. Add repository:
+  
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
+  
+  2. Add dependency:
+  
+    dependencies {
+        implementation 'com.github.elimu-ai:content-provider:<version>@aar'
+    }
 
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
-  
-  1. Add dependency:
-  
-	dependencies {
-	        implementation 'com.github.elimu-ai:content-provider:<version>@aar'
-	}
+See https://jitpack.io/#elimu-ai/content-provider/
 
 ---
 
