@@ -7,6 +7,12 @@ device and provides it to other elimu.ai apps.
 
 See software architecture diagram at https://github.com/elimu-ai/model/blob/master/README.md
 
+## Software Architecture
+
+[
+  <img width="320" alt="Software Architecture" src="https://user-images.githubusercontent.com/15718174/83595568-fb6a1e00-a594-11ea-990a-10c0bd62ed11.png">
+](https://github.com/elimu-ai/wiki/blob/master/SOFTWARE_ARCHITECTURE.md)
+
 ## Utils Library 📦
 
 The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes it easier for other Android apps to fetch content from the Content Provider.
