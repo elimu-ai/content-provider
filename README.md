@@ -9,7 +9,7 @@ See software architecture diagram at https://github.com/elimu-ai/model/blob/mast
 
 ## Utils Library 📦
 
-The Content Provider comes with a [utils](`utils`) library (`.aar`) which makes it easier for other Android apps to fetch content from the Content Provider.
+The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes it easier for other Android apps to fetch content from the Content Provider.
 
 Here is how to use the `utils` library in another Android app:
 
