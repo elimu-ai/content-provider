@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1002012
         versionName "1.2.12-SNAPSHOT"
         setProperty("archivesBaseName", "utils-${versionName}")
