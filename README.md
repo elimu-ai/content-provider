@@ -34,18 +34,21 @@ Here is how to use the `utils` library in another Android app:
         implementation 'com.github.elimu-ai:content-provider:<version>@aar'
     }
 
-See https://jitpack.io/#elimu-ai/content-provider/
+See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
 
 ### Usage Example
 
 For an example of another Android app using the `utils` library, see the Vitabu app's Gradle configuration:
 
-  1. https://github.com/elimu-ai/vitabu/blob/master/build.gradle
-  1. https://github.com/elimu-ai/vitabu/blob/master/app/build.gradle
+  1. https://github.com/elimu-ai/vitabu/blob/main/build.gradle
+  1. https://github.com/elimu-ai/vitabu/blob/main/app/build.gradle
 
+## Release 📦
+
+See [.github/workflows/gradle-release.yml](.github/workflows/gradle-release.yml)
 
 ---
 
-elimu.ai - Free personalized learning for every child on Earth 🌍🌏🌎
+elimu.ai - Free open source learning software for out-of-school children ✨🚀
 
-[Website 🌐](https://elimu.ai) &nbsp; [Wiki 📃](https://github.com/elimu-ai/wiki#readme) &nbsp; [Projects 👩🏽‍💻](https://github.com/elimu-ai/wiki/projects) &nbsp; [Milestones 🎯](https://github.com/elimu-ai/wiki/milestones) &nbsp; [Community 👋🏽](https://github.com/elimu-ai/wiki#open-source-community)
+[Website 🌐](https://elimu.ai) &nbsp; [Wiki 📃](https://github.com/elimu-ai/wiki#readme) &nbsp; [Projects 👩🏽‍💻](https://github.com/orgs/elimu-ai/projects?query=is%3Aopen) &nbsp; [Milestones 🎯](https://github.com/elimu-ai/wiki/milestones) &nbsp; [Community 👋🏽](https://github.com/elimu-ai/wiki#open-source-community)

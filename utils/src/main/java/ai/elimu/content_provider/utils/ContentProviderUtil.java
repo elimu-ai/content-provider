@@ -130,6 +130,9 @@ public class ContentProviderUtil {
         return wordGsons;
     }
 
+    /**
+     * This method is only meant to be used for testing purposes during development.
+     */
     public static List<WordGson> getAllWordGsons(Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderUtil.class.getName(), "getAllWordGsons");
 
