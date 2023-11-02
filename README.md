@@ -43,6 +43,9 @@ For an example of another Android app using the `utils` library, see the Vitabu 
   1. https://github.com/elimu-ai/vitabu/blob/main/build.gradle
   1. https://github.com/elimu-ai/vitabu/blob/main/app/build.gradle
 
+## Release 📦
+
+See [.github/workflows/gradle-release.yml](.github/workflows/gradle-release.yml)
 
 ---
 
