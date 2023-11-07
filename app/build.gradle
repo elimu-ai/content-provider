@@ -8,8 +8,8 @@ android {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 1002012
-        versionName "1.2.12-SNAPSHOT"
+        versionCode 1002013
+        versionName "1.2.13-SNAPSHOT"
         setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
