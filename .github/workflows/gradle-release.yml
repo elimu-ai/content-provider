@@ -23,3 +23,5 @@ jobs:
       - run: ./gradlew releaseClean
       - run: ./gradlew releasePrepare -PbumpType=patch
       - run: ./gradlew releasePerform
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
