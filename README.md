@@ -43,6 +43,46 @@ For an example of another Android app using the `utils` library, see the Vitabu 
   1. https://github.com/elimu-ai/vitabu/blob/main/build.gradle
   1. https://github.com/elimu-ai/vitabu/blob/main/app/build.gradle
 
+## Development 👩🏽‍💻
+
+During development, you can choose between 3 build types:
+1. `debug`
+2. `qa_test`
+3. `release`
+
+By default, both `debug` and `qa_test` are pointing to a webapp 
+[test server](https://github.com/elimu-ai/webapp/blob/main/INSTALL.md#test-server). And if you want 
+to  run the webapp yourself on `localhost` while testing the Content Provider app, you can change 
+the return value of the `getBaseUrl` method in 
+[BaseApplication.java](app/src/main/java/ai/elimu/content_provider/BaseApplication.java):
+```java
+//        return url;
+        return "http://192.168.xxx.xxx:8080/webapp";
+```
+
+Use the `ifconfig` or `ipconfig` to get your IPv4 address.
+
+You will also have to enable http connections by adding the following file to 
+`app/src/main/res/network_security_config.xml`:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+```
+
+And then adding it to [AndroidManifest.xml](app/src/main/AndroidManifest.xml):
+```xml
+<application
+        android:networkSecurityConfig="@xml/network_security_config"
+```
+
+After that, connect your Android device to the same Wi-Fi network as your computer, and run the app.
+
 ## Release 📦
 
 See [.github/workflows/gradle-release.yml](.github/workflows/gradle-release.yml)
