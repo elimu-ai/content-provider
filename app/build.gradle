@@ -9,7 +9,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 1002018
-        versionName "1.2.18-SNAPSHOT"
+        versionName '1.2.18'
         setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
