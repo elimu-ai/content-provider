@@ -85,7 +85,26 @@ After that, connect your Android device to the same Wi-Fi network as your comput
 
 ## Release 📦
 
-See [.github/workflows/gradle-release.yml](.github/workflows/gradle-release.yml)
+To perform a release, follow these steps:
+
+1. Create a new branch for the release
+1. Remove `-SNAPSHOT`
+  - from the `versionName` in `app/build.gradle`
+  - from the `versionName` in `utils/build.gradle`
+  - from the `version` in `utils/build.gradle`
+1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
+1. Pick the new branch you created as the target branch
+1. Create a new tag (e.g. `1.2.19`)
+1. Choose a release title, and click "Publish release"
+1. Ensure that the release appears at https://jitpack.io/#elimu-ai/content-provider with "Status: ok"
+1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
+  - in the `versionCode` in `app/build.gradle`
+  - in the `versionName` in `app/build.gradle`
+  - in the `versionCode` in `utils/build.gradle`
+  - in the `versionName` in `utils/build.gradle`
+  - in the `version` under `publishing` in `utils/build.gradle`
+1. Commit the changes
+1. Create a pull request for merging your branch into `main`
 
 ---
 
