@@ -63,7 +63,7 @@ the return value of the `getBaseUrl` method in
 Use the `ifconfig` or `ipconfig` to get your IPv4 address.
 
 You will also have to enable http connections by adding the following file to 
-`app/src/main/res/network_security_config.xml`:
+`app/src/main/res/xml/network_security_config.xml`:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
