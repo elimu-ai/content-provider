@@ -99,6 +99,7 @@ To perform a release, follow these steps:
   - from the `versionName` in `app/build.gradle`
   - from the `versionName` in `utils/build.gradle`
   - from the `version` in `utils/build.gradle`
+1. Commit the changes
 1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
 1. Pick the new branch you created as the target branch
 1. Create a new tag (e.g. `1.2.19`)

@@ -10,7 +10,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 1002020
-        versionName "1.2.20-SNAPSHOT"
+        versionName "1.2.20"
         setProperty("archivesBaseName", "utils-${versionName}")
     }
 
@@ -37,7 +37,7 @@ publishing {
         utils(MavenPublication) {
             groupId 'ai.elimu.content_provider'
             artifactId 'utils'
-            version '1.2.20-SNAPSHOT'
+            version '1.2.20'
             artifact("${buildDir}/outputs/aar/utils-${version}-release.aar")
         }
     }
