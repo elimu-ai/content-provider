@@ -83,6 +83,13 @@ And then adding it to [AndroidManifest.xml](app/src/main/AndroidManifest.xml):
 
 After that, connect your Android device to the same Wi-Fi network as your computer, and run the app.
 
+### Gradle Upgrade
+
+```
+./gradlew wrapper --gradle-version x.x.x --distribution-type all
+```
+
+
 ## Release 📦
 
 To perform a release, follow these steps:
