@@ -98,7 +98,7 @@ To perform a release, follow these steps:
 1. Remove `-SNAPSHOT`
   - from the `versionName` in `app/build.gradle`
   - from the `versionName` in `utils/build.gradle`
-  - from the `version` in `utils/build.gradle`
+  - from the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
 1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
 1. Pick the new branch you created as the target branch
@@ -110,7 +110,7 @@ To perform a release, follow these steps:
   - in the `versionName` in `app/build.gradle`
   - in the `versionCode` in `utils/build.gradle`
   - in the `versionName` in `utils/build.gradle`
-  - in the `version` under `publishing` in `utils/build.gradle`
+  - in the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
 1. Create a pull request for merging your branch into `main`
 
