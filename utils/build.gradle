@@ -10,7 +10,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1002022
-        versionName "1.2.22-SNAPSHOT"
+        versionName "1.2.22"
         setProperty("archivesBaseName", "utils-${versionName}")
     }
 
