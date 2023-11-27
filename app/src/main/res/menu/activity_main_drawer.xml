@@ -22,6 +22,10 @@
                     android:icon="@drawable/ic_menu_music_note"
                     android:title="@string/menu_sounds" />
                 <item
+                    android:id="@+id/nav_letter_sounds"
+                    android:icon="@drawable/ic_menu_emoji_symbols"
+                    android:title="@string/menu_letter_sounds" />
+                <item
                     android:id="@+id/nav_words"
                     android:icon="@drawable/ic_menu_sms"
                     android:title="@string/menu_words" />
