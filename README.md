@@ -89,6 +89,38 @@ After that, connect your Android device to the same Wi-Fi network as your comput
 ./gradlew wrapper --gradle-version x.x.x --distribution-type all
 ```
 
+### Database Migration 🔀
+
+When adding a new database `@Entity` (or modifying an existing one), you need to prepare a database
+migration (SQL script) in
+[`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java).
+
+Follow these steps:
+
+1. Add the new/modified `@Entity` to [`app/src/main/java/ai/elimu/content_provider/room/entity/`](app/src/main/java/ai/elimu/content_provider/room/entity/)
+1. Add the entity's DAO interface to [`app/src/main/java/ai/elimu/content_provider/room/dao/`](app/src/main/java/ai/elimu/content_provider/room/dao/)
+1. Include the DAO interface in [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java)
+1. Include the entity in the `entities` section of the `@Database` in [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java)
+1. Bump the `@Database` version in [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java)
+1. Build the code with `./gradlew clean build`
+1. Open the new database schema generated at `app/schemas/ai.elimu.content_provider.room.db.RoomDb/<version>.json`
+- Under `entities`, find the matching `tableName` and copy its SQL script from the `createSql` property.
+1. Open `RoomDb.java` and add a new method for the latest migration
+- Paste the SQL script from the above JSON schema, and replace `${TABLE_NAME}` with the name of the table you created/modified.
+- Include the migration in the `getDatabase` method in `RoomDb.java`.
+1. To run the database migration, launch the application on your device.
+
+**Tip #1:** To verify that your database migration ran successfully, look at the Logcat output and
+ensure that there are no RoomDb errors:
+```
+2023-11-27 11:46:50.662  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  migrate (23 --> 24)
+2023-11-27 11:46:50.663  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  sql: CREATE TABLE IF NOT EXISTS `LetterSound` (`revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))
+```
+
+**Tip #2:** You can also use Android Studio's _Database Inspector_ to verify that the database
+migration succeeded:
+
+![](https://github.com/elimu-ai/content-provider/assets/1451036/4c462813-bac0-4d4c-9f62-8c4aa12252d9)
 
 ## Release 📦
 

@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import ai.elimu.content_provider.room.dao.LetterSoundDao;
 import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.dao.AudioDao;
 import ai.elimu.content_provider.room.dao.EmojiDao;
@@ -27,6 +28,7 @@ import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
 import ai.elimu.content_provider.room.dao.VideoDao;
 import ai.elimu.content_provider.room.dao.WordDao;
+import ai.elimu.content_provider.room.entity.LetterSound;
 import ai.elimu.content_provider.room.entity.Sound;
 import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
@@ -42,13 +44,15 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 23, entities = {Letter.class, Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, Audio.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 24, entities = {Letter.class, Sound.class, LetterSound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, Audio.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
     public abstract LetterDao letterDao();
 
     public abstract SoundDao soundDao();
+
+    public abstract LetterSoundDao letterSoundDao();
 
     public abstract WordDao wordDao();
 
@@ -105,7 +109,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_19_20,
                                     MIGRATION_20_21,
                                     MIGRATION_21_22,
-                                    MIGRATION_22_23
+                                    MIGRATION_22_23,
+                                    MIGRATION_23_24
                             )
                             .build();
                 }
@@ -310,6 +315,17 @@ public abstract class RoomDb extends RoomDatabase {
             database.execSQL(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS `Sound` (`valueIpa` TEXT, `diacritic` INTEGER, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_23_24 = new Migration(23, 24) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (23 --> 24)");
+
+            String sql = "CREATE TABLE IF NOT EXISTS `LetterSound` (`revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
