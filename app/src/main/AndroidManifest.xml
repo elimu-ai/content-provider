@@ -33,6 +33,11 @@
             android:enabled="true"
             android:exported="true" />
         <provider
+            android:name=".provider.LetterSoundContentProvider"
+            android:authorities="${applicationId}.provider.letter_sound_provider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
             android:name=".provider.WordContentProvider"
             android:authorities="${applicationId}.provider.word_provider"
             android:enabled="true"
