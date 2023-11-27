@@ -14,6 +14,7 @@ import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.LetterDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 
+@Deprecated
 public class LetterContentProvider extends ContentProvider {
 
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider";

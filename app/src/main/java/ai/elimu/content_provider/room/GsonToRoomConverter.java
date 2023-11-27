@@ -1,5 +1,6 @@
 package ai.elimu.content_provider.room;
 
+import ai.elimu.content_provider.room.entity.LetterSound;
 import ai.elimu.content_provider.room.entity.Sound;
 import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
@@ -11,6 +12,7 @@ import ai.elimu.content_provider.room.entity.StoryBookChapter;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.model.v2.gson.content.LetterSoundGson;
 import ai.elimu.model.v2.gson.content.SoundGson;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
@@ -64,6 +66,27 @@ public class GsonToRoomConverter {
             sound.setDiacritic(soundGson.getDiacritic());
 
             return sound;
+        }
+    }
+
+    public static LetterSound getLetterSound(LetterSoundGson letterSoundGson) {
+        if (letterSoundGson == null) {
+            return null;
+        } else {
+            LetterSound letterSound = new LetterSound();
+
+            // BaseEntity
+            letterSound.setId(letterSoundGson.getId());
+
+            // Content
+            letterSound.setRevisionNumber(letterSoundGson.getRevisionNumber());
+            letterSound.setUsageCount(letterSoundGson.getUsageCount());
+
+            // LetterSound
+            // TODO: letters
+            // TODO: sounds
+
+            return letterSound;
         }
     }
 

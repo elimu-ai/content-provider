@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_sounds" />
 
     <fragment
+        android:id="@+id/nav_letter_sounds"
+        android:name="ai.elimu.content_provider.ui.letter_sound.LetterSoundsFragment"
+        android:label="@string/menu_letter_sounds"
+        tools:layout="@layout/fragment_letter_sounds" />
+
+    <fragment
         android:id="@+id/nav_words"
         android:name="ai.elimu.content_provider.ui.word.WordsFragment"
         android:label="@string/menu_words"
