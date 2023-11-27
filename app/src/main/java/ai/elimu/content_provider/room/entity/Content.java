@@ -3,7 +3,7 @@ package ai.elimu.content_provider.room.entity;
 import androidx.annotation.NonNull;
 
 /**
- * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
+ * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
  */
 public class Content extends BaseEntity {
 

@@ -5,13 +5,13 @@ device and provides it to other elimu.ai apps.
 
 ![](https://user-images.githubusercontent.com/15718174/76617075-6c82d200-6560-11ea-867d-e46385017e03.png)
 
-See software architecture diagram at https://github.com/elimu-ai/model/blob/master/README.md
+See software architecture diagram at https://github.com/elimu-ai/model/blob/main/README.md
 
 ## Software Architecture
 
 [
   <img width="320" alt="Software Architecture" src="https://user-images.githubusercontent.com/15718174/83595568-fb6a1e00-a594-11ea-990a-10c0bd62ed11.png">
-](https://github.com/elimu-ai/wiki/blob/master/SOFTWARE_ARCHITECTURE.md)
+](https://github.com/elimu-ai/wiki/blob/main/SOFTWARE_ARCHITECTURE.md)
 
 ## Utils Library 📦
 

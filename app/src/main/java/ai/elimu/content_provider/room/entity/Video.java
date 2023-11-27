@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import ai.elimu.model.v2.enums.content.VideoFormat;
 
 /**
- * For documentation, see https://github.com/elimu-ai/webapp/tree/master/src/main/java/ai/elimu/model
+ * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
  */
 @Entity
 public class Video extends Content {
