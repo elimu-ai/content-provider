@@ -15,6 +15,7 @@ import ai.elimu.content_provider.utils.converter.CursorToAudioGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToEmojiGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToImageGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter;
+import ai.elimu.content_provider.utils.converter.CursorToLetterSoundGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter;
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter;
@@ -24,6 +25,7 @@ import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.LetterGson;
+import ai.elimu.model.v2.gson.content.LetterSoundGson;
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
 import ai.elimu.model.v2.gson.content.StoryBookGson;
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
@@ -98,6 +100,45 @@ public class ContentProviderUtil {
         }
 
         return letterGsons;
+    }
+
+    /**
+     * This method is only meant to be used for testing purposes during development.
+     */
+    public static List<LetterSoundGson> getAllLetterSoundGsons(Context context, String contentProviderApplicationId) {
+        Log.i(ContentProviderUtil.class.getName(), "getAllLetterSoundGsons");
+
+        List<LetterSoundGson> letterSoundGsons = new ArrayList<>();
+
+        Uri uri = Uri.parse("content://" + contentProviderApplicationId + ".provider.letter_sound_provider/letter_sounds");
+        Log.i(ContentProviderUtil.class.getName(), "uri: " + uri);
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        Log.i(ContentProviderUtil.class.getName(), "cursor: " + cursor);
+        if (cursor == null) {
+            Log.e(ContentProviderUtil.class.getName(), "cursor == null");
+            Toast.makeText(context, "cursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(ContentProviderUtil.class.getName(), "cursor.getCount(): " + cursor.getCount());
+            if (cursor.getCount() == 0) {
+                Log.e(ContentProviderUtil.class.getName(), "cursor.getCount() == 0");
+            } else {
+                boolean isLast = false;
+                while (!isLast) {
+                    cursor.moveToNext();
+
+                    // Convert from Room to Gson
+                    LetterSoundGson letterSoundGson = CursorToLetterSoundGsonConverter.getLetterSoundGson(cursor);
+
+                    letterSoundGsons.add(letterSoundGson);
+
+                    isLast = cursor.isLast();
+                }
+                cursor.close();
+                Log.i(ContentProviderUtil.class.getName(), "cursor.isClosed(): " + cursor.isClosed());
+            }
+        }
+
+        return letterSoundGsons;
     }
 
     /**

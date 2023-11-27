@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ai.elimu.content_provider">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -31,6 +30,11 @@
         <provider
             android:name=".provider.LetterContentProvider"
             android:authorities="${applicationId}.provider.letter_provider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
+            android:name=".provider.LetterSoundContentProvider"
+            android:authorities="${applicationId}.provider.letter_sound_provider"
             android:enabled="true"
             android:exported="true" />
         <provider
