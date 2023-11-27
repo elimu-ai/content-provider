@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.library'
-    id 'maven-publish'
 }
 
 android {
@@ -29,23 +28,4 @@ android {
 dependencies {
     implementation 'com.github.elimu-ai:model:model-2.0.66' // See https://jitpack.io/#elimu-ai/model
     implementation 'com.github.elimu-ai:analytics:3.1.11@aar' // See https://jitpack.io/#elimu-ai/analytics
-}
-
-// See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
-// Usage: ./gradlew clean build publish -PmavenUsername=***** -PmavenPassword=*****
-publishing {
-    publications {
-        utils(MavenPublication) {
-            groupId 'ai.elimu.content_provider'
-            artifactId 'utils'
-            version '1.2.21-SNAPSHOT'
-            artifact("${buildDir}/outputs/aar/utils-${version}-release.aar")
-        }
-    }
-    repositories {
-        maven {
-            credentials(PasswordCredentials)
-            url "https://maven.pkg.github.com/elimu-ai/content-provider"
-        }
-    }
 }
