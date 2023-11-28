@@ -142,8 +142,9 @@ To perform a release, follow these steps:
   - in the `versionName` in `app/build.gradle`
   - in the `versionCode` in `utils/build.gradle`
   - in the `versionName` in `utils/build.gradle`
+  - in the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
-1. Create a pull request for merging your branch into `main`
+   1. Create a pull request for merging your branch into `main`
 
 ---
 
