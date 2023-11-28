@@ -22,9 +22,14 @@ public class CursorToLetterSoundGsonConverter {
         Integer revisionNumber = cursor.getInt(columnIndexRevisionNumber);
         Log.i(CursorToLetterSoundGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
 
+        int columnIndexUsageCount = cursor.getColumnIndex("usageCount");
+        Integer usageCount = cursor.getInt(columnIndexUsageCount);
+        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "usageCount: " + usageCount);
+
         LetterSoundGson letterSound = new LetterSoundGson();
         letterSound.setId(id);
         letterSound.setRevisionNumber(revisionNumber);
+        letterSound.setUsageCount(usageCount);
         // TODO: letterSound.setLetters(letters);
         // TODO: letterSound.setSounds(sounds);
 
