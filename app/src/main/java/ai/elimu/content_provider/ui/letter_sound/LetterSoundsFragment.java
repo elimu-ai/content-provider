@@ -25,8 +25,10 @@ import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.LetterSoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.LetterSoundDao;
+import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.LetterSound;
+import ai.elimu.model.v2.gson.content.LetterGson;
 import ai.elimu.model.v2.gson.content.LetterSoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,8 +120,10 @@ public class LetterSoundsFragment extends Fragment {
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 LetterSoundDao letterSoundDao = roomDb.letterSoundDao();
+                LetterSound_LetterDao letterSound_LetterDao = roomDb.letterSound_LetterDao();
 
                 // Empty the database table before downloading up-to-date content
+                letterSound_LetterDao.deleteAll();
                 letterSoundDao.deleteAll();
 
                 for (LetterSoundGson letterSoundGson : letterSoundGsons) {
@@ -129,6 +133,17 @@ public class LetterSoundsFragment extends Fragment {
                     LetterSound letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson);
                     letterSoundDao.insert(letterSound);
                     Log.i(getClass().getName(), "Stored LetterSound in database with ID " + letterSound.getId());
+
+                    // Store all the LetterSound's letters in the database
+                    List<LetterGson> letterGsons = letterSoundGson.getLetters();
+                    Log.i(getClass().getName(), "letterGsons.size(): " + letterGsons.size());
+                    for (LetterGson letterGson : letterGsons) {
+                        Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
+                        // TODO
+                    }
+
+                    // Store all the LetterSound's sounds in the database
+                    // TODO
                 }
 
                 // Update the UI
