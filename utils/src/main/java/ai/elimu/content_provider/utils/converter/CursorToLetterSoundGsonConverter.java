@@ -12,6 +12,7 @@ import java.util.List;
 
 import ai.elimu.model.v2.gson.content.LetterGson;
 import ai.elimu.model.v2.gson.content.LetterSoundGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 
 public class CursorToLetterSoundGsonConverter {
 
@@ -59,12 +60,39 @@ public class CursorToLetterSoundGsonConverter {
             Log.i(CursorToLetterSoundGsonConverter.class.getName(), "lettersCursor.isClosed(): " + lettersCursor.isClosed());
         }
 
+        List<SoundGson> soundGsons = null;
+        Uri soundsUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.sound_provider/sounds/by-letter-sound-id/" + id);
+        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsUri: " + soundsUri);
+        Cursor soundsCursor = context.getContentResolver().query(soundsUri, null, null, null, null);
+        if (soundsCursor == null) {
+            Log.e(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor == null");
+            Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor.getCount(): " + soundsCursor.getCount());
+
+            soundGsons = new ArrayList<>();
+
+            boolean isLast = false;
+            while (!isLast) {
+                soundsCursor.moveToNext();
+
+                // Convert from Room to Gson
+                SoundGson soundGson = CursorToSoundGsonConverter.getSoundGson(soundsCursor);
+                soundGsons.add(soundGson);
+
+                isLast = soundsCursor.isLast();
+            }
+
+            soundsCursor.close();
+            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor.isClosed(): " + soundsCursor.isClosed());
+        }
+
         LetterSoundGson letterSound = new LetterSoundGson();
         letterSound.setId(id);
         letterSound.setRevisionNumber(revisionNumber);
         letterSound.setUsageCount(usageCount);
         letterSound.setLetters(letterGsons);
-        // TODO: letterSound.setSounds(sounds);
+        letterSound.setSounds(soundGsons);
 
         return letterSound;
     }

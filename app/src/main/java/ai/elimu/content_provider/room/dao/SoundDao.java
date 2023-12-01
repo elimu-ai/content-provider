@@ -29,6 +29,9 @@ public interface SoundDao {
     @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
     Cursor loadAllOrderedByUsageCount_Cursor();
 
+    @Query("SELECT * FROM Sound s WHERE s.id IN (SELECT sounds_id FROM LetterSound_Sound WHERE LetterSound_id = :letterSoundId)")
+    Cursor loadAllByLetterSound(Long letterSoundId);
+
     @Update
     void update(Sound sound);
 
