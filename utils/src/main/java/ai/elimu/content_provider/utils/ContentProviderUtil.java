@@ -41,6 +41,7 @@ public class ContentProviderUtil {
      * If the student has already mastered one or more letters, those will be returned, plus one
      * additional letter to be mastered next.
      */
+    @Deprecated
     public static List<LetterGson> getAvailableLetterGsons(Context context, String contentProviderApplicationId, String analyticsApplicationId) {
         Log.i(ContentProviderUtil.class.getName(), "getAvailableLetterGsons");
 
@@ -64,8 +65,10 @@ public class ContentProviderUtil {
     }
 
     /**
-     * This method is only meant to be used for testing purposes during development.
+     * This method is only meant to be used for testing purposes during development. For production, 
+     * use {@link #getAvailableLetterGsons} instead.
      */
+    @Deprecated
     public static List<LetterGson> getAllLetterGsons(Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderUtil.class.getName(), "getAllLetterGsons");
 
@@ -103,7 +106,8 @@ public class ContentProviderUtil {
     }
 
     /**
-     * This method is only meant to be used for testing purposes during development.
+     * This method is only meant to be used for testing purposes during development. For production, 
+     * use {@link #getAvailableLetterSoundGsons} instead.
      */
     public static List<LetterSoundGson> getAllLetterSoundGsons(Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderUtil.class.getName(), "getAllLetterSoundGsons");
@@ -127,7 +131,7 @@ public class ContentProviderUtil {
                     cursor.moveToNext();
 
                     // Convert from Room to Gson
-                    LetterSoundGson letterSoundGson = CursorToLetterSoundGsonConverter.getLetterSoundGson(cursor);
+                    LetterSoundGson letterSoundGson = CursorToLetterSoundGsonConverter.getLetterSoundGson(cursor, context, contentProviderApplicationId);
 
                     letterSoundGsons.add(letterSoundGson);
 
@@ -172,7 +176,8 @@ public class ContentProviderUtil {
     }
 
     /**
-     * This method is only meant to be used for testing purposes during development.
+     * This method is only meant to be used for testing purposes during development. For production,
+     * use {@link #getAvailableWordGsons} instead.
      */
     public static List<WordGson> getAllWordGsons(Context context, String contentProviderApplicationId) {
         Log.i(ContentProviderUtil.class.getName(), "getAllWordGsons");

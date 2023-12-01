@@ -25,9 +25,15 @@ import ai.elimu.content_provider.R;
 import ai.elimu.content_provider.rest.LetterSoundsService;
 import ai.elimu.content_provider.room.GsonToRoomConverter;
 import ai.elimu.content_provider.room.dao.LetterSoundDao;
+import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
+import ai.elimu.content_provider.room.dao.LetterSound_SoundDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 import ai.elimu.content_provider.room.entity.LetterSound;
+import ai.elimu.content_provider.room.entity.LetterSound_Letter;
+import ai.elimu.content_provider.room.entity.LetterSound_Sound;
+import ai.elimu.model.v2.gson.content.LetterGson;
 import ai.elimu.model.v2.gson.content.LetterSoundGson;
+import ai.elimu.model.v2.gson.content.SoundGson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -118,8 +124,12 @@ public class LetterSoundsFragment extends Fragment {
 
                 RoomDb roomDb = RoomDb.getDatabase(getContext());
                 LetterSoundDao letterSoundDao = roomDb.letterSoundDao();
+                LetterSound_LetterDao letterSound_LetterDao = roomDb.letterSound_LetterDao();
+                LetterSound_SoundDao letterSound_SoundDao = roomDb.letterSound_SoundDao();
 
                 // Empty the database table before downloading up-to-date content
+                letterSound_LetterDao.deleteAll();
+                letterSound_SoundDao.deleteAll();
                 letterSoundDao.deleteAll();
 
                 for (LetterSoundGson letterSoundGson : letterSoundGsons) {
@@ -129,6 +139,30 @@ public class LetterSoundsFragment extends Fragment {
                     LetterSound letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson);
                     letterSoundDao.insert(letterSound);
                     Log.i(getClass().getName(), "Stored LetterSound in database with ID " + letterSound.getId());
+
+                    // Store all the LetterSound's letters in the database
+                    List<LetterGson> letterGsons = letterSoundGson.getLetters();
+                    Log.i(getClass().getName(), "letterGsons.size(): " + letterGsons.size());
+                    for (LetterGson letterGson : letterGsons) {
+                        Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
+                        LetterSound_Letter letterSound_Letter = new LetterSound_Letter();
+                        letterSound_Letter.setLetterSound_id(letterSoundGson.getId());
+                        letterSound_Letter.setLetters_id(letterGson.getId());
+                        letterSound_LetterDao.insert(letterSound_Letter);
+                        Log.i(getClass().getName(), "Stored LetterSound_Letter in database. LetterSound_id: " + letterSound_Letter.getLetterSound_id() + ", letters_id: " + letterSound_Letter.getLetters_id());
+                    }
+
+                    // Store all the LetterSound's sounds in the database
+                    List<SoundGson> soundGsons = letterSoundGson.getSounds();
+                    Log.i(getClass().getName(), "soundGsons.size():" + soundGsons.size());
+                    for (SoundGson soundGson : soundGsons) {
+                        Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
+                        LetterSound_Sound letterSound_Sound = new LetterSound_Sound();
+                        letterSound_Sound.setLetterSound_id(letterSoundGson.getId());
+                        letterSound_Sound.setSounds_id(soundGson.getId());
+                        letterSound_SoundDao.insert(letterSound_Sound);
+                        Log.i(getClass().getName(), "Stored LetterSound_Sound in database. LetterSound_id: " + letterSound_Sound.getLetterSound_id() + ", sounds_id: " + letterSound_Sound.getSounds_id());
+                    }
                 }
 
                 // Update the UI

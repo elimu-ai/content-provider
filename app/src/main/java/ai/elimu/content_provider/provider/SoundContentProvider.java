@@ -11,23 +11,23 @@ import android.util.Log;
 import java.util.List;
 
 import ai.elimu.content_provider.BuildConfig;
-import ai.elimu.content_provider.room.dao.LetterDao;
+import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 
-public class LetterContentProvider extends ContentProvider {
+public class SoundContentProvider extends ContentProvider {
 
-    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider";
-    private static final String TABLE_LETTERS = "letters";
-    private static final int CODE_LETTERS = 1;
-    private static final int CODE_LETTER_ID = 2;
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.sound_provider";
+    private static final String TABLE_SOUNDS = "sounds";
+    private static final int CODE_SOUNDS = 1;
+    private static final int CODE_SOUND_ID = 2;
 
-    private static final int CODE_LETTERS_BY_LETTER_SOUND_ID = 3;
+    private static final int CODE_SOUNDS_BY_LETTER_SOUND_ID = 3;
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS, CODE_LETTERS);
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/#", CODE_LETTER_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/by-letter-sound-id/#", CODE_LETTERS_BY_LETTER_SOUND_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_SOUNDS, CODE_SOUNDS);
+        MATCHER.addURI(AUTHORITY, TABLE_SOUNDS + "/#", CODE_SOUND_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_SOUNDS + "/by-letter-sound-id/#", CODE_SOUNDS_BY_LETTER_SOUND_ID);
     }
 
     @Override
@@ -53,21 +53,21 @@ public class LetterContentProvider extends ContentProvider {
         }
 
         RoomDb roomDb = RoomDb.getDatabase(context);
-        LetterDao letterDao = roomDb.letterDao();
+        SoundDao soundDao = roomDb.soundDao();
 
         final int code = MATCHER.match(uri);
         Log.i(getClass().getName(), "code: " + code);
-        if (code == CODE_LETTERS) {
+        if (code == CODE_SOUNDS) {
             final Cursor cursor;
 
             // Get the Room Cursor
-            cursor = letterDao.loadAllOrderedByUsageCount_Cursor();
+            cursor = soundDao.loadAllOrderedByUsageCount_Cursor();
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);
 
             return cursor;
-        } else if (code == CODE_LETTERS_BY_LETTER_SOUND_ID) {
+        } else if (code == CODE_SOUNDS_BY_LETTER_SOUND_ID) {
             // Extract the letter-sound correspondence ID from the URI
             List<String> pathSegments = uri.getPathSegments();
             Log.i(getClass().getName(), "pathSegments: " + pathSegments);
@@ -78,24 +78,24 @@ public class LetterContentProvider extends ContentProvider {
             final Cursor cursor;
 
             // Get the Room Cursor
-            cursor = letterDao.loadAllByLetterSound(letterSoundId);
+            cursor = soundDao.loadAllByLetterSound(letterSoundId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);
 
             return cursor;
-        } else if (code == CODE_LETTER_ID) {
-            // Extract the Letter ID from the URI
+        } else if (code == CODE_SOUND_ID) {
+            // Extract the Sound ID from the URI
             List<String> pathSegments = uri.getPathSegments();
             Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String letterIdAsString = pathSegments.get(1);
-            Long letterId = Long.valueOf(letterIdAsString);
-            Log.i(getClass().getName(), "letterId: " + letterId);
+            String soundIdAsString = pathSegments.get(1);
+            Long soundId = Long.valueOf(soundIdAsString);
+            Log.i(getClass().getName(), "soundId: " + soundId);
 
             final Cursor cursor;
 
             // Get the Room Cursor
-            cursor = letterDao.load_Cursor(letterId);
+            cursor = soundDao.load_Cursor(soundId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);

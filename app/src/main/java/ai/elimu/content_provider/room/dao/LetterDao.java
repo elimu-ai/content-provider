@@ -30,6 +30,9 @@ public interface LetterDao {
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
     Cursor loadAllOrderedByUsageCount_Cursor();
 
+    @Query("SELECT * FROM Letter l WHERE l.id IN (SELECT letters_id FROM LetterSound_Letter WHERE LetterSound_id = :letterSoundId)")
+    Cursor loadAllByLetterSound(Long letterSoundId);
+
     @Update
     void update(Letter letter);
 

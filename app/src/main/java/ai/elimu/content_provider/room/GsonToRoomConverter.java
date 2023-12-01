@@ -82,9 +82,9 @@ public class GsonToRoomConverter {
             letterSound.setRevisionNumber(letterSoundGson.getRevisionNumber());
             letterSound.setUsageCount(letterSoundGson.getUsageCount());
 
-            // LetterSound
-            // TODO: letters
-            // TODO: sounds
+            // Letter-sound correspondence
+            // Note: letters are stored separately in LetterSound_Letter (see LetterSoundsFragment.java)
+            // Note: sounds are stored separately in LetterSound_Sound (see LetterSoundsFragment.java)
 
             return letterSound;
         }
@@ -149,6 +149,7 @@ public class GsonToRoomConverter {
             emoji.setGlyph(emojiGson.getGlyph());
             emoji.setUnicodeVersion(emojiGson.getUnicodeVersion());
             emoji.setUnicodeEmojiVersion(emojiGson.getUnicodeEmojiVersion());
+            // Note: words are stored separately in Emoji_Word (see EmojisFragment.java)
 
             return emoji;
         }
@@ -170,6 +171,7 @@ public class GsonToRoomConverter {
             // Image
             image.setTitle(imageGson.getTitle());
             image.setImageFormat(imageGson.getImageFormat());
+            // Note: words are stored separately in Image_Word (see ImagesFragment.java)
 
             return image;
         }
@@ -253,7 +255,7 @@ public class GsonToRoomConverter {
 //            storyBookParagraph.setStoryBookChapterId(storyBookParagraphGson.getStoryBookChapter().getId());
             storyBookParagraph.setSortOrder(storyBookParagraphGson.getSortOrder());
             storyBookParagraph.setOriginalText(storyBookParagraphGson.getOriginalText());
-            // TODO: setWords
+            // Note: words are stored separately in StoryBookParagraph_Word (see StoryBooksFragment.java)
 
             return storyBookParagraph;
         }
