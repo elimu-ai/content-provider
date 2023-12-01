@@ -14,18 +14,20 @@ import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.LetterDao;
 import ai.elimu.content_provider.room.db.RoomDb;
 
-@Deprecated
 public class LetterContentProvider extends ContentProvider {
 
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider";
     private static final String TABLE_LETTERS = "letters";
     private static final int CODE_LETTERS = 1;
     private static final int CODE_LETTER_ID = 2;
+
+    private static final int CODE_LETTERS_BY_LETTER_SOUND_ID = 3;
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         MATCHER.addURI(AUTHORITY, TABLE_LETTERS, CODE_LETTERS);
         MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/#", CODE_LETTER_ID);
+        MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/by-letter-sound-id/#", CODE_LETTERS_BY_LETTER_SOUND_ID);
     }
 
     @Override
@@ -60,6 +62,23 @@ public class LetterContentProvider extends ContentProvider {
 
             // Get the Room Cursor
             cursor = letterDao.loadAllOrderedByUsageCount_Cursor();
+            Log.i(getClass().getName(), "cursor: " + cursor);
+
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+
+            return cursor;
+        } else if (code == CODE_LETTERS_BY_LETTER_SOUND_ID) {
+            // Extract the letter-sound correspondence ID from the URI
+            List<String> pathSegments = uri.getPathSegments();
+            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
+            String letterSoundIdAsString = pathSegments.get(2);
+            Long letterSoundId = Long.valueOf(letterSoundIdAsString);
+            Log.i(getClass().getName(), "letterSoundId: " + letterSoundId);
+
+            final Cursor cursor;
+
+            // Get the Room Cursor
+            cursor = letterDao.loadAllByLetterSound(letterSoundId);
             Log.i(getClass().getName(), "cursor: " + cursor);
 
             cursor.setNotificationUri(context.getContentResolver(), uri);
