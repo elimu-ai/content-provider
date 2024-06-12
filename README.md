@@ -104,10 +104,10 @@ Follow these steps:
 1. Bump the `@Database` version in [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java)
 1. Build the code with `./gradlew clean build`
 1. Open the new database schema generated at `app/schemas/ai.elimu.content_provider.room.db.RoomDb/<version>.json`
-- Under `entities`, find the matching `tableName` and copy its SQL script from the `createSql` property.
+   - Under `entities`, find the matching `tableName` and copy its SQL script from the `createSql` property.
 1. Open `RoomDb.java` and add a new method for the latest migration
-- Paste the SQL script from the above JSON schema, and replace `${TABLE_NAME}` with the name of the table you created/modified.
-- Include the migration in the `getDatabase` method in `RoomDb.java`.
+   - Paste the SQL script from the above JSON schema, and replace `${TABLE_NAME}` with the name of the table you created/modified.
+   - Include the migration in the `getDatabase` method in `RoomDb.java`.
 1. To run the database migration, launch the application on your device.
 
 **Tip #1:** To verify that your database migration ran successfully, look at the Logcat output and
@@ -128,9 +128,9 @@ To perform a release, follow these steps:
 
 1. Create a new branch for the release
 1. Remove `-SNAPSHOT`
-  - from the `versionName` in `app/build.gradle`
-  - from the `versionName` in `utils/build.gradle`
-  - from the `version` in `utils/build.gradle` under `publishing`
+   - from the `versionName` in `app/build.gradle`
+   - from the `versionName` in `utils/build.gradle`
+   - from the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
 1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
 1. Pick the new branch you created as the target branch
@@ -138,13 +138,13 @@ To perform a release, follow these steps:
 1. Choose a release title, and click "Publish release"
 1. Ensure that the release appears at https://jitpack.io/#elimu-ai/content-provider with "Status: ok"
 1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
-  - in the `versionCode` in `app/build.gradle`
-  - in the `versionName` in `app/build.gradle`
-  - in the `versionCode` in `utils/build.gradle`
-  - in the `versionName` in `utils/build.gradle`
-  - in the `version` in `utils/build.gradle` under `publishing`
+   - in the `versionCode` in `app/build.gradle`
+   - in the `versionName` in `app/build.gradle`
+   - in the `versionCode` in `utils/build.gradle`
+   - in the `versionName` in `utils/build.gradle`
+   - in the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
-   1. Create a pull request for merging your branch into `main`
+   - Create a pull request for merging your branch into `main`
 
 ---
 
