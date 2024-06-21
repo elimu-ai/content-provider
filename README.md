@@ -17,22 +17,27 @@ See software architecture diagram at https://github.com/elimu-ai/model/blob/main
 
 The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes it easier for other Android apps to fetch content from the Content Provider.
 
-Here is how to use the `utils` library in another Android app:
+> [!NOTE]
+> Here is how to use the `utils` library in another Android app:
 
-  1. Add repository:
+1. Add repository:
+
+   ```
+   allprojects {
+       repositories {
+           ...
+           maven { url 'https://jitpack.io' }
+       }
+   }
+   ```
   
-    allprojects {
-        repositories {
-            ...
-            maven { url 'https://jitpack.io' }
-        }
-    }
-  
-  2. Add dependency:
-  
-    dependencies {
-        implementation 'com.github.elimu-ai:content-provider:<version>@aar'
-    }
+2. Add dependency:
+
+   ```
+   dependencies {
+       implementation 'com.github.elimu-ai:content-provider:<version>@aar'
+   }
+   ```
 
 See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
 
@@ -91,7 +96,8 @@ After that, connect your Android device to the same Wi-Fi network as your comput
 
 ### Database Migration 🔀
 
-When adding a new database `@Entity` (or modifying an existing one), you need to prepare a database
+> [!IMPORTANT]
+> When adding a new database `@Entity` (or modifying an existing one), you need to prepare a database
 migration (SQL script) in
 [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java).
 
@@ -104,20 +110,22 @@ Follow these steps:
 1. Bump the `@Database` version in [`app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java`](app/src/main/java/ai/elimu/content_provider/room/db/RoomDb.java)
 1. Build the code with `./gradlew clean build`
 1. Open the new database schema generated at `app/schemas/ai.elimu.content_provider.room.db.RoomDb/<version>.json`
-- Under `entities`, find the matching `tableName` and copy its SQL script from the `createSql` property.
+   - Under `entities`, find the matching `tableName` and copy its SQL script from the `createSql` property.
 1. Open `RoomDb.java` and add a new method for the latest migration
-- Paste the SQL script from the above JSON schema, and replace `${TABLE_NAME}` with the name of the table you created/modified.
-- Include the migration in the `getDatabase` method in `RoomDb.java`.
+   - Paste the SQL script from the above JSON schema, and replace `${TABLE_NAME}` with the name of the table you created/modified.
+   - Include the migration in the `getDatabase` method in `RoomDb.java`.
 1. To run the database migration, launch the application on your device.
-
-**Tip #1:** To verify that your database migration ran successfully, look at the Logcat output and
+1. To verify that your database migration ran successfully, look at the Logcat output and
 ensure that there are no RoomDb errors:
-```
-2023-11-27 11:46:50.662  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  migrate (23 --> 24)
-2023-11-27 11:46:50.663  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  sql: CREATE TABLE IF NOT EXISTS `LetterSound` (`revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))
-```
 
-**Tip #2:** You can also use Android Studio's _Database Inspector_ to verify that the database
+   ```
+   2023-11-27 11:46:50.662  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  migrate (23 --> 24)
+   2023-11-27 11:46:50.663  6124-13233 ai.elimu.c....RoomDb$18 ai.elimu.content_provider.debug      I  sql: CREATE TABLE IF NOT EXISTS `LetterSound` 
+   (`revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))
+   ```
+
+> [!TIP]
+> You can also use Android Studio's _Database Inspector_ to verify that the database
 migration succeeded:
 
 ![](https://github.com/elimu-ai/content-provider/assets/1451036/4c462813-bac0-4d4c-9f62-8c4aa12252d9)
@@ -128,9 +136,9 @@ To perform a release, follow these steps:
 
 1. Create a new branch for the release
 1. Remove `-SNAPSHOT`
-  - from the `versionName` in `app/build.gradle`
-  - from the `versionName` in `utils/build.gradle`
-  - from the `version` in `utils/build.gradle` under `publishing`
+   - from the `versionName` in `app/build.gradle`
+   - from the `versionName` in `utils/build.gradle`
+   - from the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
 1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
 1. Pick the new branch you created as the target branch
@@ -138,13 +146,13 @@ To perform a release, follow these steps:
 1. Choose a release title, and click "Publish release"
 1. Ensure that the release appears at https://jitpack.io/#elimu-ai/content-provider with "Status: ok"
 1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
-  - in the `versionCode` in `app/build.gradle`
-  - in the `versionName` in `app/build.gradle`
-  - in the `versionCode` in `utils/build.gradle`
-  - in the `versionName` in `utils/build.gradle`
-  - in the `version` in `utils/build.gradle` under `publishing`
+   - in the `versionCode` in `app/build.gradle`
+   - in the `versionName` in `app/build.gradle`
+   - in the `versionCode` in `utils/build.gradle`
+   - in the `versionName` in `utils/build.gradle`
+   - in the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
-   1. Create a pull request for merging your branch into `main`
+   - Create a pull request for merging your branch into `main`
 
 ---
 
@@ -152,7 +160,7 @@ To perform a release, follow these steps:
   <img src="https://github.com/elimu-ai/webapp/blob/main/src/main/webapp/static/img/logo-text-256x78.png" />
 </p>
 <p align="center">
-  elimu.ai - Free open source learning software for out-of-school children ✨🚀
+  elimu.ai - Free open-source learning software for out-of-school children ✨🚀
 </p>
 <p align="center">
   <a href="https://elimu.ai">Website 🌐</a>
@@ -165,5 +173,5 @@ To perform a release, follow these steps:
   &nbsp;•&nbsp;
   <a href="https://github.com/elimu-ai/wiki#open-source-community">Community 👋🏽</a>
   &nbsp;•&nbsp;
-  <a href="https://www.drips.network/app/drip-lists/41305178594442616889778610143373288091511468151140966646158126636698">Drips 💧</a>
+  <a href="https://www.drips.network/app/drip-lists/41305178594442616889778610143373288091511468151140966646158126636698">Support 💜</a>
 </p>
