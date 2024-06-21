@@ -128,7 +128,7 @@ ensure that there are no RoomDb errors:
 > You can also use Android Studio's _Database Inspector_ to verify that the database
 migration succeeded:
 
-![](https://github.com/elimu-ai/content-provider/assets/1451036/4c462813-bac0-4d4c-9f62-8c4aa12252d9)
+<img width="640" src="https://github.com/elimu-ai/content-provider/assets/1451036/4c462813-bac0-4d4c-9f62-8c4aa12252d9" />
 
 ## Release 📦
 
