@@ -18,7 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 
 import ai.elimu.content_provider.language.SelectLanguageActivity;
-import ai.elimu.content_provider.language.SharedPreferencesHelper;
+import ai.elimu.content_provider.util.SharedPreferencesHelper;
 import ai.elimu.model.v2.enums.Language;
 
 public class MainActivity extends AppCompatActivity {
