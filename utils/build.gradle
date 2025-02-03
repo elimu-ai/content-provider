@@ -5,6 +5,7 @@ plugins {
 
 android {
     compileSdk 34
+    namespace 'ai.elimu.content_provider.utils'
 
     defaultConfig {
         minSdkVersion 24
