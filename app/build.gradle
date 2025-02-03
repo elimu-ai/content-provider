@@ -3,6 +3,7 @@ apply plugin: 'org.ajoberstar.grgit'
 
 android {
     compileSdk 34
+    namespace 'ai.elimu.content_provider'
 
     defaultConfig {
         applicationId "ai.elimu.content_provider"
