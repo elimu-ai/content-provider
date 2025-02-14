@@ -1,8 +1,6 @@
 package ai.elimu.content_provider.language;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import ai.elimu.content_provider.MainActivity;
 import ai.elimu.content_provider.R;
+import ai.elimu.content_provider.util.SharedPreferencesHelper;
 import ai.elimu.model.v2.enums.Language;
 
 /**
@@ -84,8 +83,7 @@ public class LanguageListDialogFragment extends BottomSheetDialogFragment {
                 public void onClick(View v) {
                     Log.i(getClass().getName(), "onClick");
                     Log.i(getClass().getName(), "language: " + language);
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("shared_preferences", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("language", language.toString()).apply();
+                    SharedPreferencesHelper.storeLanguage(getContext(), language);
                     Intent mainActivityIntent = new Intent(getContext(), MainActivity.class);
                     startActivity(mainActivityIntent);
                     getActivity().finish();

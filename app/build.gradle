@@ -3,13 +3,14 @@ apply plugin: 'org.ajoberstar.grgit'
 
 android {
     compileSdk 34
+    namespace 'ai.elimu.content_provider'
 
     defaultConfig {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 24
         targetSdkVersion 34
-        versionCode 1002027
-        versionName "1.2.27-SNAPSHOT"
+        versionCode 1002028
+        versionName "1.2.28-SNAPSHOT"
         setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
@@ -41,7 +42,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.github.elimu-ai:model:model-2.0.66' // See https://jitpack.io/#elimu-ai/model
+    implementation 'com.github.elimu-ai:model:model-2.0.78' // See https://jitpack.io/#elimu-ai/model
 
     implementation 'commons-io:commons-io:2.18.0'
     implementation 'com.google.android.material:material:1.5.0'

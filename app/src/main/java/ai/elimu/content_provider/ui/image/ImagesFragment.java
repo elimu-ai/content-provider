@@ -147,7 +147,9 @@ public class ImagesFragment extends Fragment {
                     if (!imageFile.exists()) {
                         // Download file bytes
                         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                        String downloadUrl = baseApplication.getBaseUrl() + imageGson.getBytesUrl();
+                        String downloadUrl = imageGson.getBytesUrl().startsWith("http")
+                                ? imageGson.getBytesUrl()
+                                : baseApplication.getBaseUrl() + imageGson.getBytesUrl();
                         Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
                         byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
                         Log.i(getClass().getName(), "bytes.length: " + bytes.length);

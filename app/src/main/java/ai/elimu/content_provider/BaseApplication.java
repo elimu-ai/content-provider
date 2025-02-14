@@ -3,7 +3,8 @@ package ai.elimu.content_provider;
 import android.app.Application;
 import android.util.Log;
 
-import ai.elimu.content_provider.language.SharedPreferencesHelper;
+import ai.elimu.content_provider.util.SharedPreferencesHelper;
+import ai.elimu.content_provider.util.VersionHelper;
 import ai.elimu.model.v2.enums.Language;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,6 +15,8 @@ public class BaseApplication extends Application {
     public void onCreate() {
         Log.i(getClass().getName(), "onCreate");
         super.onCreate();
+
+        VersionHelper.updateAppVersion(getApplicationContext());
     }
 
     public Retrofit getRetrofit() {
