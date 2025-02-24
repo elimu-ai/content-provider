@@ -28,7 +28,7 @@ android {
 
 dependencies {
     implementation 'com.github.elimu-ai:model:model-2.0.78' // See https://jitpack.io/#elimu-ai/model
-    implementation 'com.github.elimu-ai:analytics:3.1.11@aar' // See https://jitpack.io/#elimu-ai/analytics
+    implementation 'com.github.elimu-ai:analytics:3.1.27@aar' // See https://jitpack.io/#elimu-ai/analytics
 }
 
 // See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
