@@ -35,7 +35,7 @@ dependencies {
 // Usage: ./gradlew clean build publish -PmavenUsername=***** -PmavenPassword=*****
 publishing {
     publications {
-        utils(MavenPublication) {
+        release(MavenPublication) {
             groupId 'ai.elimu.content_provider'
             artifactId 'utils'
             version '1.2.28-SNAPSHOT'
@@ -48,4 +48,8 @@ publishing {
             url "https://maven.pkg.github.com/elimu-ai/content-provider"
         }
     }
+}
+
+tasks.named("publishReleasePublicationToMavenLocal") {
+    mustRunAfter(":utils:bundleReleaseAar")
 }
