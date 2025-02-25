@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.ajoberstar.grgit'
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace 'ai.elimu.content_provider'
 
     defaultConfig {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 24
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 1002029
         versionName "1.2.29-SNAPSHOT"
         setProperty("archivesBaseName", "${applicationId}-${versionCode}")
