@@ -52,7 +52,12 @@
             android:name=".provider.ImageContentProvider"
             android:authorities="${applicationId}.provider.image_provider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/image_file_path"/>
+        </provider>
         <provider
             android:name=".provider.AudioContentProvider"
             android:authorities="${applicationId}.provider.audio_provider"

@@ -6,13 +6,18 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import ai.elimu.content_provider.BuildConfig;
 import ai.elimu.content_provider.room.dao.ImageDao;
 import ai.elimu.content_provider.room.db.RoomDb;
+import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.content_provider.util.FileHelper;
 
 public class ImageContentProvider extends ContentProvider {
 
@@ -24,6 +29,7 @@ public class ImageContentProvider extends ContentProvider {
     private static final int CODE_IMAGES_BY_WORD_LABEL_ID = 3;
 
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private String TAG = ImageContentProvider.class.getName();
 
     static {
         MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES);
@@ -150,4 +156,28 @@ public class ImageContentProvider extends ContentProvider {
 
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+        List<String> segments = uri.getPathSegments();
+        if (segments.size() < 2) {
+            throw new FileNotFoundException("Invalid URI: " + uri);
+        }
+        String fileId = segments.get(1);
+
+        RoomDb roomDb = RoomDb.getDatabase(getContext());
+        ImageDao imageDao = roomDb.imageDao();
+        Image image = imageDao.load(Long.parseLong(fileId));
+
+        File imageFile = FileHelper.getImageFile(image, getContext());
+        if (imageFile == null) {
+            throw new FileNotFoundException("File not found!");
+        }
+        if (!imageFile.exists()) {
+            Log.e(TAG, "imageFile doesn't exist: " + imageFile.getAbsolutePath());
+            throw new FileNotFoundException("File not found: " + imageFile.getAbsolutePath());
+        }
+        return ParcelFileDescriptor.open(imageFile, ParcelFileDescriptor.MODE_READ_ONLY);
+    }
+
 }
