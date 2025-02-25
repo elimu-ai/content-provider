@@ -167,11 +167,24 @@ public class ImageContentProvider extends ContentProvider {
 
         RoomDb roomDb = RoomDb.getDatabase(getContext());
         ImageDao imageDao = roomDb.imageDao();
-        Image image = imageDao.load(Long.parseLong(fileId));
+        
+        long imageId;
+        try {
+            imageId = Long.parseLong(fileId);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Failed to parse image ID: " + fileId, e);
+            throw new FileNotFoundException("Invalid image ID format: " + fileId);
+        }
+
+        Image image = imageDao.load(imageId);
+
+        if (image == null) {
+            throw new FileNotFoundException("File not found with id: " + imageId);
+        }
 
         File imageFile = FileHelper.getImageFile(image, getContext());
         if (imageFile == null) {
-            throw new FileNotFoundException("File not found!");
+            throw new FileNotFoundException("imageFile not found with id: " + imageId);
         }
         if (!imageFile.exists()) {
             Log.e(TAG, "imageFile doesn't exist: " + imageFile.getAbsolutePath());
