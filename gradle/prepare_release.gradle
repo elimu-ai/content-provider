@@ -10,7 +10,7 @@ ext.prepareRelease = {
     String buildText = buildFile.getText()
     buildText = buildText.replaceFirst(/versionName(\s+.*)/, "versionName '$versionName'")
     buildFile.setText(buildText) //replace the build file's text
-    grgit.add(patterns: ['app/build.gradle'])
+    grgit.add(patterns: [project.name + '/build.gradle'])
     try {
         grgit.commit(message: "[gradle-release-task] prepare release $applicationId-$versionName")
     } catch (Exception e) {
@@ -59,7 +59,7 @@ ext.prepareRelease = {
     buildText = buildText.replaceFirst(/versionName(\s+.*)/, "versionName '$newVersionName-SNAPSHOT'")
     buildText = buildText.replaceFirst(/versionCode(\s+.*)/, "versionCode $newVersionCode")
     buildFile.setText(buildText) //replace the build file's text
-    grgit.add(patterns: ['app/build.gradle'])
+    grgit.add(patterns: [project.name + '/build.gradle'])
     grgit.commit(message: "[gradle-release-task] prepare for next development iteration")
     println "Done!"
 }
