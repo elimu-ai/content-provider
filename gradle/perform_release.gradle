@@ -1,0 +1,14 @@
+ext.performRelease = {
+    boolean force = false
+    if (project.properties.containsKey("force")) {
+        force = project.properties["force"]
+    }
+    println "Pushing the newest commits to the remote repository (force: $force)"
+    try {
+        grgit.push(force: force, tags: true)
+    } catch (Exception e) {
+        throw new GradleException("Failed to push to the repo,\n" +
+                " you can try using -Pforce=true parameter to force the push, error: \n$e")
+    }
+    println "Done!"
+}

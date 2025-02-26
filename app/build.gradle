@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.ajoberstar.grgit'
+apply from: "${rootProject.projectDir}/gradle/prepare_release.gradle"
+apply from: "${rootProject.projectDir}/gradle/clean_release.gradle"
+apply from: "${rootProject.projectDir}/gradle/perform_release.gradle"
 
 android {
     compileSdk 34
@@ -80,33 +83,7 @@ task ensureCleanRepo {
 
 task releaseClean(dependsOn: ensureCleanRepo) {
     doLast {
-        def clean = true
-        def applicationId = android.defaultConfig.applicationId
-
-        String headCommitMessage = grgit.head().shortMessage
-        while (headCommitMessage.contains("[gradle-release-task]")) {
-            clean = false
-            println "Found git commit: $headCommitMessage"
-            if (headCommitMessage.indexOf("$applicationId-") > -1) {
-                def tagName = headCommitMessage.split("$applicationId-")[1]
-                println "Removing the git tag: $tagName"
-                try {
-                    grgit.tag.remove {
-                        names = [tagName]
-                    }
-                } catch (Exception e) {
-                    println "Error while removing git tag:\n $e"
-                }
-            }
-            println "Resetting the git commit permanently!"
-            grgit.reset(commit: "HEAD~1", mode: "hard")
-            headCommitMessage = grgit.head().shortMessage
-
-        }
-        if (clean){
-            println "Repository is already clean"
-        }
-        println "Done!"
+        cleanRelease()
     }
 }
 
@@ -114,7 +91,6 @@ task releaseClean(dependsOn: ensureCleanRepo) {
 //    bumpVersion -> if available will specify new versionName directly and ignores the `bumpType` parameter.
 //    bumpType[major|minor|patch] -> will specify how the version bumping occurs.
 
-apply from: "${rootProject.projectDir}/gradle/prepare_release.gradle"
 task releasePrepare(dependsOn: ensureCleanRepo) {
     doLast {
         prepareRelease()
@@ -123,17 +99,6 @@ task releasePrepare(dependsOn: ensureCleanRepo) {
 
 task releasePerform(dependsOn: ensureCleanRepo) {
     doLast {
-        boolean force = false
-        if (project.properties.containsKey("force")) {
-            force = project.properties["force"]
-        }
-        println "Pushing the newest commits to the remote repository (force: $force)"
-        try {
-            grgit.push(force: force, tags: true)
-        } catch (Exception e) {
-            throw new GradleException("Failed to push to the repo,\n" +
-                    " you can try using -Pforce=true parameter to force the push, error: \n$e")
-        }
-        println "Done!"
+        performRelease()
     }
 }
