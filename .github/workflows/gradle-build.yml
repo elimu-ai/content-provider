@@ -33,6 +33,10 @@ jobs:
           distribution: 'temurin'
           cache: gradle
       - run: |
+          ./gradlew utils:releaseClean
           ./gradlew utils:releasePrepare -PbumpType=patch
+          ./gradlew utils:releasePerform
           echo "Release utils done!"
+          echo "Printing out the release output!"
+          ls -lah ~/.m2/repository/ai/elimu/content_provider/utils/1.2.29
         
