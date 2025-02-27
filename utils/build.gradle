@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+    id 'org.ajoberstar.grgit'
 }
 
 apply from: "${rootProject.projectDir}/gradle/prepare_release.gradle"
