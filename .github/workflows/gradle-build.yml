@@ -21,3 +21,11 @@ jobs:
         java-version: ${{ matrix.java }}
     - uses: gradle/gradle-build-action@v2
     - run: ./gradlew clean build
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        ./gradlew utils:releasePrepare -PbumpType=patch
+        echo "Release utils done!"
+        

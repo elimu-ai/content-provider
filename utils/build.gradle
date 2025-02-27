@@ -49,10 +49,11 @@ publishing {
         }
     }
     repositories {
-        maven {
-            credentials(PasswordCredentials)
-            url "https://maven.pkg.github.com/elimu-ai/content-provider"
-        }
+//        maven {
+//            credentials(PasswordCredentials)
+//            url "https://maven.pkg.github.com/elimu-ai/content-provider"
+//        }
+        mavenLocal()
     }
 }
 

@@ -29,3 +29,8 @@ jobs:
           ./gradlew utils:releasePerform
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - run: |
+          echo "Printing out the release output!"
+          cd ~/.m2/repository/ai/elimu/content_provider/utils/1.2.29
+          ls -lah
