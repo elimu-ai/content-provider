@@ -41,6 +41,9 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 
 See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
 
+> [!TIP]
+> To find all Android app repos that depend on this library, go to https://github.com/search?q=org%3Aelimu-ai+com.github.elimu-ai%3Acontent-provider%3A&type=code
+
 ### Usage Example
 
 For an example of another Android app using the `utils` library, see the Vitabu app's Gradle configuration:
