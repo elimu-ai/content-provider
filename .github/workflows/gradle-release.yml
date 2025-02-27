@@ -20,8 +20,17 @@ jobs:
       - run: git config user.name 'Nya Ξlimu'
       - run: git config user.email 'info@elimu.ai'
 
-      - run: ./gradlew releaseClean
-      - run: ./gradlew releasePrepare -PbumpType=patch
-      - run: ./gradlew releasePerform
+      - run: |
+          ./gradlew releaseClean
+          ./gradlew app:releasePrepare -PbumpType=patch
+          ./gradlew app:releasePerform
+          
+          ./gradlew utils:releasePrepare -PbumpType=patch
+          ./gradlew utils:releasePerform
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - run: |
+          echo "Printing out the release output!"
+          cd ~/.m2/repository/ai/elimu/content_provider/utils/1.2.29
+          ls -lah

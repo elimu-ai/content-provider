@@ -21,3 +21,22 @@ jobs:
         java-version: ${{ matrix.java }}
     - uses: gradle/gradle-build-action@v2
     - run: ./gradlew clean build
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - run: |
+          ./gradlew utils:releaseClean
+          ./gradlew utils:releasePrepare -PbumpType=patch
+          ./gradlew utils:releasePerform
+          echo "Release utils done!"
+          echo "Printing out the release output!"
+          ls -lah ~/.m2/repository/ai/elimu/content_provider/utils/1.2.29
+        

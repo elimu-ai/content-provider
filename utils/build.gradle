@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+    id 'org.ajoberstar.grgit'
 }
+
+apply from: "${rootProject.projectDir}/gradle/prepare_release.gradle"
+apply from: "${rootProject.projectDir}/gradle/clean_release.gradle"
+apply from: "${rootProject.projectDir}/gradle/perform_release.gradle"
+apply from: "${rootProject.projectDir}/gradle/ensure_clean.gradle"
 
 android {
     compileSdk 34
@@ -43,13 +49,45 @@ publishing {
         }
     }
     repositories {
-        maven {
-            credentials(PasswordCredentials)
-            url "https://maven.pkg.github.com/elimu-ai/content-provider"
-        }
+//        maven {
+//            credentials(PasswordCredentials)
+//            url "https://maven.pkg.github.com/elimu-ai/content-provider"
+//        }
+        mavenLocal()
     }
 }
 
 tasks.named("publishReleasePublicationToMavenLocal") {
     mustRunAfter(":utils:bundleReleaseAar")
+}
+
+tasks.register('ensureCleanRepo') {
+    doLast {
+        ensureClean()
+    }
+}
+
+tasks.register('releaseClean') {
+    dependsOn ensureCleanRepo
+    doLast {
+        cleanRelease()
+    }
+}
+
+// Task parameters:
+//    bumpVersion -> if available will specify new versionName directly and ignores the `bumpType` parameter.
+//    bumpType[major|minor|patch] -> will specify how the version bumping occurs.
+
+tasks.register('releasePrepare') {
+    dependsOn ensureCleanRepo
+    doLast {
+        prepareRelease()
+    }
+}
+
+tasks.register('releasePerform') {
+    dependsOn ensureCleanRepo
+    doLast {
+        performRelease()
+    }
 }
