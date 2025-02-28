@@ -3,8 +3,11 @@ package ai.elimu.content_provider.util;
 import android.content.Context;
 import android.os.Environment;
 
+import androidx.annotation.RestrictTo;
+
 import java.io.File;
 
+import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.VideoGson;
@@ -19,8 +22,20 @@ public class FileHelper {
             return null;
         }
         File imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File file = new File(imagesDirectory, imageGson.getId() + "_r" + imageGson.getRevisionNumber() + "." + imageGson.getImageFormat().toString().toLowerCase());
-        return file;
+        return new File(imagesDirectory, imageGson.getId()
+                + "_r" + imageGson.getRevisionNumber() + "."
+                + imageGson.getImageFormat().toString().toLowerCase());
+    }
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
+    public static File getImageFile(Image imageGson, Context context) {
+        if ((imageGson.getId() == null) || (imageGson.getRevisionNumber() == null)) {
+            return null;
+        }
+        File imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return new File(imagesDirectory, imageGson.getId()
+                + "_r" + imageGson.getRevisionNumber() + "."
+                + imageGson.getImageFormat().toString().toLowerCase());
     }
 
     public static File getAudioFile(AudioGson audioGson, Context context) {
