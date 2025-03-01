@@ -94,7 +94,7 @@ After that, connect your Android device to the same Wi-Fi network as your comput
 ### Gradle Upgrade
 
 ```
-./gradlew wrapper --gradle-version x.x.x --distribution-type all
+./gradlew wrapper --gradle-version x.x.x
 ```
 
 ### Database Migration 🔀
