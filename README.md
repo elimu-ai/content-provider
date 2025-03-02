@@ -53,13 +53,12 @@ For an example of another Android app using the `utils` library, see the Vitabu 
 
 ## Development 👩🏽‍💻
 
-During development, you can choose between 3 build types:
+During development, you can choose between two build types:
 1. `debug`
-2. `qa_test`
-3. `release`
+2. `release`
 
-By default, both `debug` and `qa_test` are pointing to a webapp 
-[test server](https://github.com/elimu-ai/webapp/blob/main/INSTALL.md#test-server). And if you want 
+By default, both `debug` and `release` are pointing to a webapp 
+[prod server](https://github.com/elimu-ai/webapp/blob/main/INSTALL.md). And if you want 
 to  run the webapp yourself on `localhost` while testing the Content Provider app, you can change 
 the return value of the `getBaseUrl` method in 
 [BaseApplication.java](app/src/main/java/ai/elimu/content_provider/BaseApplication.java):
