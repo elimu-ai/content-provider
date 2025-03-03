@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -21,14 +22,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 
 dependencies {
     implementation(libs.elimu.model) // See https://jitpack.io/#elimu-ai/model
-    implementation(libs.elimu.analytics) // See https://jitpack.io/#elimu-ai/analytics
+    implementation(libs.elimu.analytics)
+    implementation libs.androidx.core.ktx// See https://jitpack.io/#elimu-ai/analytics
 }
 
 // See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
