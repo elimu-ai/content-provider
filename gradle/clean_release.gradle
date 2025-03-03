@@ -1,0 +1,29 @@
+ext.cleanRelease = {
+    def clean = true
+    def applicationId = android.defaultConfig.applicationId
+
+    String headCommitMessage = grgit.head().shortMessage
+    while (headCommitMessage.contains("[gradle-release-task]")) {
+        clean = false
+        println "Found git commit: $headCommitMessage"
+        if (headCommitMessage.indexOf("$applicationId-") > -1) {
+            def tagName = headCommitMessage.split("$applicationId-")[1]
+            println "Removing the git tag: $tagName"
+            try {
+                grgit.tag.remove {
+                    names = [tagName]
+                }
+            } catch (Exception e) {
+                println "Error while removing git tag:\n $e"
+            }
+        }
+        println "Resetting the git commit permanently!"
+        grgit.reset(commit: "HEAD~1", mode: "hard")
+        headCommitMessage = grgit.head().shortMessage
+
+    }
+    if (clean){
+        println "Repository is already clean"
+    }
+    println "Done!"
+}

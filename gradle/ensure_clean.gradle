@@ -1,0 +1,5 @@
+ext.ensureClean = {
+    if (!grgit.repository.jgit.status().call().clean) {
+        throw new GradleException('Git status is not clean, please stash your changes!')
+    }
+}
