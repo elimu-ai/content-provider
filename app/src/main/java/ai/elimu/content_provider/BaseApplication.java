@@ -28,11 +28,11 @@ public class BaseApplication extends Application {
     }
 
     /**
-     * E.g. "https://hin.test.elimu.ai" or "https://hin.elimu.ai"
+     * E.g. "https://eng.elimu.ai" or "https://hin.elimu.ai"
      */
     public String getBaseUrl() {
         Language language = SharedPreferencesHelper.getLanguage(getApplicationContext());
-        String url = "https://" + language.getIsoCode();
+        String url = "http://" + language.getIsoCode();
         url += ".elimu.ai";
         return url;
     }
