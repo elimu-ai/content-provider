@@ -17,7 +17,6 @@ import ai.elimu.content_provider.room.dao.LetterSoundDao;
 import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
 import ai.elimu.content_provider.room.dao.LetterSound_SoundDao;
 import ai.elimu.content_provider.room.dao.SoundDao;
-import ai.elimu.content_provider.room.dao.AudioDao;
 import ai.elimu.content_provider.room.dao.EmojiDao;
 import ai.elimu.content_provider.room.dao.Emoji_WordDao;
 import ai.elimu.content_provider.room.dao.ImageDao;
@@ -73,8 +72,6 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract ImageDao imageDao();
 
     public abstract Image_WordDao image_WordDao();
-
-    public abstract AudioDao audioDao();
 
     public abstract StoryBookDao storyBookDao();
 
