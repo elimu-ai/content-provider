@@ -1,179 +1,181 @@
-package ai.elimu.content_provider.ui.letter_sound;
+package ai.elimu.content_provider.ui.letter_sound
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.LetterSoundsService
+import ai.elimu.content_provider.room.GsonToRoomConverter
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.LetterSound_Letter
+import ai.elimu.content_provider.room.entity.LetterSound_Sound
+import ai.elimu.model.v2.gson.content.LetterSoundGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class LetterSoundsFragment : Fragment() {
+    private var letterSoundsViewModel: LetterSoundsViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.LetterSoundsService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.LetterSoundDao;
-import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
-import ai.elimu.content_provider.room.dao.LetterSound_SoundDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.LetterSound;
-import ai.elimu.content_provider.room.entity.LetterSound_Letter;
-import ai.elimu.content_provider.room.entity.LetterSound_Sound;
-import ai.elimu.model.v2.gson.content.LetterGson;
-import ai.elimu.model.v2.gson.content.LetterSoundGson;
-import ai.elimu.model.v2.gson.content.SoundGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class LetterSoundsFragment extends Fragment {
-
-    private LetterSoundsViewModel letterSoundsViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        letterSoundsViewModel = new ViewModelProvider(this).get(LetterSoundsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_letter_sounds, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_letter_sounds);
-        textView = root.findViewById(R.id.text_letter_sounds);
-        letterSoundsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        letterSoundsViewModel = ViewModelProvider(this).get(
+            LetterSoundsViewModel::class.java
+        )
+        val root = inflater.inflate(R.layout.fragment_letter_sounds, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_letter_sounds)
+        textView = root.findViewById(R.id.text_letter_sounds) as? TextView
+        letterSoundsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download LetterSounds from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        LetterSoundsService letterSoundsService = retrofit.create(LetterSoundsService.class);
-        Call<List<LetterSoundGson>> letterSoundGsonsCall = letterSoundsService.listLetterSounds();
-        Log.i(getClass().getName(), "letterSoundGsonsCall.request(): " + letterSoundGsonsCall.request());
-        letterSoundGsonsCall.enqueue(new Callback<List<LetterSoundGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val letterSoundsService = retrofit.create(
+            LetterSoundsService::class.java
+        )
+        val letterSoundGsonsCall = letterSoundsService.listLetterSounds()
+        Log.i(javaClass.name, "letterSoundGsonsCall.request(): " + letterSoundGsonsCall.request())
+        letterSoundGsonsCall.enqueue(object : Callback<List<LetterSoundGson>> {
+            override fun onResponse(
+                call: Call<List<LetterSoundGson>>,
+                response: Response<List<LetterSoundGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<LetterSoundGson>> call, Response<List<LetterSoundGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val letterSoundGsons = response.body()!!
+                    Log.i(javaClass.name, "letterSoundGsons.size(): " + letterSoundGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<LetterSoundGson> letterSoundGsons = response.body();
-                    Log.i(getClass().getName(), "letterSoundGsons.size(): " + letterSoundGsons.size());
-
-                    if (letterSoundGsons.size() > 0) {
-                        processResponseBody(letterSoundGsons);
+                    if (letterSoundGsons.size > 0) {
+                        processResponseBody(letterSoundGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<LetterSoundGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<LetterSoundGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<LetterSoundGson> letterSoundGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(letterSoundGsons: List<LetterSoundGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                LetterSoundDao letterSoundDao = roomDb.letterSoundDao();
-                LetterSound_LetterDao letterSound_LetterDao = roomDb.letterSound_LetterDao();
-                LetterSound_SoundDao letterSound_SoundDao = roomDb.letterSound_SoundDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val letterSoundDao = roomDb.letterSoundDao()
+                val letterSound_LetterDao = roomDb.letterSound_LetterDao()
+                val letterSound_SoundDao = roomDb.letterSound_SoundDao()
 
                 // Empty the database table before downloading up-to-date content
-                letterSound_LetterDao.deleteAll();
-                letterSound_SoundDao.deleteAll();
-                letterSoundDao.deleteAll();
+                letterSound_LetterDao.deleteAll()
+                letterSound_SoundDao.deleteAll()
+                letterSoundDao.deleteAll()
 
-                for (LetterSoundGson letterSoundGson : letterSoundGsons) {
-                    Log.i(getClass().getName(), "letterSoundGson.getId(): " + letterSoundGson.getId());
+                for (letterSoundGson in letterSoundGsons) {
+                    Log.i(javaClass.name, "letterSoundGson.getId(): " + letterSoundGson.id)
 
                     // Store the LetterSound in the database
-                    LetterSound letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson);
-                    letterSoundDao.insert(letterSound);
-                    Log.i(getClass().getName(), "Stored LetterSound in database with ID " + letterSound.getId());
+                    val letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson)
+                    letterSoundDao.insert(letterSound)
+                    Log.i(
+                        javaClass.name,
+                        "Stored LetterSound in database with ID " + letterSound.id
+                    )
 
                     // Store all the LetterSound's letters in the database
-                    List<LetterGson> letterGsons = letterSoundGson.getLetters();
-                    Log.i(getClass().getName(), "letterGsons.size(): " + letterGsons.size());
-                    for (LetterGson letterGson : letterGsons) {
-                        Log.i(getClass().getName(), "letterGson.getId(): " + letterGson.getId());
-                        LetterSound_Letter letterSound_Letter = new LetterSound_Letter();
-                        letterSound_Letter.setLetterSound_id(letterSoundGson.getId());
-                        letterSound_Letter.setLetters_id(letterGson.getId());
-                        letterSound_LetterDao.insert(letterSound_Letter);
-                        Log.i(getClass().getName(), "Stored LetterSound_Letter in database. LetterSound_id: " + letterSound_Letter.getLetterSound_id() + ", letters_id: " + letterSound_Letter.getLetters_id());
+                    val letterGsons = letterSoundGson.letters
+                    Log.i(javaClass.name, "letterGsons.size(): " + letterGsons.size)
+                    for (letterGson in letterGsons) {
+                        Log.i(javaClass.name, "letterGson.getId(): " + letterGson.id)
+                        val letterSound_Letter = LetterSound_Letter()
+                        letterSound_Letter.letterSound_id = letterSoundGson.id
+                        letterSound_Letter.letters_id = letterGson.id
+                        letterSound_LetterDao.insert(letterSound_Letter)
+                        Log.i(
+                            javaClass.name,
+                            "Stored LetterSound_Letter in database. LetterSound_id: " + letterSound_Letter.letterSound_id + ", letters_id: " + letterSound_Letter.letters_id
+                        )
                     }
 
                     // Store all the LetterSound's sounds in the database
-                    List<SoundGson> soundGsons = letterSoundGson.getSounds();
-                    Log.i(getClass().getName(), "soundGsons.size():" + soundGsons.size());
-                    for (SoundGson soundGson : soundGsons) {
-                        Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
-                        LetterSound_Sound letterSound_Sound = new LetterSound_Sound();
-                        letterSound_Sound.setLetterSound_id(letterSoundGson.getId());
-                        letterSound_Sound.setSounds_id(soundGson.getId());
-                        letterSound_SoundDao.insert(letterSound_Sound);
-                        Log.i(getClass().getName(), "Stored LetterSound_Sound in database. LetterSound_id: " + letterSound_Sound.getLetterSound_id() + ", sounds_id: " + letterSound_Sound.getSounds_id());
+                    val soundGsons = letterSoundGson.sounds
+                    Log.i(javaClass.name, "soundGsons.size():" + soundGsons.size)
+                    for (soundGson in soundGsons) {
+                        Log.i(javaClass.name, "soundGson.getId(): " + soundGson.id)
+                        val letterSound_Sound = LetterSound_Sound()
+                        letterSound_Sound.letterSound_id = letterSoundGson.id
+                        letterSound_Sound.sounds_id = soundGson.id
+                        letterSound_SoundDao.insert(letterSound_Sound)
+                        Log.i(
+                            javaClass.name,
+                            "Stored LetterSound_Sound in database. LetterSound_id: " + letterSound_Sound.letterSound_id + ", sounds_id: " + letterSound_Sound.sounds_id
+                        )
                     }
                 }
 
                 // Update the UI
-                List<LetterSound> letterSounds = letterSoundDao.loadAll();
-                Log.i(getClass().getName(), "letterSounds.size(): " + letterSounds.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("letterSounds.size(): " + letterSounds.size());
-                    Snackbar.make(textView, "letterSounds.size(): " + letterSounds.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val letterSounds = letterSoundDao.loadAll()
+                Log.i(javaClass.name, "letterSounds.size(): " + letterSounds.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "letterSounds.size(): " + letterSounds.size
+                    Snackbar.make(
+                        textView!!,
+                        "letterSounds.size(): " + letterSounds.size,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
