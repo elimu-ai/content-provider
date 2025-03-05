@@ -33,7 +33,6 @@ import ai.elimu.content_provider.room.entity.LetterSound;
 import ai.elimu.content_provider.room.entity.LetterSound_Letter;
 import ai.elimu.content_provider.room.entity.LetterSound_Sound;
 import ai.elimu.content_provider.room.entity.Sound;
-import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Emoji_Word;
 import ai.elimu.content_provider.room.entity.Image;
@@ -47,7 +46,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 26, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, Audio.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 26, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 

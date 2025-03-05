@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 26,
-    "identityHash": "59e65b275fee9665d0c18eb2d49f6a3a",
+    "identityHash": "0f15f0f2b2fa7d5262a10c32eb16e440",
     "entities": [
       {
         "tableName": "Letter",
@@ -415,56 +415,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Audio",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `transcription` TEXT NOT NULL, `audioFormat` TEXT NOT NULL, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "transcription",
-            "columnName": "transcription",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "audioFormat",
-            "columnName": "audioFormat",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "revisionNumber",
-            "columnName": "revisionNumber",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "usageCount",
-            "columnName": "usageCount",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "StoryBook",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT, `coverImageId` INTEGER NOT NULL, `readingLevel` TEXT, `revisionNumber` INTEGER NOT NULL, `usageCount` INTEGER, `id` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
@@ -677,7 +627,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '59e65b275fee9665d0c18eb2d49f6a3a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0f15f0f2b2fa7d5262a10c32eb16e440')"
     ]
   }
 }
