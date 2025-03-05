@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import androidx.room.TypeConverter;
 
 import ai.elimu.model.v2.enums.ReadingLevel;
-import ai.elimu.model.v2.enums.content.AudioFormat;
 import ai.elimu.model.v2.enums.content.ImageFormat;
 import ai.elimu.model.v2.enums.content.VideoFormat;
 import ai.elimu.model.v2.enums.content.WordType;
@@ -27,22 +26,6 @@ public class Converters {
     @TypeConverter
     public static String toString(ImageFormat imageFormat) {
         String value = imageFormat.toString();
-        return value;
-    }
-
-
-    @TypeConverter
-    public static AudioFormat fromAudioFormat(String value) {
-        AudioFormat audioFormat = null;
-        if (!TextUtils.isEmpty(value)) {
-            audioFormat = AudioFormat.valueOf(value);
-        }
-        return audioFormat;
-    }
-
-    @TypeConverter
-    public static String toString(AudioFormat audioFormat) {
-        String value = audioFormat.toString();
         return value;
     }
 
