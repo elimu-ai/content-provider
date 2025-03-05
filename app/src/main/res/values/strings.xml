@@ -15,7 +15,6 @@
     <string name="menu_numbers">Numbers</string>
     <string name="menu_emojis">Emojis</string>
     <string name="menu_images">Images</string>
-    <string name="menu_audios">Audios</string>
     <string name="menu_storybooks">Storybooks</string>
     <string name="menu_videos">Videos</string>
 </resources>
