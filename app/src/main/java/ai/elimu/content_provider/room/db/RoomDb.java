@@ -46,7 +46,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 26, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 27, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -116,7 +116,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_22_23,
                                     MIGRATION_23_24,
                                     MIGRATION_24_25,
-                                    MIGRATION_25_26
+                                    MIGRATION_25_26,
+                                    MIGRATION_26_27
                             )
                             .build();
                 }
@@ -354,6 +355,17 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (25 --> 26)");
 
             String sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Sound` (`LetterSound_id` INTEGER NOT NULL, `sounds_id` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `sounds_id`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_26_27 = new Migration(26, 27) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (26 --> 27)");
+
+            String sql = "DROP TABLE `Audio`";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
