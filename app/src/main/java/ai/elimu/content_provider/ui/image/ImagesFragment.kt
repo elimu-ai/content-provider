@@ -1,197 +1,187 @@
-package ai.elimu.content_provider.ui.image;
+package ai.elimu.content_provider.ui.image
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.ImagesService
+import ai.elimu.content_provider.room.GsonToRoomConverter
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Image_Word
+import ai.elimu.content_provider.util.FileHelper
+import ai.elimu.content_provider.util.MultimediaDownloader
+import ai.elimu.model.v2.gson.content.ImageGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class ImagesFragment : Fragment() {
+    private var imagesViewModel: ImagesViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.ImagesService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.ImageDao;
-import ai.elimu.content_provider.room.dao.Image_WordDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Image;
-import ai.elimu.content_provider.room.entity.Image_Word;
-import ai.elimu.content_provider.util.FileHelper;
-import ai.elimu.content_provider.util.MultimediaDownloader;
-import ai.elimu.model.v2.gson.content.ImageGson;
-import ai.elimu.model.v2.gson.content.WordGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class ImagesFragment extends Fragment {
-
-    private ImagesViewModel imagesViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        imagesViewModel = new ViewModelProvider(this).get(ImagesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_images, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_images);
-        textView = root.findViewById(R.id.text_images);
-        imagesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        imagesViewModel = ViewModelProvider(this).get(ImagesViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_images, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_images)
+        textView = root.findViewById(R.id.text_images) as? TextView
+        imagesViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Images from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        ImagesService imagesService = retrofit.create(ImagesService.class);
-        Call<List<ImageGson>> imageGsonsCall = imagesService.listImages();
-        Log.i(getClass().getName(), "imageGsonsCall.request(): " + imageGsonsCall.request());
-        imageGsonsCall.enqueue(new Callback<List<ImageGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val imagesService = retrofit.create(ImagesService::class.java)
+        val imageGsonsCall = imagesService.listImages()
+        Log.i(javaClass.name, "imageGsonsCall.request(): " + imageGsonsCall.request())
+        imageGsonsCall.enqueue(object : Callback<List<ImageGson>> {
+            override fun onResponse(
+                call: Call<List<ImageGson>>,
+                response: Response<List<ImageGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<ImageGson>> call, Response<List<ImageGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val imageGsons = response.body()!!
+                    Log.i(javaClass.name, "imageGsons.size(): " + imageGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<ImageGson> imageGsons = response.body();
-                    Log.i(getClass().getName(), "imageGsons.size(): " + imageGsons.size());
-
-                    if (imageGsons.size() > 0) {
-                        processResponseBody(imageGsons);
+                    if (imageGsons.size > 0) {
+                        processResponseBody(imageGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<ImageGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<ImageGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<ImageGson> imageGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(imageGsons: List<ImageGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                ImageDao imageDao = roomDb.imageDao();
-                Image_WordDao image_WordDao = roomDb.image_WordDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val imageDao = roomDb.imageDao()
+                val image_WordDao = roomDb.image_WordDao()
 
                 // Empty the database table before downloading up-to-date content
-                image_WordDao.deleteAll();
-                imageDao.deleteAll();
+                image_WordDao.deleteAll()
+                imageDao.deleteAll()
+
                 // TODO: also delete corresponding image files (only those that are no longer used)
+                for (imageGson in imageGsons) {
+                    Log.i(javaClass.name, "imageGson.getId(): " + imageGson.id)
 
-                for (ImageGson imageGson : imageGsons) {
-                    Log.i(getClass().getName(), "imageGson.getId(): " + imageGson.getId());
-
-                    Image image = GsonToRoomConverter.getImage(imageGson);
+                    val image = GsonToRoomConverter.getImage(imageGson)
 
                     // Check if the corresponding image file has already been downloaded
-                    File imageFile = FileHelper.getImageFile(imageGson, getContext());
-                    Log.i(getClass().getName(), "imageFile: " + imageFile);
-                    Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
+                    val imageFile = FileHelper.getImageFile(imageGson, context)
+                    Log.i(javaClass.name, "imageFile: $imageFile")
+                    Log.i(javaClass.name, "imageFile.exists(): " + imageFile.exists())
                     if (!imageFile.exists()) {
                         // Download file bytes
-                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                        String downloadUrl = imageGson.getBytesUrl().startsWith("http")
-                                ? imageGson.getBytesUrl()
-                                : baseApplication.getBaseUrl() + imageGson.getBytesUrl();
-                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
-                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+                        val baseApplication = activity!!.application as BaseApplication
+                        val downloadUrl = if (imageGson.bytesUrl.startsWith("http"))
+                            imageGson.bytesUrl
+                        else
+                            baseApplication.baseUrl + imageGson.bytesUrl
+                        Log.i(javaClass.name, "downloadUrl: $downloadUrl")
+                        val bytes = MultimediaDownloader.downloadFileBytes(downloadUrl)
+                        Log.i(javaClass.name, "bytes.length: " + bytes.size)
 
                         // Store the downloaded file in the external storage directory
                         try {
-                            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-                            fileOutputStream.write(bytes);
-                        } catch (FileNotFoundException e) {
-                            Log.e(getClass().getName(), null, e);
-                        } catch (IOException e) {
-                            Log.e(getClass().getName(), null, e);
+                            val fileOutputStream = FileOutputStream(imageFile)
+                            fileOutputStream.write(bytes)
+                        } catch (e: FileNotFoundException) {
+                            Log.e(javaClass.name, null, e)
+                        } catch (e: IOException) {
+                            Log.e(javaClass.name, null, e)
                         }
-                        Log.i(getClass().getName(), "imageFile.exists(): " + imageFile.exists());
+                        Log.i(javaClass.name, "imageFile.exists(): " + imageFile.exists())
                     }
 
                     // Store the Image in the database
-                    imageDao.insert(image);
-                    Log.i(getClass().getName(), "Stored Image in database with ID " + image.getId());
+                    imageDao.insert(image)
+                    Log.i(javaClass.name, "Stored Image in database with ID " + image.id)
 
                     // Store all the Image's Word labels in the database
-                    Set<WordGson> wordGsons = imageGson.getWords();
-                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                    for (WordGson wordGson : wordGsons) {
-                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                        Image_Word image_Word = new Image_Word();
-                        image_Word.setImage_id(imageGson.getId());
-                        image_Word.setWords_id(wordGson.getId());
-                        image_WordDao.insert(image_Word);
-                        Log.i(getClass().getName(), "Stored Image_Word in database. Image_id: " + image_Word.getImage_id() + ", words_id: " + image_Word.getWords_id());
+                    val wordGsons = imageGson.words
+                    Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                    for (wordGson in wordGsons) {
+                        Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
+                        val image_Word = Image_Word()
+                        image_Word.image_id = imageGson.id
+                        image_Word.words_id = wordGson.id
+                        image_WordDao.insert(image_Word)
+                        Log.i(
+                            javaClass.name,
+                            "Stored Image_Word in database. Image_id: " + image_Word.image_id + ", words_id: " + image_Word.words_id
+                        )
                     }
                 }
 
                 // Update the UI
-                List<Image> images = imageDao.loadAll();
-                Log.i(getClass().getName(), "images.size(): " + images.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("images.size(): " + images.size());
-                    Snackbar.make(textView, "images.size(): " + images.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val images = imageDao.loadAll()
+                Log.i(javaClass.name, "images.size(): " + images.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "images.size(): " + images.size
+                    Snackbar.make(textView!!, "images.size(): " + images.size, Snackbar.LENGTH_LONG)
+                        .show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
