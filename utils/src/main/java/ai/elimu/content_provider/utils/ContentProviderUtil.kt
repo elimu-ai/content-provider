@@ -25,6 +25,9 @@ import android.util.Log
 import android.widget.Toast
 
 object ContentProviderUtil {
+
+    private const val TAG = "ContentProviderUtil"
+
     /**
      * Returns a list of letters currently available to the student.
      *
@@ -41,15 +44,15 @@ object ContentProviderUtil {
         contentProviderApplicationId: String,
         analyticsApplicationId: String?
     ): List<LetterGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAvailableLetterGsons")
+        Log.i(TAG, "getAvailableLetterGsons")
 
         val letterGsons: MutableList<LetterGson> = ArrayList()
 
         val allLetterGsons = getAllLetterGsons(context, contentProviderApplicationId)
-        Log.i(ContentProviderUtil::class.java.name, "allLetterGsons.size(): " + allLetterGsons.size)
+        Log.i(TAG, "allLetterGsons.size(): " + allLetterGsons.size)
         for (letterGson in allLetterGsons) {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "letterGson.getText(): \"" + letterGson.text + "\""
             )
             val letterAssessmentEventGsons =
@@ -59,12 +62,12 @@ object ContentProviderUtil {
                     analyticsApplicationId
                 )
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "letterAssessmentEventGsons.size(): " + letterAssessmentEventGsons.size
             )
             val isLetterMastered = MasteryHelper.isLetterMastered(letterAssessmentEventGsons)
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "isLetterMastered: $isLetterMastered"
             )
             letterGsons.add(letterGson)
@@ -85,22 +88,22 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): List<LetterGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAllLetterGsons")
+        Log.i(TAG, "getAllLetterGsons")
 
         val letterGsons: MutableList<LetterGson> = ArrayList()
 
         val uri =
             Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters")
-        Log.i(ContentProviderUtil::class.java.name, "uri: $uri")
+        Log.i(TAG, "uri: $uri")
         val cursor = context.contentResolver.query(uri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "cursor: $cursor")
+        Log.i(TAG, "cursor: $cursor")
         if (cursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "cursor == null")
+            Log.e(TAG, "cursor == null")
             Toast.makeText(context, "cursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(ContentProviderUtil::class.java.name, "cursor.getCount(): " + cursor.count)
+            Log.i(TAG, "cursor.getCount(): " + cursor.count)
             if (cursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "cursor.getCount() == 0")
+                Log.e(TAG, "cursor.getCount() == 0")
             } else {
                 var isLast = false
                 while (!isLast) {
@@ -114,7 +117,7 @@ object ContentProviderUtil {
                     isLast = cursor.isLast
                 }
                 cursor.close()
-                Log.i(ContentProviderUtil::class.java.name, "cursor.isClosed(): " + cursor.isClosed)
+                Log.i(TAG, "cursor.isClosed(): " + cursor.isClosed)
             }
         }
 
@@ -129,22 +132,22 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): List<LetterSoundGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAllLetterSoundGsons")
+        Log.i(TAG, "getAllLetterSoundGsons")
 
         val letterSoundGsons: MutableList<LetterSoundGson> = ArrayList()
 
         val uri =
             Uri.parse("content://$contentProviderApplicationId.provider.letter_sound_provider/letter_sounds")
-        Log.i(ContentProviderUtil::class.java.name, "uri: $uri")
+        Log.i(TAG, "uri: $uri")
         val cursor = context.contentResolver.query(uri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "cursor: $cursor")
+        Log.i(TAG, "cursor: $cursor")
         if (cursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "cursor == null")
+            Log.e(TAG, "cursor == null")
             Toast.makeText(context, "cursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(ContentProviderUtil::class.java.name, "cursor.getCount(): " + cursor.count)
+            Log.i(TAG, "cursor.getCount(): " + cursor.count)
             if (cursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "cursor.getCount() == 0")
+                Log.e(TAG, "cursor.getCount() == 0")
             } else {
                 var isLast = false
                 while (!isLast) {
@@ -162,7 +165,7 @@ object ContentProviderUtil {
                     isLast = cursor.isLast
                 }
                 cursor.close()
-                Log.i(ContentProviderUtil::class.java.name, "cursor.isClosed(): " + cursor.isClosed)
+                Log.i(TAG, "cursor.isClosed(): " + cursor.isClosed)
             }
         }
 
@@ -184,15 +187,15 @@ object ContentProviderUtil {
         contentProviderApplicationId: String,
         analyticsApplicationId: String?
     ): List<WordGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAvailableWordGsons")
+        Log.i(TAG, "getAvailableWordGsons")
 
         val wordGsons: MutableList<WordGson> = ArrayList()
 
         val allWordGsons = getAllWordGsons(context, contentProviderApplicationId)
-        Log.i(ContentProviderUtil::class.java.name, "allWordGsons.size(): " + allWordGsons.size)
+        Log.i(TAG, "allWordGsons.size(): " + allWordGsons.size)
         for (wordGson in allWordGsons) {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "wordGson.getText(): \"" + wordGson.text + "\""
             )
             val wordAssessmentEventGsons = EventProviderUtil.getWordAssessmentEventGsonsByWord(
@@ -201,12 +204,12 @@ object ContentProviderUtil {
                 analyticsApplicationId
             )
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "wordAssessmentEventGsons.size(): " + wordAssessmentEventGsons.size
             )
             val isWordMastered = MasteryHelper.isWordMastered(wordAssessmentEventGsons)
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "isWordMastered: $isWordMastered"
             )
             wordGsons.add(wordGson)
@@ -223,25 +226,25 @@ object ContentProviderUtil {
      * use [.getAvailableWordGsons] instead.
      */
     fun getAllWordGsons(context: Context, contentProviderApplicationId: String): List<WordGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAllWordGsons")
+        Log.i(TAG, "getAllWordGsons")
 
         val wordGsons: MutableList<WordGson> = ArrayList()
 
         val wordsUri =
             Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words")
-        Log.i(ContentProviderUtil::class.java.name, "wordsUri: $wordsUri")
+        Log.i(TAG, "wordsUri: $wordsUri")
         val wordsCursor = context.contentResolver.query(wordsUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "wordsCursor: $wordsCursor")
+        Log.i(TAG, "wordsCursor: $wordsCursor")
         if (wordsCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "wordsCursor == null")
+            Log.e(TAG, "wordsCursor == null")
             Toast.makeText(context, "wordsCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "wordsCursor.getCount(): " + wordsCursor.count
             )
             if (wordsCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "wordsCursor.getCount() == 0")
+                Log.e(TAG, "wordsCursor.getCount() == 0")
             } else {
                 var isLast = false
                 while (!isLast) {
@@ -257,12 +260,12 @@ object ContentProviderUtil {
 
                 wordsCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "wordsCursor.isClosed(): " + wordsCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "wordGsons.size(): " + wordGsons.size)
+        Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
 
         return wordGsons
     }
@@ -272,25 +275,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): WordGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getWordGson")
+        Log.i(TAG, "getWordGson")
 
         var wordGson: WordGson? = null
 
         val wordUri =
             Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words/$wordId")
-        Log.i(ContentProviderUtil::class.java.name, "wordUri: $wordUri")
+        Log.i(TAG, "wordUri: $wordUri")
         val wordCursor = context.contentResolver.query(wordUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "wordCursor: $wordCursor")
+        Log.i(TAG, "wordCursor: $wordCursor")
         if (wordCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "wordCursor == null")
+            Log.e(TAG, "wordCursor == null")
             Toast.makeText(context, "wordCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "wordCursor.getCount(): " + wordCursor.count
             )
             if (wordCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "wordCursor.getCount() == 0")
+                Log.e(TAG, "wordCursor.getCount() == 0")
             } else {
                 wordCursor.moveToFirst()
 
@@ -299,12 +302,12 @@ object ContentProviderUtil {
 
                 wordCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "wordCursor.isClosed(): " + wordCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "wordGson: $wordGson")
+        Log.i(TAG, "wordGson: $wordGson")
 
         return wordGson
     }
@@ -314,25 +317,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): List<EmojiGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAllEmojiGsons")
+        Log.i(TAG, "getAllEmojiGsons")
 
         val emojiGsons: MutableList<EmojiGson> = ArrayList()
 
         val emojisUri =
             Uri.parse("content://$contentProviderApplicationId.provider.emoji_provider/emojis/by-word-label-id/$wordId")
-        Log.i(ContentProviderUtil::class.java.name, "emojisUri: $emojisUri")
+        Log.i(TAG, "emojisUri: $emojisUri")
         val emojisCursor = context.contentResolver.query(emojisUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "emojisCursor: $emojisCursor")
+        Log.i(TAG, "emojisCursor: $emojisCursor")
         if (emojisCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "emojisCursor == null")
+            Log.e(TAG, "emojisCursor == null")
             Toast.makeText(context, "emojisCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "emojisCursor.getCount(): " + emojisCursor.count
             )
             if (emojisCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "emojisCursor.getCount() == 0")
+                Log.e(TAG, "emojisCursor.getCount() == 0")
             } else {
                 var isLast = false
                 while (!isLast) {
@@ -348,12 +351,12 @@ object ContentProviderUtil {
 
                 emojisCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "emojisCursor.isClosed(): " + emojisCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "emojiGsons.size(): " + emojiGsons.size)
+        Log.i(TAG, "emojiGsons.size(): " + emojiGsons.size)
 
         return emojiGsons
     }
@@ -363,25 +366,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): ImageGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getImageGson")
+        Log.i(TAG, "getImageGson")
 
         var imageGson: ImageGson? = null
 
         val imageUri =
             Uri.parse("content://$contentProviderApplicationId.provider.image_provider/images/$imageId")
-        Log.i(ContentProviderUtil::class.java.name, "imageUri: $imageUri")
+        Log.i(TAG, "imageUri: $imageUri")
         val imageCursor = context.contentResolver.query(imageUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "imageCursor: $imageCursor")
+        Log.i(TAG, "imageCursor: $imageCursor")
         if (imageCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "imageCursor == null")
+            Log.e(TAG, "imageCursor == null")
             Toast.makeText(context, "imageCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "imageCursor.getCount(): " + imageCursor.count
             )
             if (imageCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "imageCursor.getCount() == 0")
+                Log.e(TAG, "imageCursor.getCount() == 0")
             } else {
                 imageCursor.moveToFirst()
 
@@ -390,12 +393,12 @@ object ContentProviderUtil {
 
                 imageCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "imageCursor.isClosed(): " + imageCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "imageGson: $imageGson")
+        Log.i(TAG, "imageGson: $imageGson")
 
         return imageGson
     }
@@ -405,25 +408,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): AudioGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getAudioGson")
+        Log.i(TAG, "getAudioGson")
 
         var audioGson: AudioGson? = null
 
         val audioUri =
             Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/$audioId")
-        Log.i(ContentProviderUtil::class.java.name, "audioUri: $audioUri")
+        Log.i(TAG, "audioUri: $audioUri")
         val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "audioCursor: $audioCursor")
+        Log.i(TAG, "audioCursor: $audioCursor")
         if (audioCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "audioCursor == null")
+            Log.e(TAG, "audioCursor == null")
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "audioCursor.getCount(): " + audioCursor.count
             )
             if (audioCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "audioCursor.getCount() == 0")
+                Log.e(TAG, "audioCursor.getCount() == 0")
             } else {
                 audioCursor.moveToFirst()
 
@@ -432,12 +435,12 @@ object ContentProviderUtil {
 
                 audioCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "audioCursor.isClosed(): " + audioCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "audioGson: $audioGson")
+        Log.i(TAG, "audioGson: $audioGson")
 
         return audioGson
     }
@@ -447,25 +450,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): AudioGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getAudioGsonByTitle")
+        Log.i(TAG, "getAudioGsonByTitle")
 
         var audioGson: AudioGson? = null
 
         val audioUri =
             Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/by-title/$title")
-        Log.i(ContentProviderUtil::class.java.name, "audioUri: $audioUri")
+        Log.i(TAG, "audioUri: $audioUri")
         val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "audioCursor: $audioCursor")
+        Log.i(TAG, "audioCursor: $audioCursor")
         if (audioCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "audioCursor == null")
+            Log.e(TAG, "audioCursor == null")
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "audioCursor.getCount(): " + audioCursor.count
             )
             if (audioCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "audioCursor.getCount() == 0")
+                Log.e(TAG, "audioCursor.getCount() == 0")
             } else {
                 audioCursor.moveToFirst()
 
@@ -474,12 +477,12 @@ object ContentProviderUtil {
 
                 audioCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "audioCursor.isClosed(): " + audioCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "audioGson: $audioGson")
+        Log.i(TAG, "audioGson: $audioGson")
 
         return audioGson
     }
@@ -489,25 +492,25 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): AudioGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getAudioGsonByTranscription")
+        Log.i(TAG, "getAudioGsonByTranscription")
 
         var audioGson: AudioGson? = null
 
         val audioUri =
             Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/by-transcription/$transcription")
-        Log.i(ContentProviderUtil::class.java.name, "audioUri: $audioUri")
+        Log.i(TAG, "audioUri: $audioUri")
         val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(ContentProviderUtil::class.java.name, "audioCursor: $audioCursor")
+        Log.i(TAG, "audioCursor: $audioCursor")
         if (audioCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "audioCursor == null")
+            Log.e(TAG, "audioCursor == null")
             Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "audioCursor.getCount(): " + audioCursor.count
             )
             if (audioCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "audioCursor.getCount() == 0")
+                Log.e(TAG, "audioCursor.getCount() == 0")
             } else {
                 audioCursor.moveToFirst()
 
@@ -516,12 +519,12 @@ object ContentProviderUtil {
 
                 audioCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "audioCursor.isClosed(): " + audioCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "audioGson: $audioGson")
+        Log.i(TAG, "audioGson: $audioGson")
 
         return audioGson
     }
@@ -530,31 +533,31 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): List<StoryBookGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getAllStoryBookGsons")
+        Log.i(TAG, "getAllStoryBookGsons")
 
         val storyBookGsons: MutableList<StoryBookGson> = ArrayList()
 
         val storyBooksUri =
             Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks")
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBooksUri: $storyBooksUri"
         )
         val storyBooksCursor = context.contentResolver.query(storyBooksUri, null, null, null, null)
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBooksCursor: $storyBooksCursor"
         )
         if (storyBooksCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "storyBooksCursor == null")
+            Log.e(TAG, "storyBooksCursor == null")
             Toast.makeText(context, "storyBooksCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "storyBooksCursor.getCount(): " + storyBooksCursor.count
             )
             if (storyBooksCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "storyBooksCursor.getCount() == 0")
+                Log.e(TAG, "storyBooksCursor.getCount() == 0")
             } else {
                 var isLast = false
                 while (!isLast) {
@@ -571,12 +574,12 @@ object ContentProviderUtil {
 
                 storyBooksCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "storyBooksCursor.isClosed(): " + storyBooksCursor.isClosed
                 )
             }
         }
-        Log.i(ContentProviderUtil::class.java.name, "storyBookGsons.size(): " + storyBookGsons.size)
+        Log.i(TAG, "storyBookGsons.size(): " + storyBookGsons.size)
 
         return storyBookGsons
     }
@@ -586,28 +589,28 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): StoryBookGson? {
-        Log.i(ContentProviderUtil::class.java.name, "getStoryBookGson")
+        Log.i(TAG, "getStoryBookGson")
 
         var storyBookGson: StoryBookGson? = null
 
         val storyBookUri =
             Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId")
-        Log.i(ContentProviderUtil::class.java.name, "storyBookUri: $storyBookUri")
+        Log.i(TAG, "storyBookUri: $storyBookUri")
         val storyBookCursor = context.contentResolver.query(storyBookUri, null, null, null, null)
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBookCursor: $storyBookCursor"
         )
         if (storyBookCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "storyBookCursor == null")
+            Log.e(TAG, "storyBookCursor == null")
             Toast.makeText(context, "storyBookCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "storyBookCursor.getCount(): " + storyBookCursor.count
             )
             if (storyBookCursor.count == 0) {
-                Log.e(ContentProviderUtil::class.java.name, "storyBookCursor.getCount() == 0")
+                Log.e(TAG, "storyBookCursor.getCount() == 0")
             } else {
                 storyBookCursor.moveToFirst()
 
@@ -616,13 +619,13 @@ object ContentProviderUtil {
 
                 storyBookCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "storyBookCursor.isClosed(): " + storyBookCursor.isClosed
                 )
             }
         }
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBookGson: $storyBookGson"
         )
 
@@ -634,7 +637,7 @@ object ContentProviderUtil {
         context: Context,
         contentProviderApplicationId: String
     ): List<StoryBookChapterGson> {
-        Log.i(ContentProviderUtil::class.java.name, "getStoryBookChapterGsons")
+        Log.i(TAG, "getStoryBookChapterGsons")
 
         val storyBookChapterGsons: MutableList<StoryBookChapterGson> = ArrayList()
 
@@ -657,26 +660,26 @@ object ContentProviderUtil {
         val storyBookChaptersUri =
             Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId/chapters")
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBookChaptersUri: $storyBookChaptersUri"
         )
         val storyBookChaptersCursor =
             context.contentResolver.query(storyBookChaptersUri, null, null, null, null)
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBookChaptersCursor: $storyBookChaptersCursor"
         )
         if (storyBookChaptersCursor == null) {
-            Log.e(ContentProviderUtil::class.java.name, "storyBookChaptersCursor == null")
+            Log.e(TAG, "storyBookChaptersCursor == null")
             Toast.makeText(context, "storyBookChaptersCursor == null", Toast.LENGTH_LONG).show()
         } else {
             Log.i(
-                ContentProviderUtil::class.java.name,
+                TAG,
                 "storyBookChaptersCursor.getCount(): " + storyBookChaptersCursor.count
             )
             if (storyBookChaptersCursor.count == 0) {
                 Log.e(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "storyBookChaptersCursor.getCount() == 0"
                 )
             } else {
@@ -699,13 +702,13 @@ object ContentProviderUtil {
 
                 storyBookChaptersCursor.close()
                 Log.i(
-                    ContentProviderUtil::class.java.name,
+                    TAG,
                     "storyBookChaptersCursor.isClosed(): " + storyBookChaptersCursor.isClosed
                 )
             }
         }
         Log.i(
-            ContentProviderUtil::class.java.name,
+            TAG,
             "storyBookChapterGsons.size(): " + storyBookChapterGsons.size
         )
 
