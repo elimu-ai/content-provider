@@ -1,27 +1,23 @@
-package ai.elimu.content_provider.language;
+package ai.elimu.content_provider.language
 
-import android.os.Bundle;
-import android.util.Log;
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.language.LanguageListDialogFragment.Companion.newInstance
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 
-import androidx.appcompat.app.AppCompatActivity;
+class SelectLanguageActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(javaClass.name, "onCreate")
+        super.onCreate(savedInstanceState)
 
-import ai.elimu.content_provider.R;
-
-public class SelectLanguageActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreate");
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_select_language);
+        setContentView(R.layout.activity_select_language)
     }
 
-    @Override
-    protected void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
-        LanguageListDialogFragment.newInstance().show(getSupportFragmentManager(), "dialog");
+        newInstance().show(supportFragmentManager, "dialog")
     }
 }
