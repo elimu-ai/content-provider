@@ -2,7 +2,6 @@ package ai.elimu.content_provider.utils
 
 import ai.elimu.analytics.utils.EventProviderUtil
 import ai.elimu.analytics.utils.logic.MasteryHelper
-import ai.elimu.content_provider.utils.converter.CursorToAudioGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToEmojiGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToImageGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter
@@ -10,7 +9,6 @@ import ai.elimu.content_provider.utils.converter.CursorToLetterSoundGsonConverte
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter
-import ai.elimu.model.v2.gson.content.AudioGson
 import ai.elimu.model.v2.gson.content.EmojiGson
 import ai.elimu.model.v2.gson.content.ImageGson
 import ai.elimu.model.v2.gson.content.LetterGson
@@ -401,132 +399,6 @@ object ContentProviderUtil {
         Log.i(TAG, "imageGson: $imageGson")
 
         return imageGson
-    }
-
-    fun getAudioGson(
-        audioId: Long,
-        context: Context,
-        contentProviderApplicationId: String
-    ): AudioGson? {
-        Log.i(TAG, "getAudioGson")
-
-        var audioGson: AudioGson? = null
-
-        val audioUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/$audioId")
-        Log.i(TAG, "audioUri: $audioUri")
-        val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(TAG, "audioCursor: $audioCursor")
-        if (audioCursor == null) {
-            Log.e(TAG, "audioCursor == null")
-            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
-        } else {
-            Log.i(
-                TAG,
-                "audioCursor.getCount(): " + audioCursor.count
-            )
-            if (audioCursor.count == 0) {
-                Log.e(TAG, "audioCursor.getCount() == 0")
-            } else {
-                audioCursor.moveToFirst()
-
-                // Convert from Room to Gson
-                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor)
-
-                audioCursor.close()
-                Log.i(
-                    TAG,
-                    "audioCursor.isClosed(): " + audioCursor.isClosed
-                )
-            }
-        }
-        Log.i(TAG, "audioGson: $audioGson")
-
-        return audioGson
-    }
-
-    fun getAudioGsonByTitle(
-        title: String,
-        context: Context,
-        contentProviderApplicationId: String
-    ): AudioGson? {
-        Log.i(TAG, "getAudioGsonByTitle")
-
-        var audioGson: AudioGson? = null
-
-        val audioUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/by-title/$title")
-        Log.i(TAG, "audioUri: $audioUri")
-        val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(TAG, "audioCursor: $audioCursor")
-        if (audioCursor == null) {
-            Log.e(TAG, "audioCursor == null")
-            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
-        } else {
-            Log.i(
-                TAG,
-                "audioCursor.getCount(): " + audioCursor.count
-            )
-            if (audioCursor.count == 0) {
-                Log.e(TAG, "audioCursor.getCount() == 0")
-            } else {
-                audioCursor.moveToFirst()
-
-                // Convert from Room to Gson
-                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor)
-
-                audioCursor.close()
-                Log.i(
-                    TAG,
-                    "audioCursor.isClosed(): " + audioCursor.isClosed
-                )
-            }
-        }
-        Log.i(TAG, "audioGson: $audioGson")
-
-        return audioGson
-    }
-
-    fun getAudioGsonByTranscription(
-        transcription: String,
-        context: Context,
-        contentProviderApplicationId: String
-    ): AudioGson? {
-        Log.i(TAG, "getAudioGsonByTranscription")
-
-        var audioGson: AudioGson? = null
-
-        val audioUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.audio_provider/audios/by-transcription/$transcription")
-        Log.i(TAG, "audioUri: $audioUri")
-        val audioCursor = context.contentResolver.query(audioUri, null, null, null, null)
-        Log.i(TAG, "audioCursor: $audioCursor")
-        if (audioCursor == null) {
-            Log.e(TAG, "audioCursor == null")
-            Toast.makeText(context, "audioCursor == null", Toast.LENGTH_LONG).show()
-        } else {
-            Log.i(
-                TAG,
-                "audioCursor.getCount(): " + audioCursor.count
-            )
-            if (audioCursor.count == 0) {
-                Log.e(TAG, "audioCursor.getCount() == 0")
-            } else {
-                audioCursor.moveToFirst()
-
-                // Convert from Room to Gson
-                audioGson = CursorToAudioGsonConverter.getAudioGson(audioCursor)
-
-                audioCursor.close()
-                Log.i(
-                    TAG,
-                    "audioCursor.isClosed(): " + audioCursor.isClosed
-                )
-            }
-        }
-        Log.i(TAG, "audioGson: $audioGson")
-
-        return audioGson
     }
 
     fun getAllStoryBookGsons(
