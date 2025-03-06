@@ -60,11 +60,6 @@
                 android:resource="@xml/image_file_path"/>
         </provider>
         <provider
-            android:name=".provider.AudioContentProvider"
-            android:authorities="${applicationId}.provider.audio_provider"
-            android:enabled="true"
-            android:exported="true" />
-        <provider
             android:name=".provider.StoryBookContentProvider"
             android:authorities="${applicationId}.provider.storybook_provider"
             android:enabled="true"
