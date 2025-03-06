@@ -54,12 +54,6 @@
         tools:layout="@layout/fragment_images" />
 
     <fragment
-        android:id="@+id/nav_audios"
-        android:name="ai.elimu.content_provider.ui.audio.AudiosFragment"
-        android:label="@string/menu_audios"
-        tools:layout="@layout/fragment_audios" />
-
-    <fragment
         android:id="@+id/nav_storybooks"
         android:name="ai.elimu.content_provider.ui.storybook.StoryBooksFragment"
         android:label="@string/menu_storybooks"

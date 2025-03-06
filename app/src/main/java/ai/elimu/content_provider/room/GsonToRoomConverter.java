@@ -2,7 +2,6 @@ package ai.elimu.content_provider.room;
 
 import ai.elimu.content_provider.room.entity.LetterSound;
 import ai.elimu.content_provider.room.entity.Sound;
-import ai.elimu.content_provider.room.entity.Audio;
 import ai.elimu.content_provider.room.entity.Emoji;
 import ai.elimu.content_provider.room.entity.Image;
 import ai.elimu.content_provider.room.entity.Letter;
@@ -14,7 +13,6 @@ import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 import ai.elimu.model.v2.gson.content.LetterSoundGson;
 import ai.elimu.model.v2.gson.content.SoundGson;
-import ai.elimu.model.v2.gson.content.AudioGson;
 import ai.elimu.model.v2.gson.content.EmojiGson;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.LetterGson;
@@ -174,28 +172,6 @@ public class GsonToRoomConverter {
             // Note: words are stored separately in Image_Word (see ImagesFragment.java)
 
             return image;
-        }
-    }
-
-    public static Audio getAudio(AudioGson audioGson) {
-        if (audioGson == null) {
-            return null;
-        } else {
-            Audio audio = new Audio();
-
-            // BaseEntity
-            audio.setId(audioGson.getId());
-
-            // Content
-            audio.setRevisionNumber(audioGson.getRevisionNumber());
-            audio.setUsageCount(audioGson.getUsageCount());
-
-            // Audio
-            audio.setTitle(audioGson.getTitle());
-            audio.setTranscription(audioGson.getTranscription());
-            audio.setAudioFormat(audioGson.getAudioFormat());
-
-            return audio;
         }
     }
 
