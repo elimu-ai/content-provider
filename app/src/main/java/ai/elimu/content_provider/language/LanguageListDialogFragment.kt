@@ -90,7 +90,7 @@ class LanguageListDialogFragment : BottomSheetDialogFragment() {
                         MainActivity::class.java
                     )
                     startActivity(mainActivityIntent)
-                    activity!!.finish()
+                    activity?.finish()
                 }
             })
         }
