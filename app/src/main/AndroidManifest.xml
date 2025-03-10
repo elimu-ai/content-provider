@@ -64,5 +64,16 @@
             android:authorities="${applicationId}.provider.storybook_provider"
             android:enabled="true"
             android:exported="true" />
+
+        <provider
+            android:name=".provider.VideoContentProvider"
+            android:authorities="${applicationId}.provider.video_provider"
+            android:enabled="true"
+            android:exported="true"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/video_file_path"/>
+        </provider>
     </application>
 </manifest>
