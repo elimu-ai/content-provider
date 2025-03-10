@@ -12,8 +12,8 @@ android {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 1002029
-        versionName "1.2.29-SNAPSHOT"
+        versionCode 1002030
+        versionName "1.2.30"
         setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
