@@ -8,6 +8,7 @@ import androidx.annotation.RestrictTo;
 import java.io.File;
 
 import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.model.v2.gson.content.ImageGson;
 import ai.elimu.model.v2.gson.content.VideoGson;
 
@@ -44,5 +45,16 @@ public class FileHelper {
         File videosDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES);
         File file = new File(videosDirectory, videoGson.getId() + "_r" + videoGson.getRevisionNumber() + "." + videoGson.getVideoFormat().toString().toLowerCase());
         return file;
+    }
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
+    public static File getVideoFile(Video videoGson, Context context) {
+        if ((videoGson.getId() == null) || (videoGson.getRevisionNumber() == null)) {
+            return null;
+        }
+        File videosDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        return new File(videosDirectory, videoGson.getId()
+                + "_r" + videoGson.getRevisionNumber() + "."
+                + videoGson.getVideoFormat().toString().toLowerCase());
     }
 }

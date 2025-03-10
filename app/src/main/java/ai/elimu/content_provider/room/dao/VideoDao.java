@@ -32,6 +32,9 @@ public interface VideoDao {
 //    @Query("SELECT * FROM Video i WHERE i.id IN (SELECT Video_id FROM Video_Word WHERE words_id = :wordId)")
 //    Cursor loadAllByWordLabelAsCursor(Long wordId);
 
+    @Query("SELECT * FROM Video WHERE title = :title")
+    Cursor loadByTitleAsCursor(String title);
+
     @Update
     void update(Video video);
 

@@ -8,6 +8,7 @@ import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToLetterSoundGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookChapterGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToStoryBookGsonConverter
+import ai.elimu.content_provider.utils.converter.CursorToVideoGsonConverter
 import ai.elimu.content_provider.utils.converter.CursorToWordGsonConverter
 import ai.elimu.model.v2.gson.content.EmojiGson
 import ai.elimu.model.v2.gson.content.ImageGson
@@ -16,11 +17,14 @@ import ai.elimu.model.v2.gson.content.LetterSoundGson
 import ai.elimu.model.v2.gson.content.StoryBookChapterGson
 import ai.elimu.model.v2.gson.content.StoryBookGson
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson
+import ai.elimu.model.v2.gson.content.VideoGson
 import ai.elimu.model.v2.gson.content.WordGson
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object ContentProviderUtil {
 
@@ -585,5 +589,60 @@ object ContentProviderUtil {
         )
 
         return storyBookChapterGsons
+    }
+
+    suspend fun getAllVideoGSONs(
+        context: Context,
+        contentProviderApplicationId: String
+    ): List<VideoGson> {
+        Log.i(ContentProviderUtil::class.java.name, "getAllVideoGsons")
+
+        val videoGsons: MutableList<VideoGson> = ArrayList()
+
+        val videosUri =
+            Uri.parse("content://$contentProviderApplicationId.provider.video_provider/videos")
+        Log.i(
+            ContentProviderUtil::class.java.name,
+            "videosUri: $videosUri"
+        )
+        val videosCursor = context.contentResolver.query(videosUri, null, null, null, null)
+        Log.i(
+            ContentProviderUtil::class.java.name,
+            "videosCursor: $videosCursor"
+        )
+        if (videosCursor == null) {
+            Log.e(ContentProviderUtil::class.java.name, "videosCursor == null")
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "videosCursor == null", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Log.i(
+                ContentProviderUtil::class.java.name,
+                "videosCursor.getCount(): " + videosCursor.count
+            )
+            if (videosCursor.count == 0) {
+                Log.e(ContentProviderUtil::class.java.name, "videosCursor.getCount() == 0")
+            } else {
+                var isLast = false
+                while (!isLast) {
+                    videosCursor.moveToNext()
+
+                    // Convert from Room to Gson
+                    val videoGson = CursorToVideoGsonConverter.getVideoGson(videosCursor)
+                    videoGsons.add(videoGson)
+
+                    isLast = videosCursor.isLast
+                }
+
+                videosCursor.close()
+                Log.i(
+                    ContentProviderUtil::class.java.name,
+                    "videosCursor.isClosed(): " + videosCursor.isClosed
+                )
+            }
+        }
+        Log.i(ContentProviderUtil::class.java.name, "videoGsons.size(): " + videoGsons.size)
+
+        return videoGsons
     }
 }
