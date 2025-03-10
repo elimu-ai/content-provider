@@ -56,5 +56,5 @@ publishing {
 }
 
 tasks.named("publishReleasePublicationToMavenLocal") {
-    mustRunAfter(":utils:bundleReleaseAar")
+    dependsOn(":utils:bundleReleaseAar")
 }
