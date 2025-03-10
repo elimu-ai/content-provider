@@ -1,46 +1,43 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.enums.content.VideoFormat
+import ai.elimu.model.v2.gson.content.VideoGson
+import android.database.Cursor
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToVideoGsonConverter {
+    private val TAG: String = CursorToVideoGsonConverter::class.java.name
 
-import ai.elimu.model.v2.enums.content.VideoFormat;
-import ai.elimu.model.v2.gson.content.VideoGson;
+    fun getVideoGson(cursor: Cursor): VideoGson {
+        Log.i(TAG, "getVideoGson")
 
-public class CursorToVideoGsonConverter {
+        Log.i(TAG, "Arrays.toString(cursor.getColumnNames()): "
+                + cursor.columnNames.contentToString())
 
-    private static String TAG = CursorToVideoGsonConverter.class.getName();
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(TAG, "id: $id")
 
-    public static VideoGson getVideoGson(Cursor cursor) {
-        Log.i(TAG, "getVideoGson");
+        val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnRevisionNumber)
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
-        Log.i(TAG, "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnTitle = cursor.getColumnIndex("title")
+        val title = cursor.getString(columnTitle)
+        Log.i(TAG, "title: \"$title\"")
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(TAG, "id: " + id);
+        val columnVideoFormat = cursor.getColumnIndex("videoFormat")
+        val videoFormatAsString = cursor.getString(columnVideoFormat)
+        Log.i(TAG, "videoFormatAsString: $videoFormatAsString")
+        val videoFormat = VideoFormat.valueOf(videoFormatAsString)
+        Log.i(TAG, "videoFormat: $videoFormat")
 
-        int columnRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnRevisionNumber);
-        Log.i(TAG, "revisionNumber: " + revisionNumber);
+        val video = VideoGson()
+        video.id = id
+        video.revisionNumber = revisionNumber
+        video.title = title
+        video.videoFormat = videoFormat
 
-        int columnTitle = cursor.getColumnIndex("title");
-        String title = cursor.getString(columnTitle);
-        Log.i(TAG, "title: \"" + title + "\"");
-
-        int columnVideoFormat = cursor.getColumnIndex("videoFormat");
-        String videoFormatAsString = cursor.getString(columnVideoFormat);
-        Log.i(TAG, "videoFormatAsString: " + videoFormatAsString);
-        VideoFormat videoFormat = VideoFormat.valueOf(videoFormatAsString);
-        Log.i(TAG, "videoFormat: " + videoFormat);
-
-        VideoGson video = new VideoGson();
-        video.setId(id);
-        video.setRevisionNumber(revisionNumber);
-        video.setTitle(title);
-        video.setVideoFormat(videoFormat);
-
-        return video;
+        return video
     }
 }
