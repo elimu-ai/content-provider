@@ -123,8 +123,8 @@ class ImagesFragment : Fragment() {
                 // Check if the corresponding image file has already been downloaded
                 val imageFile = FileHelper.getImageFile(imageGson, context)
                 Log.i(TAG, "imageFile: $imageFile")
-                Log.i(TAG, "imageFile.exists(): " + imageFile.exists())
-                if (!imageFile.exists()) {
+                Log.i(TAG, "imageFile.exists(): " + imageFile?.exists())
+                if (imageFile?.exists() != true) {
                     // Download file bytes
                     val baseApplication = activity?.application as? BaseApplication ?: return@launch
                     val downloadUrl = if (imageGson.bytesUrl.startsWith("http"))
@@ -144,7 +144,7 @@ class ImagesFragment : Fragment() {
                     } catch (e: IOException) {
                         Log.e(TAG, null, e)
                     }
-                    Log.i(TAG, "imageFile.exists(): " + imageFile.exists())
+                    Log.i(TAG, "imageFile.exists(): " + imageFile?.exists())
                 }
 
                 // Store the Image in the database
