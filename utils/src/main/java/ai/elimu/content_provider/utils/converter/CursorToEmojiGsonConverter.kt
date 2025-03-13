@@ -1,51 +1,62 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.gson.content.EmojiGson
+import android.database.Cursor
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToEmojiGsonConverter {
+    fun getEmojiGson(cursor: Cursor): EmojiGson {
+        Log.i(CursorToEmojiGsonConverter::class.java.name, "getEmojiGson")
 
-import ai.elimu.model.v2.gson.content.EmojiGson;
+        Log.i(
+            CursorToEmojiGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToEmojiGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(CursorToEmojiGsonConverter::class.java.name, "id: $id")
 
-    public static EmojiGson getEmojiGson(Cursor cursor) {
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "getEmojiGson");
+        val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnRevisionNumber)
+        Log.i(
+            CursorToEmojiGsonConverter::class.java.name,
+            "revisionNumber: $revisionNumber"
+        )
 
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnUsageCount = cursor.getColumnIndex("usageCount")
+        val usageCount = cursor.getInt(columnUsageCount)
+        Log.i(
+            CursorToEmojiGsonConverter::class.java.name,
+            "usageCount: $usageCount"
+        )
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "id: " + id);
+        val columnGlyph = cursor.getColumnIndex("glyph")
+        val glyph = cursor.getString(columnGlyph)
+        Log.i(CursorToEmojiGsonConverter::class.java.name, "glyph: \"$glyph\"")
 
-        int columnRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnRevisionNumber);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
+        val columnUnicodeVersion = cursor.getColumnIndex("unicodeVersion")
+        val unicodeVersion = cursor.getDouble(columnUnicodeVersion)
+        Log.i(
+            CursorToEmojiGsonConverter::class.java.name,
+            "unicodeVersion: $unicodeVersion"
+        )
 
-        int columnUsageCount = cursor.getColumnIndex("usageCount");
-        Integer usageCount = cursor.getInt(columnUsageCount);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "usageCount: " + usageCount);
+        val columnUnicodeEmojiVersion = cursor.getColumnIndex("unicodeEmojiVersion")
+        val unicodeEmojiVersion = cursor.getDouble(columnUnicodeEmojiVersion)
+        Log.i(
+            CursorToEmojiGsonConverter::class.java.name,
+            "unicodeEmojiVersion: $unicodeEmojiVersion"
+        )
 
-        int columnGlyph = cursor.getColumnIndex("glyph");
-        String glyph = cursor.getString(columnGlyph);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "glyph: \"" + glyph + "\"");
+        val emoji = EmojiGson()
+        emoji.id = id
+        emoji.revisionNumber = revisionNumber
+        emoji.usageCount = usageCount
+        emoji.glyph = glyph
+        emoji.unicodeVersion = unicodeVersion
+        emoji.unicodeEmojiVersion = unicodeEmojiVersion
 
-        int columnUnicodeVersion = cursor.getColumnIndex("unicodeVersion");
-        Double unicodeVersion = cursor.getDouble(columnUnicodeVersion);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "unicodeVersion: " + unicodeVersion);
-
-        int columnUnicodeEmojiVersion = cursor.getColumnIndex("unicodeEmojiVersion");
-        Double unicodeEmojiVersion = cursor.getDouble(columnUnicodeEmojiVersion);
-        Log.i(CursorToEmojiGsonConverter.class.getName(), "unicodeEmojiVersion: " + unicodeEmojiVersion);
-
-        EmojiGson emoji = new EmojiGson();
-        emoji.setId(id);
-        emoji.setRevisionNumber(revisionNumber);
-        emoji.setUsageCount(usageCount);
-        emoji.setGlyph(glyph);
-        emoji.setUnicodeVersion(unicodeVersion);
-        emoji.setUnicodeEmojiVersion(unicodeEmojiVersion);
-
-        return emoji;
+        return emoji
     }
 }
