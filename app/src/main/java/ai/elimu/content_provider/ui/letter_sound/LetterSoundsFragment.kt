@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -40,18 +39,14 @@ class LetterSoundsFragment : Fragment() {
     ): View? {
         Log.i(TAG, "onCreateView")
 
-        letterSoundsViewModel = ViewModelProvider(this).get(
-            LetterSoundsViewModel::class.java
-        )
+        letterSoundsViewModel = ViewModelProvider(this)[LetterSoundsViewModel::class.java]
         val root = inflater.inflate(R.layout.fragment_letter_sounds, container, false)
         progressBar = root.findViewById(R.id.progress_bar_letter_sounds)
         textView = root.findViewById(R.id.text_letter_sounds) as? TextView
-        letterSoundsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
-            override fun onChanged(s: String?) {
-                Log.i(TAG, "onChanged")
-                textView?.text = s
-            }
-        })
+        letterSoundsViewModel?.text?.observe(viewLifecycleOwner) { s ->
+            Log.i(TAG, "onChanged")
+            textView?.text = s
+        }
         return root
     }
 

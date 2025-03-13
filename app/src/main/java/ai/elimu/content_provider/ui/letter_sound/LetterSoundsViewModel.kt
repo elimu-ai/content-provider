@@ -1,19 +1,12 @@
-package ai.elimu.content_provider.ui.letter_sound;
+package ai.elimu.content_provider.ui.letter_sound
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class LetterSoundsViewModel extends ViewModel {
+class LetterSoundsViewModel : ViewModel() {
+    val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public LetterSoundsViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("LetterSoundsViewModel");
-    }
-
-    public LiveData<String> getText() {
-        return text;
+    init {
+        text.value = "LetterSoundsViewModel"
     }
 }
