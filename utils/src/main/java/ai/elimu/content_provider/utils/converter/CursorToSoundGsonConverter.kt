@@ -1,36 +1,42 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.gson.content.SoundGson
+import android.database.Cursor
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToSoundGsonConverter {
+    @JvmStatic
+    fun getSoundGson(cursor: Cursor): SoundGson {
+        Log.i(CursorToSoundGsonConverter::class.java.name, "getSoundGson")
 
-import ai.elimu.model.v2.gson.content.SoundGson;
+        Log.i(
+            CursorToSoundGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToSoundGsonConverter {
+        val columnIndexId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnIndexId)
+        Log.i(CursorToSoundGsonConverter::class.java.name, "id: $id")
 
-    public static SoundGson getSoundGson(Cursor cursor) {
-        Log.i(CursorToSoundGsonConverter.class.getName(), "getSoundGson");
+        val columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnIndexRevisionNumber)
+        Log.i(
+            CursorToSoundGsonConverter::class.java.name,
+            "revisionNumber: $revisionNumber"
+        )
 
-        Log.i(CursorToSoundGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnIndexValueIpa = cursor.getColumnIndex("valueIpa")
+        val valueIpa = cursor.getString(columnIndexValueIpa)
+        Log.i(
+            CursorToSoundGsonConverter::class.java.name,
+            "valueIpa: \"$valueIpa\""
+        )
 
-        int columnIndexId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnIndexId);
-        Log.i(CursorToSoundGsonConverter.class.getName(), "id: " + id);
+        val soundGson = SoundGson()
+        soundGson.id = id
+        soundGson.revisionNumber = revisionNumber
+        soundGson.valueIpa = valueIpa
 
-        int columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnIndexRevisionNumber);
-        Log.i(CursorToSoundGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
-
-        int columnIndexValueIpa = cursor.getColumnIndex("valueIpa");
-        String valueIpa = cursor.getString(columnIndexValueIpa);
-        Log.i(CursorToSoundGsonConverter.class.getName(), "valueIpa: \"" + valueIpa + "\"");
-
-        SoundGson soundGson = new SoundGson();
-        soundGson.setId(id);
-        soundGson.setRevisionNumber(revisionNumber);
-        soundGson.setValueIpa(valueIpa);
-
-        return soundGson;
+        return soundGson
     }
 }
