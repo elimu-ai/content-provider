@@ -1,54 +1,65 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.enums.ReadingLevel
+import ai.elimu.model.v2.gson.content.ImageGson
+import ai.elimu.model.v2.gson.content.StoryBookGson
+import android.database.Cursor
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToStoryBookGsonConverter {
+    fun getStoryBookGson(cursor: Cursor): StoryBookGson {
+        Log.i(CursorToStoryBookGsonConverter::class.java.name, "getStoryBookGson")
 
-import ai.elimu.model.v2.enums.ReadingLevel;
-import ai.elimu.model.v2.gson.content.ImageGson;
-import ai.elimu.model.v2.gson.content.StoryBookGson;
+        Log.i(
+            CursorToStoryBookGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToStoryBookGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(CursorToStoryBookGsonConverter::class.java.name, "id: $id")
 
-    public static StoryBookGson getStoryBookGson(Cursor cursor) {
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "getStoryBookGson");
+        val columnTitle = cursor.getColumnIndex("title")
+        val title = cursor.getString(columnTitle)
+        Log.i(
+            CursorToStoryBookGsonConverter::class.java.name,
+            "title: \"$title\""
+        )
 
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnDescription = cursor.getColumnIndex("description")
+        val description = cursor.getString(columnDescription)
+        Log.i(
+            CursorToStoryBookGsonConverter::class.java.name,
+            "description: \"$description\""
+        )
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "id: " + id);
+        val columnCoverImageId = cursor.getColumnIndex("coverImageId")
+        val coverImageId = cursor.getLong(columnCoverImageId)
+        Log.i(
+            CursorToImageGsonConverter::class.java.name,
+            "coverImageId: $coverImageId"
+        )
+        val coverImage = ImageGson()
+        coverImage.id = coverImageId
 
-        int columnTitle = cursor.getColumnIndex("title");
-        String title = cursor.getString(columnTitle);
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "title: \"" + title + "\"");
-
-        int columnDescription = cursor.getColumnIndex("description");
-        String description = cursor.getString(columnDescription);
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "description: \"" + description + "\"");
-
-        int columnCoverImageId = cursor.getColumnIndex("coverImageId");
-        Long coverImageId = cursor.getLong(columnCoverImageId);
-        Log.i(CursorToImageGsonConverter.class.getName(), "coverImageId: " + coverImageId);
-        ImageGson coverImage = new ImageGson();
-        coverImage.setId(coverImageId);
-
-        int columnReadingLevel = cursor.getColumnIndex("readingLevel");
-        String readingLevelName = cursor.getString(columnReadingLevel);
-        ReadingLevel readingLevel = null;
+        val columnReadingLevel = cursor.getColumnIndex("readingLevel")
+        val readingLevelName = cursor.getString(columnReadingLevel)
+        var readingLevel: ReadingLevel? = null
         if (readingLevelName != null) {
-             readingLevel = ReadingLevel.valueOf(readingLevelName);
+            readingLevel = ReadingLevel.valueOf(readingLevelName)
         }
-        Log.i(CursorToStoryBookGsonConverter.class.getName(), "readingLevel: " + readingLevel);
+        Log.i(
+            CursorToStoryBookGsonConverter::class.java.name,
+            "readingLevel: $readingLevel"
+        )
 
-        StoryBookGson storyBook = new StoryBookGson();
-        storyBook.setId(id);
-        storyBook.setTitle(title);
-        storyBook.setDescription(description);
-        storyBook.setCoverImage(coverImage);
-        storyBook.setReadingLevel(readingLevel);
+        val storyBook = StoryBookGson()
+        storyBook.id = id
+        storyBook.title = title
+        storyBook.description = description
+        storyBook.coverImage = coverImage
+        storyBook.readingLevel = readingLevel
 
-        return storyBook;
+        return storyBook
     }
 }
