@@ -1,44 +1,53 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.enums.content.ImageFormat
+import ai.elimu.model.v2.gson.content.ImageGson
+import android.database.Cursor
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToImageGsonConverter {
+    @JvmStatic
+    fun getImageGson(cursor: Cursor): ImageGson {
+        Log.i(CursorToImageGsonConverter::class.java.name, "getImageGson")
 
-import ai.elimu.model.v2.enums.content.ImageFormat;
-import ai.elimu.model.v2.gson.content.ImageGson;
+        Log.i(
+            CursorToImageGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToImageGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(CursorToImageGsonConverter::class.java.name, "id: $id")
 
-    public static ImageGson getImageGson(Cursor cursor) {
-        Log.i(CursorToImageGsonConverter.class.getName(), "getImageGson");
+        val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnRevisionNumber)
+        Log.i(
+            CursorToImageGsonConverter::class.java.name,
+            "revisionNumber: $revisionNumber"
+        )
 
-        Log.i(CursorToImageGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnTitle = cursor.getColumnIndex("title")
+        val title = cursor.getString(columnTitle)
+        Log.i(CursorToImageGsonConverter::class.java.name, "title: \"$title\"")
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToImageGsonConverter.class.getName(), "id: " + id);
+        val columnImageFormat = cursor.getColumnIndex("imageFormat")
+        val imageFormatAsString = cursor.getString(columnImageFormat)
+        Log.i(
+            CursorToImageGsonConverter::class.java.name,
+            "imageFormatAsString: $imageFormatAsString"
+        )
+        val imageFormat = ImageFormat.valueOf(imageFormatAsString)
+        Log.i(
+            CursorToImageGsonConverter::class.java.name,
+            "imageFormat: $imageFormat"
+        )
 
-        int columnRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnRevisionNumber);
-        Log.i(CursorToImageGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
+        val image = ImageGson()
+        image.id = id
+        image.revisionNumber = revisionNumber
+        image.title = title
+        image.imageFormat = imageFormat
 
-        int columnTitle = cursor.getColumnIndex("title");
-        String title = cursor.getString(columnTitle);
-        Log.i(CursorToImageGsonConverter.class.getName(), "title: \"" + title + "\"");
-
-        int columnImageFormat = cursor.getColumnIndex("imageFormat");
-        String imageFormatAsString = cursor.getString(columnImageFormat);
-        Log.i(CursorToImageGsonConverter.class.getName(), "imageFormatAsString: " + imageFormatAsString);
-        ImageFormat imageFormat = ImageFormat.valueOf(imageFormatAsString);
-        Log.i(CursorToImageGsonConverter.class.getName(), "imageFormat: " + imageFormat);
-
-        ImageGson image = new ImageGson();
-        image.setId(id);
-        image.setRevisionNumber(revisionNumber);
-        image.setTitle(title);
-        image.setImageFormat(imageFormat);
-
-        return image;
+        return image
     }
 }
