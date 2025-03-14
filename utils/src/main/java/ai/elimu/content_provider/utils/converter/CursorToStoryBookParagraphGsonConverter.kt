@@ -10,35 +10,30 @@ import android.widget.Toast
 import java.util.Locale
 
 object CursorToStoryBookParagraphGsonConverter {
+
+    private const val TAG = "CursorToStoryBookParagraphGsonConverter"
+
     fun getStoryBookParagraphGson(
         cursor: Cursor,
         context: Context,
         contentProviderApplicationId: String
     ): StoryBookParagraphGson {
-        Log.i(CursorToStoryBookParagraphGsonConverter::class.java.name, "getStoryBookParagraphGson")
+        Log.i(TAG, "getStoryBookParagraphGson")
 
-        Log.i(
-            CursorToStoryBookParagraphGsonConverter::class.java.name,
-            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
-        )
+        Log.i(TAG,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
         val columnId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnId)
-        Log.i(CursorToStoryBookParagraphGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnSortOrder = cursor.getColumnIndex("sortOrder")
         val sortOrder = cursor.getInt(columnSortOrder)
-        Log.i(
-            CursorToStoryBookParagraphGsonConverter::class.java.name,
-            "sortOrder: $sortOrder"
-        )
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val columnOriginalText = cursor.getColumnIndex("originalText")
         val originalText = cursor.getString(columnOriginalText)
-        Log.i(
-            CursorToStoryBookParagraphGsonConverter::class.java.name,
-            "originalText: $originalText"
-        )
+        Log.i(TAG, "originalText: $originalText")
 
         var wordGsons: MutableList<WordGson>? = null
         val wordsUri =
@@ -49,17 +44,11 @@ object CursorToStoryBookParagraphGsonConverter {
             Log.e(CursorToImageGsonConverter::class.java.name, "wordsCursor == null")
             Toast.makeText(context, "wordsCursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(
-                CursorToImageGsonConverter::class.java.name,
-                "wordsCursor.getCount(): " + wordsCursor.count
-            )
+            Log.i(TAG, "wordsCursor.getCount(): " + wordsCursor.count)
             if (wordsCursor.count == 0) {
-                Log.e(CursorToImageGsonConverter::class.java.name, "wordsCursor.getCount() == 0")
+                Log.e(TAG, "wordsCursor.getCount() == 0")
             } else {
-                Log.i(
-                    CursorToImageGsonConverter::class.java.name,
-                    "wordsCursor.getCount(): " + wordsCursor.count
-                )
+                Log.i(TAG, "wordsCursor.getCount(): " + wordsCursor.count)
 
                 wordGsons = ArrayList()
 
@@ -75,10 +64,7 @@ object CursorToStoryBookParagraphGsonConverter {
                 }
 
                 wordsCursor.close()
-                Log.i(
-                    CursorToImageGsonConverter::class.java.name,
-                    "wordsCursor.isClosed(): " + wordsCursor.isClosed
-                )
+                Log.i(TAG, "wordsCursor.isClosed(): " + wordsCursor.isClosed)
             }
         }
 
@@ -89,20 +75,12 @@ object CursorToStoryBookParagraphGsonConverter {
             val wordsInOriginalText =
                 originalText.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
                     .toTypedArray()
-            Log.i(
-                CursorToImageGsonConverter::class.java.name,
-                "wordsInOriginalText.length: " + wordsInOriginalText.size
-            )
-            Log.i(
-                CursorToImageGsonConverter::class.java.name,
-                "Arrays.toString(wordsInOriginalText): " + wordsInOriginalText.contentToString()
-            )
+            Log.i(TAG, "wordsInOriginalText.length: " + wordsInOriginalText.size)
+            Log.i(TAG,
+                "Arrays.toString(wordsInOriginalText): " + wordsInOriginalText.contentToString())
             for (wordInOriginalText in wordsInOriginalText) {
                 var wordInOriginalText = wordInOriginalText
-                Log.i(
-                    CursorToImageGsonConverter::class.java.name,
-                    "wordInOriginalText (before cleaning): \"$wordInOriginalText\""
-                )
+                Log.i(TAG, "wordInOriginalText (before cleaning): \"$wordInOriginalText\"")
                 wordInOriginalText = wordInOriginalText
                     .replace(",", "")
                     .replace("\"", "")
@@ -116,17 +94,11 @@ object CursorToStoryBookParagraphGsonConverter {
                     .replace(")", "")
                 wordInOriginalText = wordInOriginalText.trim { it <= ' ' }
                 wordInOriginalText = wordInOriginalText.lowercase(Locale.getDefault())
-                Log.i(
-                    CursorToImageGsonConverter::class.java.name,
-                    "wordInOriginalText (after cleaning): \"$wordInOriginalText\""
-                )
+                Log.i(TAG, "wordInOriginalText (after cleaning): \"$wordInOriginalText\"")
 
                 var wordGsonMatch: WordGson? = null
                 for (wordGson in wordGsons) {
-                    Log.i(
-                        CursorToImageGsonConverter::class.java.name,
-                        "wordGson.getText(): \"" + wordGson.text + "\""
-                    )
+                    Log.i(TAG, "wordGson.getText(): \"" + wordGson.text + "\"")
                     if (wordGson.text == wordInOriginalText) {
                         wordGsonMatch = wordGson
                         break
@@ -134,10 +106,7 @@ object CursorToStoryBookParagraphGsonConverter {
                 }
                 wordGsonsWithNullObjects.add(wordGsonMatch)
             }
-            Log.i(
-                CursorToImageGsonConverter::class.java.name,
-                "wordGsonsWithNullObjects.size(): " + wordGsonsWithNullObjects.size
-            )
+            Log.i(TAG, "wordGsonsWithNullObjects.size(): " + wordGsonsWithNullObjects.size)
         }
 
         val storyBookParagraph = StoryBookParagraphGson()

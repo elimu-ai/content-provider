@@ -7,38 +7,30 @@ import android.database.Cursor
 import android.util.Log
 
 object CursorToStoryBookGsonConverter {
-    fun getStoryBookGson(cursor: Cursor): StoryBookGson {
-        Log.i(CursorToStoryBookGsonConverter::class.java.name, "getStoryBookGson")
 
-        Log.i(
-            CursorToStoryBookGsonConverter::class.java.name,
-            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
-        )
+    private const val TAG = "CursorToStoryBookGsonConverter"
+
+    fun getStoryBookGson(cursor: Cursor): StoryBookGson {
+        Log.i(TAG, "getStoryBookGson")
+
+        Log.i(TAG, "Arrays.toString(cursor.getColumnNames()): "
+                + cursor.columnNames.contentToString())
 
         val columnId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnId)
-        Log.i(CursorToStoryBookGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnTitle = cursor.getColumnIndex("title")
         val title = cursor.getString(columnTitle)
-        Log.i(
-            CursorToStoryBookGsonConverter::class.java.name,
-            "title: \"$title\""
-        )
+        Log.i(TAG, "title: \"$title\"")
 
         val columnDescription = cursor.getColumnIndex("description")
         val description = cursor.getString(columnDescription)
-        Log.i(
-            CursorToStoryBookGsonConverter::class.java.name,
-            "description: \"$description\""
-        )
+        Log.i(TAG, "description: \"$description\"")
 
         val columnCoverImageId = cursor.getColumnIndex("coverImageId")
         val coverImageId = cursor.getLong(columnCoverImageId)
-        Log.i(
-            CursorToImageGsonConverter::class.java.name,
-            "coverImageId: $coverImageId"
-        )
+        Log.i(TAG, "coverImageId: $coverImageId")
         val coverImage = ImageGson()
         coverImage.id = coverImageId
 
@@ -48,10 +40,7 @@ object CursorToStoryBookGsonConverter {
         if (readingLevelName != null) {
             readingLevel = ReadingLevel.valueOf(readingLevelName)
         }
-        Log.i(
-            CursorToStoryBookGsonConverter::class.java.name,
-            "readingLevel: $readingLevel"
-        )
+        Log.i(TAG, "readingLevel: $readingLevel")
 
         val storyBook = StoryBookGson()
         storyBook.id = id
