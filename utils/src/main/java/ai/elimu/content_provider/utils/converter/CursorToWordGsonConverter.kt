@@ -1,52 +1,52 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.text.TextUtils;
-import android.util.Log;
+import ai.elimu.model.v2.enums.content.WordType
+import ai.elimu.model.v2.gson.content.WordGson
+import android.database.Cursor
+import android.text.TextUtils
+import android.util.Log
 
-import java.util.Arrays;
+object CursorToWordGsonConverter {
+    
+    private const val TAG = "CursorToWordGsonConverter"
+    
+    fun getWordGson(cursor: Cursor): WordGson {
+        Log.i(TAG, "getWordGson")
 
-import ai.elimu.model.v2.enums.content.WordType;
-import ai.elimu.model.v2.gson.content.WordGson;
+        Log.i(TAG,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
-public class CursorToWordGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(TAG, "id: $id")
 
-    public static WordGson getWordGson(Cursor cursor) {
-        Log.i(CursorToWordGsonConverter.class.getName(), "getWordGson");
+        val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnRevisionNumber)
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
-        Log.i(CursorToWordGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnUsageCount = cursor.getColumnIndex("usageCount")
+        val usageCount = cursor.getInt(columnUsageCount)
+        Log.i(TAG, "usageCount: $usageCount")
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToWordGsonConverter.class.getName(), "id: " + id);
+        val columnText = cursor.getColumnIndex("text")
+        val text = cursor.getString(columnText)
+        Log.i(TAG, "text: \"$text\"")
 
-        int columnRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnRevisionNumber);
-        Log.i(CursorToWordGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
-
-        int columnUsageCount = cursor.getColumnIndex("usageCount");
-        Integer usageCount = cursor.getInt(columnUsageCount);
-        Log.i(CursorToWordGsonConverter.class.getName(), "usageCount: " + usageCount);
-
-        int columnText = cursor.getColumnIndex("text");
-        String text = cursor.getString(columnText);
-        Log.i(CursorToWordGsonConverter.class.getName(), "text: \"" + text + "\"");
-
-        int columnWordType = cursor.getColumnIndex("wordType");
-        String wordTypeAsString = cursor.getString(columnWordType);
-        WordType wordType = null;
+        val columnWordType = cursor.getColumnIndex("wordType")
+        val wordTypeAsString = cursor.getString(columnWordType)
+        var wordType: WordType? = null
         if (!TextUtils.isEmpty(wordTypeAsString)) {
-            wordType = WordType.valueOf(wordTypeAsString);
+            wordType = WordType.valueOf(wordTypeAsString)
         }
-        Log.i(CursorToWordGsonConverter.class.getName(), "wordType: " + wordType);
+        Log.i(TAG, "wordType: $wordType")
 
-        WordGson word = new WordGson();
-        word.setId(id);
-        word.setRevisionNumber(revisionNumber);
-        word.setUsageCount(usageCount);
-        word.setText(text);
-        word.setWordType(wordType);
+        val word = WordGson()
+        word.id = id
+        word.revisionNumber = revisionNumber
+        word.usageCount = usageCount
+        word.text = text
+        word.wordType = wordType
 
-        return word;
+        return word
     }
 }
