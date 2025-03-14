@@ -1,62 +1,62 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.database.Cursor;
-import android.util.Log;
+import ai.elimu.model.v2.enums.analytics.LearningEventType
+import ai.elimu.model.v2.gson.analytics.WordLearningEventGson
+import android.database.Cursor
+import android.util.Log
+import java.util.Calendar
 
-import java.util.Arrays;
-import java.util.Calendar;
+object CursorToWordLearningEventGsonConverter {
+    
+    private const val TAG = "CursorToWordLearningEventGsonConverter"
+    
+    fun getWordLearningEventGson(cursor: Cursor): WordLearningEventGson {
+        Log.i(TAG, "getWordLearningEventGson")
 
-import ai.elimu.model.v2.enums.analytics.LearningEventType;
-import ai.elimu.model.v2.gson.analytics.WordLearningEventGson;
+        Log.i(TAG,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
-public class CursorToWordLearningEventGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(TAG, "id: $id")
 
-    public static WordLearningEventGson getWordLearningEventGson(Cursor cursor) {
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "getWordLearningEventGson");
+        val columnAndroidId = cursor.getColumnIndex("androidId")
+        val androidId = cursor.getString(columnAndroidId)
+        Log.i(TAG, "androidId: \"$androidId\"")
 
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnPackageName = cursor.getColumnIndex("packageName")
+        val packageName = cursor.getString(columnPackageName)
+        Log.i(TAG, "packageName: \"$packageName\"")
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "id: " + id);
+        val columnTime = cursor.getColumnIndex("time")
+        val timeAsLong = cursor.getLong(columnTime)
+        Log.i(TAG, "timeAsLong: $timeAsLong")
+        val time = Calendar.getInstance()
+        time.timeInMillis = timeAsLong
+        Log.i(TAG, "time.getTime(): " + time.time)
 
-        int columnAndroidId = cursor.getColumnIndex("androidId");
-        String androidId = cursor.getString(columnAndroidId);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "androidId: \"" + androidId + "\"");
+        val columnWordId = cursor.getColumnIndex("wordId")
+        val wordId = cursor.getLong(columnWordId)
+        Log.i(TAG, "wordId: $wordId")
 
-        int columnPackageName = cursor.getColumnIndex("packageName");
-        String packageName = cursor.getString(columnPackageName);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "packageName: \"" + packageName + "\"");
+        val columnWordText = cursor.getColumnIndex("wordText")
+        val wordText = cursor.getString(columnWordText)
+        Log.i(TAG, "wordText: \"$wordText\"")
 
-        int columnTime = cursor.getColumnIndex("time");
-        Long timeAsLong = cursor.getLong(columnTime);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "timeAsLong: " + timeAsLong);
-        Calendar time = Calendar.getInstance();
-        time.setTimeInMillis(timeAsLong);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "time.getTime(): " + time.getTime());
+        val columnLearningEventType = cursor.getColumnIndex("learningEventType")
+        val learningEventTypeAsString = cursor.getString(columnLearningEventType)
+        val learningEventType = LearningEventType.valueOf(learningEventTypeAsString)
+        Log.i(TAG, "learningEventType: $learningEventType")
 
-        int columnWordId = cursor.getColumnIndex("wordId");
-        Long wordId = cursor.getLong(columnWordId);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "wordId: " + wordId);
+        val wordLearningEventGson = WordLearningEventGson()
+        wordLearningEventGson.id = id
+        wordLearningEventGson.androidId = androidId
+        wordLearningEventGson.packageName = packageName
+        wordLearningEventGson.time = time
+        wordLearningEventGson.wordId = wordId
+        wordLearningEventGson.wordText = wordText
+        wordLearningEventGson.learningEventType = learningEventType
 
-        int columnWordText = cursor.getColumnIndex("wordText");
-        String wordText = cursor.getString(columnWordText);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "wordText: \"" + wordText + "\"");
-
-        int columnLearningEventType = cursor.getColumnIndex("learningEventType");
-        String learningEventTypeAsString = cursor.getString(columnLearningEventType);
-        LearningEventType learningEventType = LearningEventType.valueOf(learningEventTypeAsString);
-        Log.i(CursorToWordLearningEventGsonConverter.class.getName(), "learningEventType: " + learningEventType);
-
-        WordLearningEventGson wordLearningEventGson = new WordLearningEventGson();
-        wordLearningEventGson.setId(id);
-        wordLearningEventGson.setAndroidId(androidId);
-        wordLearningEventGson.setPackageName(packageName);
-        wordLearningEventGson.setTime(time);
-        wordLearningEventGson.setWordId(wordId);
-        wordLearningEventGson.setWordText(wordText);
-        wordLearningEventGson.setLearningEventType(learningEventType);
-
-        return wordLearningEventGson;
+        return wordLearningEventGson
     }
 }
