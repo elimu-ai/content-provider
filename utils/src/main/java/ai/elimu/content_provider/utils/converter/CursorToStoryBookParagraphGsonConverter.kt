@@ -1,112 +1,151 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
+import ai.elimu.model.v2.gson.content.StoryBookParagraphGson
+import ai.elimu.model.v2.gson.content.WordGson
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import java.util.Locale
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+object CursorToStoryBookParagraphGsonConverter {
+    fun getStoryBookParagraphGson(
+        cursor: Cursor,
+        context: Context,
+        contentProviderApplicationId: String
+    ): StoryBookParagraphGson {
+        Log.i(CursorToStoryBookParagraphGsonConverter::class.java.name, "getStoryBookParagraphGson")
 
-import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
-import ai.elimu.model.v2.gson.content.WordGson;
+        Log.i(
+            CursorToStoryBookParagraphGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToStoryBookParagraphGsonConverter {
+        val columnId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnId)
+        Log.i(CursorToStoryBookParagraphGsonConverter::class.java.name, "id: $id")
 
-    public static StoryBookParagraphGson getStoryBookParagraphGson(Cursor cursor, Context context, String contentProviderApplicationId) {
-        Log.i(CursorToStoryBookParagraphGsonConverter.class.getName(), "getStoryBookParagraphGson");
+        val columnSortOrder = cursor.getColumnIndex("sortOrder")
+        val sortOrder = cursor.getInt(columnSortOrder)
+        Log.i(
+            CursorToStoryBookParagraphGsonConverter::class.java.name,
+            "sortOrder: $sortOrder"
+        )
 
-        Log.i(CursorToStoryBookParagraphGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnOriginalText = cursor.getColumnIndex("originalText")
+        val originalText = cursor.getString(columnOriginalText)
+        Log.i(
+            CursorToStoryBookParagraphGsonConverter::class.java.name,
+            "originalText: $originalText"
+        )
 
-        int columnId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnId);
-        Log.i(CursorToStoryBookParagraphGsonConverter.class.getName(), "id: " + id);
-
-        int columnSortOrder = cursor.getColumnIndex("sortOrder");
-        Integer sortOrder = cursor.getInt(columnSortOrder);
-        Log.i(CursorToStoryBookParagraphGsonConverter.class.getName(), "sortOrder: " + sortOrder);
-
-        int columnOriginalText = cursor.getColumnIndex("originalText");
-        String originalText = cursor.getString(columnOriginalText);
-        Log.i(CursorToStoryBookParagraphGsonConverter.class.getName(), "originalText: " + originalText);
-
-        List<WordGson> wordGsons = null;
-        Uri wordsUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.word_provider/words/by-paragraph-id/" + id);
-        Log.i(CursorToImageGsonConverter.class.getName(), "wordsUri: " + wordsUri);
-        Cursor wordsCursor = context.getContentResolver().query(wordsUri, null, null, null, null);
+        var wordGsons: MutableList<WordGson>? = null
+        val wordsUri =
+            Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words/by-paragraph-id/$id")
+        Log.i(CursorToImageGsonConverter::class.java.name, "wordsUri: $wordsUri")
+        val wordsCursor = context.contentResolver.query(wordsUri, null, null, null, null)
         if (wordsCursor == null) {
-            Log.e(CursorToImageGsonConverter.class.getName(), "wordsCursor == null");
-            Toast.makeText(context, "wordsCursor == null", Toast.LENGTH_LONG).show();
+            Log.e(CursorToImageGsonConverter::class.java.name, "wordsCursor == null")
+            Toast.makeText(context, "wordsCursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(CursorToImageGsonConverter.class.getName(), "wordsCursor.getCount(): " + wordsCursor.getCount());
-            if (wordsCursor.getCount() == 0) {
-                Log.e(CursorToImageGsonConverter.class.getName(), "wordsCursor.getCount() == 0");
+            Log.i(
+                CursorToImageGsonConverter::class.java.name,
+                "wordsCursor.getCount(): " + wordsCursor.count
+            )
+            if (wordsCursor.count == 0) {
+                Log.e(CursorToImageGsonConverter::class.java.name, "wordsCursor.getCount() == 0")
             } else {
-                Log.i(CursorToImageGsonConverter.class.getName(), "wordsCursor.getCount(): " + wordsCursor.getCount());
+                Log.i(
+                    CursorToImageGsonConverter::class.java.name,
+                    "wordsCursor.getCount(): " + wordsCursor.count
+                )
 
-                wordGsons = new ArrayList<>();
+                wordGsons = ArrayList()
 
-                boolean isLast = false;
+                var isLast = false
                 while (!isLast) {
-                    wordsCursor.moveToNext();
+                    wordsCursor.moveToNext()
 
                     // Convert from Room to Gson
-                    WordGson wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor);
-                    wordGsons.add(wordGson);
+                    val wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor)
+                    wordGsons.add(wordGson)
 
-                    isLast = wordsCursor.isLast();
+                    isLast = wordsCursor.isLast
                 }
 
-                wordsCursor.close();
-                Log.i(CursorToImageGsonConverter.class.getName(), "wordsCursor.isClosed(): " + wordsCursor.isClosed());
+                wordsCursor.close()
+                Log.i(
+                    CursorToImageGsonConverter::class.java.name,
+                    "wordsCursor.isClosed(): " + wordsCursor.isClosed
+                )
             }
         }
 
-        List<WordGson> wordGsonsWithNullObjects = null;
+        var wordGsonsWithNullObjects: MutableList<WordGson?>? = null
         if (wordGsons != null) {
             // Look for a Word match in the original text, and add null if none was found
-            wordGsonsWithNullObjects = new ArrayList<>();
-            String[] wordsInOriginalText = originalText.trim().split(" ");
-            Log.i(CursorToImageGsonConverter.class.getName(), "wordsInOriginalText.length: " + wordsInOriginalText.length);
-            Log.i(CursorToImageGsonConverter.class.getName(), "Arrays.toString(wordsInOriginalText): " + Arrays.toString(wordsInOriginalText));
-            for (String wordInOriginalText : wordsInOriginalText) {
-                Log.i(CursorToImageGsonConverter.class.getName(), "wordInOriginalText (before cleaning): \"" + wordInOriginalText + "\"");
+            wordGsonsWithNullObjects = ArrayList()
+            val wordsInOriginalText =
+                originalText.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+            Log.i(
+                CursorToImageGsonConverter::class.java.name,
+                "wordsInOriginalText.length: " + wordsInOriginalText.size
+            )
+            Log.i(
+                CursorToImageGsonConverter::class.java.name,
+                "Arrays.toString(wordsInOriginalText): " + wordsInOriginalText.contentToString()
+            )
+            for (wordInOriginalText in wordsInOriginalText) {
+                var wordInOriginalText = wordInOriginalText
+                Log.i(
+                    CursorToImageGsonConverter::class.java.name,
+                    "wordInOriginalText (before cleaning): \"$wordInOriginalText\""
+                )
                 wordInOriginalText = wordInOriginalText
-                        .replace(",", "")
-                        .replace("\"", "")
-                        .replace("“", "")
-                        .replace("”", "")
-                        .replace(".", "")
-                        .replace("!", "")
-                        .replace("?", "")
-                        .replace(":", "")
-                        .replace("(", "")
-                        .replace(")", "");
-                wordInOriginalText = wordInOriginalText.trim();
-                wordInOriginalText = wordInOriginalText.toLowerCase();
-                Log.i(CursorToImageGsonConverter.class.getName(), "wordInOriginalText (after cleaning): \"" + wordInOriginalText + "\"");
+                    .replace(",", "")
+                    .replace("\"", "")
+                    .replace("“", "")
+                    .replace("”", "")
+                    .replace(".", "")
+                    .replace("!", "")
+                    .replace("?", "")
+                    .replace(":", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                wordInOriginalText = wordInOriginalText.trim { it <= ' ' }
+                wordInOriginalText = wordInOriginalText.lowercase(Locale.getDefault())
+                Log.i(
+                    CursorToImageGsonConverter::class.java.name,
+                    "wordInOriginalText (after cleaning): \"$wordInOriginalText\""
+                )
 
-                WordGson wordGsonMatch = null;
-                for (WordGson wordGson : wordGsons) {
-                    Log.i(CursorToImageGsonConverter.class.getName(), "wordGson.getText(): \"" + wordGson.getText() + "\"");
-                    if (wordGson.getText().equals(wordInOriginalText)) {
-                        wordGsonMatch = wordGson;
-                        break;
+                var wordGsonMatch: WordGson? = null
+                for (wordGson in wordGsons) {
+                    Log.i(
+                        CursorToImageGsonConverter::class.java.name,
+                        "wordGson.getText(): \"" + wordGson.text + "\""
+                    )
+                    if (wordGson.text == wordInOriginalText) {
+                        wordGsonMatch = wordGson
+                        break
                     }
                 }
-                wordGsonsWithNullObjects.add(wordGsonMatch);
+                wordGsonsWithNullObjects.add(wordGsonMatch)
             }
-            Log.i(CursorToImageGsonConverter.class.getName(), "wordGsonsWithNullObjects.size(): " + wordGsonsWithNullObjects.size());
+            Log.i(
+                CursorToImageGsonConverter::class.java.name,
+                "wordGsonsWithNullObjects.size(): " + wordGsonsWithNullObjects.size
+            )
         }
 
-        StoryBookParagraphGson storyBookParagraph = new StoryBookParagraphGson();
-        storyBookParagraph.setId(id);
-        storyBookParagraph.setSortOrder(sortOrder);
-        storyBookParagraph.setOriginalText(originalText);
-        storyBookParagraph.setWords(wordGsonsWithNullObjects);
+        val storyBookParagraph = StoryBookParagraphGson()
+        storyBookParagraph.id = id
+        storyBookParagraph.sortOrder = sortOrder
+        storyBookParagraph.originalText = originalText
+        storyBookParagraph.words = wordGsonsWithNullObjects
 
-        return storyBookParagraph;
+        return storyBookParagraph
     }
 }
