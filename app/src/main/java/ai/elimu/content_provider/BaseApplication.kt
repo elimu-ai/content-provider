@@ -1,43 +1,42 @@
-package ai.elimu.content_provider;
+package ai.elimu.content_provider
 
-import android.app.Application;
-import android.util.Log;
+import ai.elimu.content_provider.util.SharedPreferencesHelper
+import ai.elimu.content_provider.util.VersionHelper
+import ai.elimu.model.v2.enums.Language
+import android.app.Application
+import android.util.Log
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-import ai.elimu.content_provider.util.SharedPreferencesHelper;
-import ai.elimu.content_provider.util.VersionHelper;
-import ai.elimu.model.v2.enums.Language;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+class BaseApplication : Application() {
+    override fun onCreate() {
+        Log.i(javaClass.name, "onCreate")
+        super.onCreate()
 
-public class BaseApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-        super.onCreate();
-
-        VersionHelper.updateAppVersion(getApplicationContext());
+        VersionHelper.updateAppVersion(applicationContext)
     }
 
-    public Retrofit getRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getRestUrl() + "/")
+    val retrofit: Retrofit
+        get() {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(restUrl + "/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        return retrofit;
-    }
+                .build()
+            return retrofit
+        }
 
-    /**
-     * E.g. "https://eng.elimu.ai" or "https://hin.elimu.ai"
-     */
-    public String getBaseUrl() {
-        Language language = SharedPreferencesHelper.getLanguage(getApplicationContext());
-        String url = "http://" + language.getIsoCode();
-        url += ".elimu.ai";
-        return url;
-    }
+    val baseUrl: String
+        /**
+         * E.g. "https://eng.elimu.ai" or "https://hin.elimu.ai"
+         */
+        get() {
+            val language =
+                SharedPreferencesHelper.getLanguage(applicationContext) ?: Language.ENG
+            var url = "http://" + language.isoCode
+            url += ".elimu.ai"
+            return url
+        }
 
-    public String getRestUrl() {
-        return getBaseUrl() + "/rest/v2";
-    }
+    private val restUrl: String
+        get() = baseUrl + "/rest/v2"
 }
