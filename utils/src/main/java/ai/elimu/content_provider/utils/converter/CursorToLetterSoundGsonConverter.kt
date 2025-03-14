@@ -1,99 +1,128 @@
-package ai.elimu.content_provider.utils.converter;
+package ai.elimu.content_provider.utils.converter
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
+import ai.elimu.content_provider.utils.converter.CursorToLetterGsonConverter.getLetterGson
+import ai.elimu.content_provider.utils.converter.CursorToSoundGsonConverter.getSoundGson
+import ai.elimu.model.v2.gson.content.LetterGson
+import ai.elimu.model.v2.gson.content.LetterSoundGson
+import ai.elimu.model.v2.gson.content.SoundGson
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+object CursorToLetterSoundGsonConverter {
+    fun getLetterSoundGson(
+        cursor: Cursor,
+        context: Context,
+        contentProviderApplicationId: String
+    ): LetterSoundGson {
+        Log.i(CursorToLetterSoundGsonConverter::class.java.name, "getLetterSoundGson")
 
-import ai.elimu.model.v2.gson.content.LetterGson;
-import ai.elimu.model.v2.gson.content.LetterSoundGson;
-import ai.elimu.model.v2.gson.content.SoundGson;
+        Log.i(
+            CursorToLetterSoundGsonConverter::class.java.name,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
+        )
 
-public class CursorToLetterSoundGsonConverter {
+        val columnIndexId = cursor.getColumnIndex("id")
+        val id = cursor.getLong(columnIndexId)
+        Log.i(CursorToLetterSoundGsonConverter::class.java.name, "id: $id")
 
-    public static LetterSoundGson getLetterSoundGson(Cursor cursor, Context context, String contentProviderApplicationId) {
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "getLetterSoundGson");
+        val columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber")
+        val revisionNumber = cursor.getInt(columnIndexRevisionNumber)
+        Log.i(
+            CursorToLetterSoundGsonConverter::class.java.name,
+            "revisionNumber: $revisionNumber"
+        )
 
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "Arrays.toString(cursor.getColumnNames()): " + Arrays.toString(cursor.getColumnNames()));
+        val columnIndexUsageCount = cursor.getColumnIndex("usageCount")
+        val usageCount = cursor.getInt(columnIndexUsageCount)
+        Log.i(
+            CursorToLetterSoundGsonConverter::class.java.name,
+            "usageCount: $usageCount"
+        )
 
-        int columnIndexId = cursor.getColumnIndex("id");
-        Long id = cursor.getLong(columnIndexId);
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "id: " + id);
-
-        int columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber");
-        Integer revisionNumber = cursor.getInt(columnIndexRevisionNumber);
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "revisionNumber: " + revisionNumber);
-
-        int columnIndexUsageCount = cursor.getColumnIndex("usageCount");
-        Integer usageCount = cursor.getInt(columnIndexUsageCount);
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "usageCount: " + usageCount);
-
-        List<LetterGson> letterGsons = null;
-        Uri lettersUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.letter_provider/letters/by-letter-sound-id/" + id);
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "lettersUri: " + lettersUri);
-        Cursor lettersCursor = context.getContentResolver().query(lettersUri, null, null, null, null);
+        var letterGsons: MutableList<LetterGson?>? = null
+        val lettersUri =
+            Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id")
+        Log.i(
+            CursorToLetterSoundGsonConverter::class.java.name,
+            "lettersUri: $lettersUri"
+        )
+        val lettersCursor = context.contentResolver.query(lettersUri, null, null, null, null)
         if (lettersCursor == null) {
-            Log.e(CursorToLetterSoundGsonConverter.class.getName(), "lettersCursor == null");
-            Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show();
+            Log.e(CursorToLetterSoundGsonConverter::class.java.name, "lettersCursor == null")
+            Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "lettersCursor.getCount(): " + lettersCursor.getCount());
+            Log.i(
+                CursorToLetterSoundGsonConverter::class.java.name,
+                "lettersCursor.getCount(): " + lettersCursor.count
+            )
 
-            letterGsons = new ArrayList<>();
+            letterGsons = ArrayList()
 
-            boolean isLast = false;
+            var isLast = false
             while (!isLast) {
-                lettersCursor.moveToNext();
+                lettersCursor.moveToNext()
 
                 // Convert from Room to Gson
-                LetterGson letterGson = CursorToLetterGsonConverter.getLetterGson(lettersCursor);
-                letterGsons.add(letterGson);
+                val letterGson = getLetterGson(lettersCursor)
+                letterGsons.add(letterGson)
 
-                isLast = lettersCursor.isLast();
+                isLast = lettersCursor.isLast
             }
 
-            lettersCursor.close();
-            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "lettersCursor.isClosed(): " + lettersCursor.isClosed());
+            lettersCursor.close()
+            Log.i(
+                CursorToLetterSoundGsonConverter::class.java.name,
+                "lettersCursor.isClosed(): " + lettersCursor.isClosed
+            )
         }
 
-        List<SoundGson> soundGsons = null;
-        Uri soundsUri = Uri.parse("content://" + contentProviderApplicationId + ".provider.sound_provider/sounds/by-letter-sound-id/" + id);
-        Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsUri: " + soundsUri);
-        Cursor soundsCursor = context.getContentResolver().query(soundsUri, null, null, null, null);
+        var soundGsons: MutableList<SoundGson?>? = null
+        val soundsUri =
+            Uri.parse("content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id")
+        Log.i(
+            CursorToLetterSoundGsonConverter::class.java.name,
+            "soundsUri: $soundsUri"
+        )
+        val soundsCursor = context.contentResolver.query(soundsUri, null, null, null, null)
         if (soundsCursor == null) {
-            Log.e(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor == null");
-            Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show();
+            Log.e(CursorToLetterSoundGsonConverter::class.java.name, "soundsCursor == null")
+            Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor.getCount(): " + soundsCursor.getCount());
+            Log.i(
+                CursorToLetterSoundGsonConverter::class.java.name,
+                "soundsCursor.getCount(): " + soundsCursor.count
+            )
 
-            soundGsons = new ArrayList<>();
+            soundGsons = ArrayList()
 
-            boolean isLast = false;
+            var isLast = false
             while (!isLast) {
-                soundsCursor.moveToNext();
+                soundsCursor.moveToNext()
 
                 // Convert from Room to Gson
-                SoundGson soundGson = CursorToSoundGsonConverter.getSoundGson(soundsCursor);
-                soundGsons.add(soundGson);
+                val soundGson = getSoundGson(soundsCursor)
+                soundGsons.add(soundGson)
 
-                isLast = soundsCursor.isLast();
+                isLast = soundsCursor.isLast
             }
 
-            soundsCursor.close();
-            Log.i(CursorToLetterSoundGsonConverter.class.getName(), "soundsCursor.isClosed(): " + soundsCursor.isClosed());
+            soundsCursor.close()
+            Log.i(
+                CursorToLetterSoundGsonConverter::class.java.name,
+                "soundsCursor.isClosed(): " + soundsCursor.isClosed
+            )
         }
 
-        LetterSoundGson letterSound = new LetterSoundGson();
-        letterSound.setId(id);
-        letterSound.setRevisionNumber(revisionNumber);
-        letterSound.setUsageCount(usageCount);
-        letterSound.setLetters(letterGsons);
-        letterSound.setSounds(soundGsons);
+        val letterSound = LetterSoundGson()
+        letterSound.id = id
+        letterSound.revisionNumber = revisionNumber
+        letterSound.usageCount = usageCount
+        letterSound.letters = letterGsons
+        letterSound.sounds = soundGsons
 
-        return letterSound;
+        return letterSound
     }
 }
