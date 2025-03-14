@@ -1,97 +1,97 @@
-package ai.elimu.content_provider;
+package ai.elimu.content_provider
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.TextView;
+import ai.elimu.content_provider.language.SelectLanguageActivity
+import ai.elimu.content_provider.util.SharedPreferencesHelper
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.navigateUp
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+class MainActivity : AppCompatActivity() {
+    private var appBarConfiguration: AppBarConfiguration? = null
 
-import com.google.android.material.navigation.NavigationView;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(javaClass.name, "onCreate")
 
-import ai.elimu.content_provider.language.SelectLanguageActivity;
-import ai.elimu.content_provider.util.SharedPreferencesHelper;
-import ai.elimu.model.v2.enums.Language;
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration appBarConfiguration;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreate");
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Language language = SharedPreferencesHelper.getLanguage(getApplicationContext());
-        Log.i(getClass().getName(), "language: " + language);
+        val language = SharedPreferencesHelper.getLanguage(
+            applicationContext
+        )
+        Log.i(javaClass.name, "language: $language")
         if (language == null) {
             // Redirect to language selection
 
-            Intent selectLanguageIntent = new Intent(getApplicationContext(), SelectLanguageActivity.class);
-            startActivity(selectLanguageIntent);
-            finish();
+            val selectLanguageIntent = Intent(
+                applicationContext,
+                SelectLanguageActivity::class.java
+            )
+            startActivity(selectLanguageIntent)
+            finish()
         } else {
             // Redirect to content
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            setSupportActionBar(toolbar)
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            appBarConfiguration = new AppBarConfiguration
-                    .Builder(
-                            // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-                            R.id.nav_home,
-                            R.id.nav_letters,
-                            R.id.nav_sounds,
-                            R.id.nav_letter_sounds,
-                            R.id.nav_words,
-                            R.id.nav_numbers,
-                            R.id.nav_emojis,
-                            R.id.nav_images,
-                            R.id.nav_storybooks,
-                            R.id.nav_videos
-                    )
+            val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+            appBarConfiguration =
+                AppBarConfiguration.Builder( // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
+                    R.id.nav_home,
+                    R.id.nav_letters,
+                    R.id.nav_sounds,
+                    R.id.nav_letter_sounds,
+                    R.id.nav_words,
+                    R.id.nav_numbers,
+                    R.id.nav_emojis,
+                    R.id.nav_images,
+                    R.id.nav_storybooks,
+                    R.id.nav_videos
+                )
                     .setDrawerLayout(drawer)
-                    .build();
+                    .build()
 
-            NavigationView navigationView = findViewById(R.id.nav_view);
-            View navigationViewHeaderLayoutView = navigationView.getHeaderView(0);
-            TextView navHeaderSubtitleTextView = navigationViewHeaderLayoutView.findViewById(R.id.navHeaderSubtitle);
-            BaseApplication baseApplication = (BaseApplication) getApplication();
-            navHeaderSubtitleTextView.setText(baseApplication.getBaseUrl());
+            val navigationView = findViewById<NavigationView>(R.id.nav_view)
+            val navigationViewHeaderLayoutView = navigationView.getHeaderView(0)
+            val navHeaderSubtitleTextView =
+                navigationViewHeaderLayoutView.findViewById<TextView>(R.id.navHeaderSubtitle)
+            val baseApplication = application as BaseApplication
+            navHeaderSubtitleTextView.text = baseApplication.baseUrl
 
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            val navController = findNavController(this, R.id.nav_host_fragment)
 
-            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(navigationView, navController);
+            setupActionBarWithNavController(
+                this, navController,
+                appBarConfiguration!!
+            )
+            setupWithNavController(navigationView, navController)
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(getClass().getName(), "onCreateOptionsMenu");
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        Log.i(javaClass.name, "onCreateOptionsMenu")
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        menuInflater.inflate(R.menu.main, menu)
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        Log.i(getClass().getName(), "onSupportNavigateUp");
+    override fun onSupportNavigateUp(): Boolean {
+        Log.i(javaClass.name, "onSupportNavigateUp")
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+        val navController = findNavController(this, R.id.nav_host_fragment)
+        return navigateUp(navController, appBarConfiguration!!) || super.onSupportNavigateUp()
     }
 }
