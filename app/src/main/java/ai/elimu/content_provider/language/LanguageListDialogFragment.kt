@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
@@ -50,6 +51,17 @@ class LanguageListDialogFragment : BottomSheetDialogFragment() {
         )
 
         isCancelable = false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.let {
+            val bottomSheet = it.findViewById<View>(
+                com.google.android.material.R.id.design_bottom_sheet
+            ) ?: return
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     override fun getTheme(): Int {
