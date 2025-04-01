@@ -118,7 +118,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_24_25,
                                     MIGRATION_25_26,
                                     MIGRATION_26_27,
-                                    MIGRATION_27_28
+                                    MIGRATION_27_28,
+                                    MIGRATION_28_29
                             )
                             .build();
                 }
@@ -382,6 +383,21 @@ public abstract class RoomDb extends RoomDatabase {
             database.execSQL(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Letter` (`LetterSound_id` INTEGER NOT NULL, `letters_id` INTEGER NOT NULL, `letters_ORDER` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `letters_ORDER`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_28_29 = new Migration(28, 29) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (28 --> 29)");
+
+            String sql = "DROP TABLE `LetterSound_Sound`";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Sound` (`LetterSound_id` INTEGER NOT NULL, `sounds_id` INTEGER NOT NULL, `sounds_ORDER` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `sounds_ORDER`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }
