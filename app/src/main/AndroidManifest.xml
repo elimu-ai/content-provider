@@ -34,6 +34,13 @@
             android:authorities="${applicationId}.provider.letter_provider"
             android:enabled="true"
             android:exported="true" />
+
+        <provider
+            android:name=".provider.SoundContentProvider"
+            android:authorities="${applicationId}.provider.sound_provider"
+            android:enabled="true"
+            android:exported="true" />
+
         <provider
             android:name=".provider.LetterSoundContentProvider"
             android:authorities="${applicationId}.provider.letter_sound_provider"
