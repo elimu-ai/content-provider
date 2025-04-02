@@ -46,7 +46,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 27, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 29, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -117,7 +117,9 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_23_24,
                                     MIGRATION_24_25,
                                     MIGRATION_25_26,
-                                    MIGRATION_26_27
+                                    MIGRATION_26_27,
+                                    MIGRATION_27_28,
+                                    MIGRATION_28_29
                             )
                             .build();
                 }
@@ -366,6 +368,36 @@ public abstract class RoomDb extends RoomDatabase {
             Log.i(getClass().getName(), "migrate (26 --> 27)");
 
             String sql = "DROP TABLE `Audio`";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_27_28 = new Migration(27, 28) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (27 --> 28)");
+
+            String sql = "DROP TABLE `LetterSound_Letter`";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Letter` (`LetterSound_id` INTEGER NOT NULL, `letters_id` INTEGER NOT NULL, `letters_ORDER` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `letters_ORDER`))";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_28_29 = new Migration(28, 29) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (28 --> 29)");
+
+            String sql = "DROP TABLE `LetterSound_Sound`";
+            Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Sound` (`LetterSound_id` INTEGER NOT NULL, `sounds_id` INTEGER NOT NULL, `sounds_ORDER` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `sounds_ORDER`))";
             Log.i(getClass().getName(), "sql: " + sql);
             database.execSQL(sql);
         }

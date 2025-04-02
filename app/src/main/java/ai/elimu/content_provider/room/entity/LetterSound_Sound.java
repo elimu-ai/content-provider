@@ -6,7 +6,7 @@ import androidx.room.Entity;
 /**
  * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
  */
-@Entity(primaryKeys = {"LetterSound_id", "sounds_id"})
+@Entity(primaryKeys = {"LetterSound_id", "sounds_ORDER"})
 public class LetterSound_Sound {
 
     @NonNull
@@ -14,6 +14,9 @@ public class LetterSound_Sound {
 
     @NonNull
     private Long sounds_id;
+
+    @NonNull
+    private Integer sounds_ORDER;
 
     public Long getLetterSound_id() {
         return LetterSound_id;
@@ -29,5 +32,13 @@ public class LetterSound_Sound {
 
     public void setSounds_id(Long sounds_id) {
         this.sounds_id = sounds_id;
+    }
+
+    public Integer getSounds_ORDER() {
+        return sounds_ORDER;
+    }
+
+    public void setSounds_ORDER(Integer sounds_ORDER) {
+        this.sounds_ORDER = sounds_ORDER;
     }
 }
