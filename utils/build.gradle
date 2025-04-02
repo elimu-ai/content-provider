@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 1002034
-        versionName "1.2.34"
+        versionCode 1002035
+        versionName "1.2.35-SNAPSHOT"
         setProperty("archivesBaseName", "utils-${versionName}")
     }
 
