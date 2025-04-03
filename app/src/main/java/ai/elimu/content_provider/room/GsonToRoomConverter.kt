@@ -24,25 +24,21 @@ import ai.elimu.model.v2.gson.content.VideoGson
 import ai.elimu.model.v2.gson.content.WordGson
 
 object GsonToRoomConverter {
-    fun getLetter(letterGson: LetterGson?): Letter? {
-        if (letterGson == null) {
-            return null
-        } else {
-            val letter = Letter()
+    fun getLetter(letterGson: LetterGson): Letter {
+        val letter = Letter()
 
-            // BaseEntity
-            letter.id = letterGson.id
+        // BaseEntity
+        letter.id = letterGson.id
 
-            // Content
-            letter.revisionNumber = letterGson.revisionNumber
-            letter.usageCount = letterGson.usageCount
+        // Content
+        letter.revisionNumber = letterGson.revisionNumber
+        letter.usageCount = letterGson.usageCount
 
-            // Letter
-            letter.text = letterGson.text
-            letter.isDiacritic = letterGson.diacritic
+        // Letter
+        letter.text = letterGson.text
+        letter.isDiacritic = letterGson.diacritic
 
-            return letter
-        }
+        return letter
     }
 
     @JvmStatic
@@ -67,24 +63,20 @@ object GsonToRoomConverter {
         }
     }
 
-    fun getLetterSound(letterSoundGson: LetterSoundGson?): LetterSound? {
-        if (letterSoundGson == null) {
-            return null
-        } else {
-            val letterSound = LetterSound()
+    fun getLetterSound(letterSoundGson: LetterSoundGson): LetterSound {
+        val letterSound = LetterSound()
 
-            // BaseEntity
-            letterSound.id = letterSoundGson.id
+        // BaseEntity
+        letterSound.id = letterSoundGson.id
 
-            // Content
-            letterSound.revisionNumber = letterSoundGson.revisionNumber
-            letterSound.usageCount = letterSoundGson.usageCount
+        // Content
+        letterSound.revisionNumber = letterSoundGson.revisionNumber
+        letterSound.usageCount = letterSoundGson.usageCount
 
-            // Letter-sound correspondence
-            // Note: letters are stored separately in LetterSound_Letter (see LetterSoundsFragment.java)
-            // Note: sounds are stored separately in LetterSound_Sound (see LetterSoundsFragment.java)
-            return letterSound
-        }
+        // Letter-sound correspondence
+        // Note: letters are stored separately in LetterSound_Letter (see LetterSoundsFragment.java)
+        // Note: sounds are stored separately in LetterSound_Sound (see LetterSoundsFragment.java)
+        return letterSound
     }
 
     @JvmStatic
@@ -155,26 +147,22 @@ object GsonToRoomConverter {
         }
     }
 
-    fun getImage(imageGson: ImageGson?): Image? {
-        if (imageGson == null) {
-            return null
-        } else {
-            val image = Image()
+    fun getImage(imageGson: ImageGson): Image {
+        val image = Image()
 
-            // BaseEntity
-            image.id = imageGson.id
+        // BaseEntity
+        image.id = imageGson.id
 
-            // Content
-            image.revisionNumber = imageGson.revisionNumber
-            image.usageCount = imageGson.usageCount
+        // Content
+        image.revisionNumber = imageGson.revisionNumber
+        image.usageCount = imageGson.usageCount
 
-            // Image
-            image.title = imageGson.title
-            image.imageFormat = imageGson.imageFormat
+        // Image
+        image.title = imageGson.title
+        image.imageFormat = imageGson.imageFormat
 
-            // Note: words are stored separately in Image_Word (see ImagesFragment.java)
-            return image
-        }
+        // Note: words are stored separately in Image_Word (see ImagesFragment.java)
+        return image
     }
 
     @JvmStatic

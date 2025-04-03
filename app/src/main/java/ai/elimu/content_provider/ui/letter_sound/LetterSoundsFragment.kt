@@ -123,7 +123,7 @@ class LetterSoundsFragment : Fragment() {
 
                     // Store the LetterSound in the database
                     val letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson)
-                    letterSound?.let {
+                    letterSound.let {
                         letterSoundDao.insert(letterSound)
                         Log.i(
                             TAG,
