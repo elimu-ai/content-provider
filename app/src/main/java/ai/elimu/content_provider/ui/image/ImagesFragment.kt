@@ -148,7 +148,7 @@ class ImagesFragment : Fragment() {
                 }
 
                 // Store the Image in the database
-                image?.let {
+                image.let {
                     imageDao.insert(image)
                     Log.i(TAG, "Stored Image in database with ID " + image.id)
                 }
