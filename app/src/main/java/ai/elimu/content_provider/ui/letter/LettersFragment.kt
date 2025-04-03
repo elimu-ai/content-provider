@@ -120,8 +120,10 @@ class LettersFragment : Fragment() {
 
                     // Store the Letter in the database
                     val letter = GsonToRoomConverter.getLetter(letterGson)
-                    letterDao.insert(letter)
-                    Log.i(TAG, "Stored Letter in database with ID " + letter.id)
+                    letter?.let {
+                        letterDao.insert(letter)
+                        Log.i(TAG, "Stored Letter in database with ID " + letter.id)
+                    }
                 }
 
                 // Update the UI

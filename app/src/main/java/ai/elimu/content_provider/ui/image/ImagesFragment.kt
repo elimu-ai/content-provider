@@ -148,8 +148,10 @@ class ImagesFragment : Fragment() {
                 }
 
                 // Store the Image in the database
-                imageDao.insert(image)
-                Log.i(TAG, "Stored Image in database with ID " + image.id)
+                image?.let {
+                    imageDao.insert(image)
+                    Log.i(TAG, "Stored Image in database with ID " + image.id)
+                }
 
                 // Store all the Image's Word labels in the database
                 val wordGsons = imageGson.words

@@ -123,11 +123,13 @@ class LetterSoundsFragment : Fragment() {
 
                     // Store the LetterSound in the database
                     val letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson)
-                    letterSoundDao.insert(letterSound)
-                    Log.i(
-                        TAG,
-                        "Stored LetterSound in database with ID " + letterSound.id
-                    )
+                    letterSound?.let {
+                        letterSoundDao.insert(letterSound)
+                        Log.i(
+                            TAG,
+                            "Stored LetterSound in database with ID " + letterSound.id
+                        )
+                    }
 
                     // Store all the LetterSound's letters in the database
                     val letterGsons = letterSoundGson.letters
