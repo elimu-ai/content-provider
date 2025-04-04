@@ -52,7 +52,7 @@ object CursorToWordLearningEventGsonConverter {
         wordLearningEventGson.id = id
         wordLearningEventGson.androidId = androidId
         wordLearningEventGson.packageName = packageName
-        wordLearningEventGson.time = time
+        wordLearningEventGson.timestamp = time
         wordLearningEventGson.wordId = wordId
         wordLearningEventGson.wordText = wordText
         wordLearningEventGson.learningEventType = learningEventType
