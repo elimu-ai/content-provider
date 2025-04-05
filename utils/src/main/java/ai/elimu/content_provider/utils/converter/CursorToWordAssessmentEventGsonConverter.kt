@@ -54,7 +54,7 @@ object CursorToWordAssessmentEventGsonConverter {
         wordAssessmentEventGson.id = id
         wordAssessmentEventGson.androidId = androidId
         wordAssessmentEventGson.packageName = packageName
-        wordAssessmentEventGson.time = time
+        wordAssessmentEventGson.timestamp = time
         wordAssessmentEventGson.wordId = wordId
         wordAssessmentEventGson.wordText = wordText
         wordAssessmentEventGson.masteryScore = masteryScore
