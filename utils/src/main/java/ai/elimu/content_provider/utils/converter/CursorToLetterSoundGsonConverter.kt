@@ -48,7 +48,7 @@ object CursorToLetterSoundGsonConverter {
             "usageCount: $usageCount"
         )
 
-        var letterGsons: MutableList<LetterGson?>? = null
+        val letterGsons = mutableListOf<LetterGson>()
         val lettersUri =
             Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id")
         Log.i(
@@ -66,8 +66,6 @@ object CursorToLetterSoundGsonConverter {
                 CursorToLetterSoundGsonConverter::class.java.name,
                 "lettersCursor.getCount(): " + lettersCursor.count
             )
-
-            letterGsons = ArrayList()
 
             var isLast = false
             while (!isLast) {
@@ -87,7 +85,7 @@ object CursorToLetterSoundGsonConverter {
             )
         }
 
-        var soundGsons: MutableList<SoundGson?>? = null
+        val soundGsons = mutableListOf<SoundGson>()
         val soundsUri =
             Uri.parse("content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id")
         Log.i(
@@ -105,8 +103,6 @@ object CursorToLetterSoundGsonConverter {
                 CursorToLetterSoundGsonConverter::class.java.name,
                 "soundsCursor.getCount(): " + soundsCursor.count
             )
-
-            soundGsons = ArrayList()
 
             var isLast = false
             while (!isLast) {
