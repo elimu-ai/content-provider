@@ -116,13 +116,12 @@ object CursorToLetterSoundGsonConverter {
             )
         }
 
-        val letterSound = LetterSoundGson()
-        letterSound.id = id
-        letterSound.revisionNumber = revisionNumber
-        letterSound.usageCount = usageCount
-        letterSound.letters = letterGsons
-        letterSound.sounds = soundGsons
-
-        return letterSound
+        return LetterSoundGson().apply {
+            this.id = id
+            this.revisionNumber = revisionNumber
+            this.usageCount = usageCount
+            this.letters = letterGsons
+            this.sounds = soundGsons
+        }
     }
 }
