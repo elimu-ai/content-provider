@@ -10,8 +10,14 @@ import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object CursorToLetterSoundGsonConverter {
+
+    private val mainScope by lazy { CoroutineScope(Dispatchers.Main) }
+
     fun getLetterSoundGson(
         cursor: Cursor,
         context: Context,
@@ -52,7 +58,9 @@ object CursorToLetterSoundGsonConverter {
         val lettersCursor = context.contentResolver.query(lettersUri, null, null, null, null)
         if (lettersCursor == null) {
             Log.e(CursorToLetterSoundGsonConverter::class.java.name, "lettersCursor == null")
-            Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
+            mainScope.launch {
+                Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
+            }
         } else {
             Log.i(
                 CursorToLetterSoundGsonConverter::class.java.name,
@@ -89,7 +97,9 @@ object CursorToLetterSoundGsonConverter {
         val soundsCursor = context.contentResolver.query(soundsUri, null, null, null, null)
         if (soundsCursor == null) {
             Log.e(CursorToLetterSoundGsonConverter::class.java.name, "soundsCursor == null")
-            Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
+            mainScope.launch {
+                Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
+            }
         } else {
             Log.i(
                 CursorToLetterSoundGsonConverter::class.java.name,
