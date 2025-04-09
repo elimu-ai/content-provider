@@ -19,10 +19,10 @@ public interface LetterSoundDao {
     @Query("SELECT * FROM LetterSound WHERE id = :id")
     Cursor load_Cursor(Long id);
 
-    @Query("SELECT * FROM LetterSound")
+    @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
     List<LetterSound> loadAll();
 
-    @Query("SELECT * FROM LetterSound")
+    @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
     Cursor loadAll_Cursor();
 
     @Query("DELETE FROM LetterSound")
