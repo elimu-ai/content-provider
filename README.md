@@ -41,9 +41,6 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 
 See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
 
-> [!TIP]
-> To find all Android app repos that depend on this library, go to https://github.com/search?q=org%3Aelimu-ai+com.github.elimu-ai%3Acontent-provider%3A&type=code
-
 ### To publish a snapshot for local development & testing:
 
 1. Change `versionName`, `versionCode` and publication `version` in https://github.com/elimu-ai/content-provider/blob/main/utils/build.gradle
@@ -164,6 +161,14 @@ To perform a release, follow these steps:
    - in the `version` in `utils/build.gradle` under `publishing`
 1. Commit the changes
    - Create a pull request for merging your branch into `main`
+
+> [!IMPORTANT]
+> After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
+> * https://github.com/elimu-ai/common-utils/blob/main/gradle/libs.versions.toml
+> * https://github.com/elimu-ai/kukariri/blob/main/gradle/libs.versions.toml
+> * https://github.com/elimu-ai/herufi/blob/main/gradle/libs.versions.toml
+> * https://github.com/elimu-ai/vitabu/blob/main/gradle/libs.versions.toml
+> * https://github.com/elimu-ai/filamu/blob/main/gradle/libs.versions.toml
 
 ---
 

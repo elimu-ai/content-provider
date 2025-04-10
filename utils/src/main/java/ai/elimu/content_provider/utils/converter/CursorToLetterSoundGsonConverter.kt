@@ -10,8 +10,14 @@ import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object CursorToLetterSoundGsonConverter {
+
+    private val mainScope by lazy { CoroutineScope(Dispatchers.Main) }
+
     fun getLetterSoundGson(
         cursor: Cursor,
         context: Context,
@@ -42,7 +48,7 @@ object CursorToLetterSoundGsonConverter {
             "usageCount: $usageCount"
         )
 
-        var letterGsons: MutableList<LetterGson?>? = null
+        val letterGsons = mutableListOf<LetterGson>()
         val lettersUri =
             Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id")
         Log.i(
@@ -52,14 +58,14 @@ object CursorToLetterSoundGsonConverter {
         val lettersCursor = context.contentResolver.query(lettersUri, null, null, null, null)
         if (lettersCursor == null) {
             Log.e(CursorToLetterSoundGsonConverter::class.java.name, "lettersCursor == null")
-            Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
+            mainScope.launch {
+                Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
+            }
         } else {
             Log.i(
                 CursorToLetterSoundGsonConverter::class.java.name,
                 "lettersCursor.getCount(): " + lettersCursor.count
             )
-
-            letterGsons = ArrayList()
 
             var isLast = false
             while (!isLast) {
@@ -79,7 +85,7 @@ object CursorToLetterSoundGsonConverter {
             )
         }
 
-        var soundGsons: MutableList<SoundGson?>? = null
+        val soundGsons = mutableListOf<SoundGson>()
         val soundsUri =
             Uri.parse("content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id")
         Log.i(
@@ -89,14 +95,14 @@ object CursorToLetterSoundGsonConverter {
         val soundsCursor = context.contentResolver.query(soundsUri, null, null, null, null)
         if (soundsCursor == null) {
             Log.e(CursorToLetterSoundGsonConverter::class.java.name, "soundsCursor == null")
-            Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
+            mainScope.launch {
+                Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
+            }
         } else {
             Log.i(
                 CursorToLetterSoundGsonConverter::class.java.name,
                 "soundsCursor.getCount(): " + soundsCursor.count
             )
-
-            soundGsons = ArrayList()
 
             var isLast = false
             while (!isLast) {
@@ -116,13 +122,12 @@ object CursorToLetterSoundGsonConverter {
             )
         }
 
-        val letterSound = LetterSoundGson()
-        letterSound.id = id
-        letterSound.revisionNumber = revisionNumber
-        letterSound.usageCount = usageCount
-        letterSound.letters = letterGsons
-        letterSound.sounds = soundGsons
-
-        return letterSound
+        return LetterSoundGson().apply {
+            this.id = id
+            this.revisionNumber = revisionNumber
+            this.usageCount = usageCount
+            this.letters = letterGsons
+            this.sounds = soundGsons
+        }
     }
 }
