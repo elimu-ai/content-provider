@@ -164,6 +164,7 @@ To perform a release, follow these steps:
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
+> * https://github.com/elimu-ai/common-utils/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/kukariri/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/herufi/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/vitabu/blob/main/gradle/libs.versions.toml
