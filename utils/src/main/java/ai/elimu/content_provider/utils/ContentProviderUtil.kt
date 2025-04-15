@@ -31,57 +31,6 @@ object ContentProviderUtil {
     private const val TAG = "ContentProviderUtil"
 
     /**
-     * Returns a list of letters currently available to the student.
-     *
-     *
-     * If the student has not yet mastered any letters, only the first letter will be returned.
-     *
-     *
-     * If the student has already mastered one or more letters, those will be returned, plus one
-     * additional letter to be mastered next.
-     */
-    @Deprecated("")
-    fun getAvailableLetterGsons(
-        context: Context,
-        contentProviderApplicationId: String,
-        analyticsApplicationId: String?
-    ): List<LetterGson> {
-        Log.i(TAG, "getAvailableLetterGsons")
-
-        val letterGsons: MutableList<LetterGson> = ArrayList()
-
-        val allLetterGsons = getAllLetterGsons(context, contentProviderApplicationId)
-        Log.i(TAG, "allLetterGsons.size(): " + allLetterGsons.size)
-        for (letterGson in allLetterGsons) {
-            Log.i(
-                TAG,
-                "letterGson.getText(): \"" + letterGson.text + "\""
-            )
-            val letterAssessmentEventGsons =
-                EventProviderUtil.getLetterAssessmentEventGsonsByLetter(
-                    letterGson,
-                    context,
-                    analyticsApplicationId
-                )
-            Log.i(
-                TAG,
-                "letterAssessmentEventGsons.size(): " + letterAssessmentEventGsons.size
-            )
-            val isLetterMastered = MasteryHelper.isLetterMastered(letterAssessmentEventGsons)
-            Log.i(
-                TAG,
-                "isLetterMastered: $isLetterMastered"
-            )
-            letterGsons.add(letterGson)
-            if (!isLetterMastered) {
-                break
-            }
-        }
-
-        return letterGsons
-    }
-
-    /**
      * This method is only meant to be used for testing purposes during development. For production,
      * use [.getAvailableLetterGsons] instead.
      */
