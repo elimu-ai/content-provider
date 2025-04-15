@@ -83,7 +83,7 @@ dependencies {
 /**
  * Enable `publishApkPublicationToMavenLocal` on JitPack, which uses the following command:
  *
- * ./gradlew clean -Pgroup=com.github.elimu-ai -Pversion=1.2.38 -xtest -xlint assemble publishToMavenLocal
+ * ./gradlew clean -P group=com.github.elimu-ai -P version=1.2.38 -xtest -xlint assemble publishToMavenLocal
  */
 publishing {
     publications {
