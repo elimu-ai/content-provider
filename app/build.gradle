@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.android)
+    id 'maven-publish'
 }
 apply plugin: 'com.android.application'
 apply plugin: 'org.ajoberstar.grgit'
@@ -77,6 +78,22 @@ dependencies {
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso)
+}
+
+/**
+ * Enable `publishApkPublicationToMavenLocal` on JitPack, which uses the following command:
+ *
+ * ./gradlew clean -Pgroup=com.github.elimu-ai -Pversion=1.2.38 -xtest -xlint assemble publishToMavenLocal
+ */
+publishing {
+    publications {
+        apk(MavenPublication) {
+            artifact("${buildDir}/outputs/apk/release/${android.defaultConfig.applicationId}-${android.defaultConfig.versionCode}-release-unsigned.apk")
+        }
+    }
+}
+tasks.named("publishApkPublicationToMavenLocal") {
+    mustRunAfter(":app:assembleRelease")
 }
 
 task ensureCleanRepo {
