@@ -93,7 +93,7 @@ publishing {
     }
 }
 tasks.named("publishApkPublicationToMavenLocal") {
-    mustRunAfter(":app:assembleRelease")
+    mustRunAfter(":app:bundleRelease")
 }
 
 task ensureCleanRepo {
