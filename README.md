@@ -1,5 +1,7 @@
 # elimu.ai Content Provider
 
+[![Release](https://jitpack.io/v/elimu-ai/content-provider.svg)](https://jitpack.io/#elimu-ai/content-provider)
+
 Android application which downloads educational content (e.g. letters, words, audios, storybooks, videos, etc) to the 
 device and provides it to other elimu.ai apps.
 
@@ -176,25 +178,12 @@ migration succeeded:
 
 To perform a release, follow these steps:
 
-1. Create a new branch for the release
-1. Remove `-SNAPSHOT`
-   - from the `versionName` in `app/build.gradle`
-   - from the `versionName` in `utils/build.gradle`
-   - from the `version` in `utils/build.gradle` under `publishing`
-1. Commit the changes
-1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
-1. Pick the new branch you created as the target branch
-1. Create a new tag (e.g. `1.2.19`)
-1. Choose a release title, and click "Publish release"
-1. Ensure that the release appears at https://jitpack.io/#elimu-ai/content-provider with "Status: ok"
-1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
-   - in the `versionCode` in `app/build.gradle`
-   - in the `versionName` in `app/build.gradle`
-   - in the `versionCode` in `utils/build.gradle`
-   - in the `versionName` in `utils/build.gradle`
-   - in the `version` in `utils/build.gradle` under `publishing`
-1. Commit the changes
-   - Create a pull request for merging your branch into `main`
+1. Go to https://github.com/elimu-ai/content-provider/actions/workflows/gradle-release.yml
+2. Press "Run workflow"
+3. Once the new release version has been tagged, go to https://github.com/elimu-ai/content-provider/tags
+4. Select your tag, and press "Create release"
+5. Go to https://jitpack.io/#elimu-ai/content-provider
+6. Ensure that your release version appears with "Status: ok"
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
@@ -210,7 +199,7 @@ To perform a release, follow these steps:
   <img src="https://github.com/elimu-ai/webapp/blob/main/src/main/webapp/static/img/logo-text-256x78.png" />
 </p>
 <p align="center">
-  elimu.ai - Free open-source learning software for out-of-school children ✨🚀
+  elimu.ai - Free open-source learning software for out-of-school children 🚀✨
 </p>
 <p align="center">
   <a href="https://elimu.ai">Website 🌐</a>
