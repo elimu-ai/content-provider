@@ -1,6 +1,6 @@
 [versions]
 elimuModel = "model-2.0.97"
-elimuAnalytics = "3.1.28"
+elimuAnalytics = "3.1.30"
 commonsIo = "2.18.0"
 material = "1.5.0"
 retrofit = "2.11.0"
