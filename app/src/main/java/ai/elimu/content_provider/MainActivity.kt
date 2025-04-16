@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val language = SharedPreferencesHelper.getLanguage(
             applicationContext
         )
-        Log.i("getLanguage", "language: $language. \nFrom utils: " +
+        Log.i("getLanguage", "language: $language.\nFrom utils: " +
                 "${LanguageUtils.getLanguage(this@MainActivity, BuildConfig.APPLICATION_ID)}")
         if (language == null) {
             // Redirect to language selection
