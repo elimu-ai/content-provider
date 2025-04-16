@@ -127,12 +127,12 @@ class ImagesFragment : Fragment() {
                 if (imageFile?.exists() != true) {
                     // Download file bytes
                     val baseApplication = activity?.application as? BaseApplication ?: return@launch
-                    val downloadUrl = if (imageGson.bytesUrl.startsWith("http"))
-                        imageGson.bytesUrl
+                    val fileUrl = if (imageGson.fileUrl.startsWith("http"))
+                        imageGson.fileUrl
                     else
-                        baseApplication.baseUrl + imageGson.bytesUrl
-                    Log.i(TAG, "downloadUrl: $downloadUrl")
-                    val bytes = MultimediaDownloader.downloadFileBytes(downloadUrl)
+                        baseApplication.baseUrl + imageGson.fileUrl
+                    Log.i(TAG, "fileUrl: $fileUrl")
+                    val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
                     Log.i(TAG, "bytes.length: " + bytes.size)
 
                     // Store the downloaded file in the external storage directory
