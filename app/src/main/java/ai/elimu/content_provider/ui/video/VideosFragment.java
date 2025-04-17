@@ -144,8 +144,7 @@ public class VideosFragment extends Fragment {
                     Log.i(getClass().getName(), "videoFile: " + videoFile);
                     Log.i(getClass().getName(), "videoFile.exists(): " + videoFile.exists());
                     if (!videoFile.exists()) {
-                        // Download file bytes
-                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+                        // Download file
                         String fileUrl = videoGson.getFileUrl();
                         Log.i(getClass().getName(), "fileUrl: " + fileUrl);
                         byte[] bytes = MultimediaDownloader.downloadFileBytes(fileUrl);
