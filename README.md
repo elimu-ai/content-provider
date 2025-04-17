@@ -41,14 +41,48 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 
 See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
 
-### To publish a snapshot for local development & testing:
+<a name="utils-snapshot"></a>
+### How to Test `-SNAPSHOT` Versions of the Utils Library
 
-1. Change `versionName`, `versionCode` and publication `version` in https://github.com/elimu-ai/content-provider/blob/main/utils/build.gradle
-2. Under `publishing` -> `repositories` block: Replace the existing `maven` repo by `mavenLocal()`
-3. Run `./gradlew clean utils:publishReleasePublicationToMavenLocal` from project's root folder
-4. In app side: Add `mavenLocal()` to `repositsories` block in `build.gradle` script
-5. Implement `ai.elimu.content_provider:utils:$snapshot_version` in app's `build.gradle` file 
-
+1. In `utils/build.gradle`, add `mavenLocal()`:
+    ```diff
+    publishing {
+        publications {
+            ...
+        }
+        repositories {
+            maven {
+                credentials(PasswordCredentials)
+                url "https://maven.pkg.github.com/elimu-ai/content-provider"
+            }
+    +        mavenLocal()
+        }
+    }
+    ```
+2. Publish the library to your local Maven repository:
+    ```sh
+    ./gradlew clean utils:publishReleasePublicationToMavenLocal
+    ```
+3. In the app that will be testing the `-SNAPSHOT` version of the library, also add `mavenLocal()`:
+    ```diff
+    allprojects {
+        repositories {
+            google()
+            mavenCentral()
+            maven {
+                url "https://jitpack.io"
+            }
+    +       mavenLocal()
+        }
+    }
+    ```
+4. Then change to your snapshot version of the library:
+    ```diff
+    [versions]
+    elimuModel = "model-2.0.89"
+    -elimuContentProvider = "model-1.2.38"
+    +elimuContentProvider = "model-1.2.39-SNAPSHOT"
+    ```
 
 ### Usage Example
 

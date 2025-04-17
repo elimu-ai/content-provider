@@ -144,11 +144,10 @@ public class VideosFragment extends Fragment {
                     Log.i(getClass().getName(), "videoFile: " + videoFile);
                     Log.i(getClass().getName(), "videoFile.exists(): " + videoFile.exists());
                     if (!videoFile.exists()) {
-                        // Download file bytes
-                        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-                        String downloadUrl = baseApplication.getBaseUrl() + videoGson.getBytesUrl();
-                        Log.i(getClass().getName(), "downloadUrl: " + downloadUrl);
-                        byte[] bytes = MultimediaDownloader.downloadFileBytes(downloadUrl);
+                        // Download file
+                        String fileUrl = videoGson.getFileUrl();
+                        Log.i(getClass().getName(), "fileUrl: " + fileUrl);
+                        byte[] bytes = MultimediaDownloader.downloadFileBytes(fileUrl);
                         Log.i(getClass().getName(), "bytes.length: " + bytes.length);
 
                         // Store the downloaded file in the external storage directory
