@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.emoji;
+package ai.elimu.content_provider.ui.emoji
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class EmojisViewModel extends ViewModel {
+class EmojisViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public EmojisViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("EmojisViewModel");
+    init {
+        text.value = "EmojisViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }

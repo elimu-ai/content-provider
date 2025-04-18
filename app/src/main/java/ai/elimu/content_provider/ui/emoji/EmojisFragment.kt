@@ -36,7 +36,7 @@ class EmojisFragment : Fragment() {
 
         emojisViewModel = ViewModelProvider(this).get(EmojisViewModel::class.java)
         binding = FragmentEmojisBinding.inflate(layoutInflater)
-        emojisViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        emojisViewModel?.getText()?.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 binding.textEmojis.text = s
