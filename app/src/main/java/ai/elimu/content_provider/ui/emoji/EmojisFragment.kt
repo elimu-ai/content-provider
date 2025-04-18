@@ -1,163 +1,153 @@
-package ai.elimu.content_provider.ui.emoji;
+package ai.elimu.content_provider.ui.emoji
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.EmojisService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getEmoji
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Emoji_Word
+import ai.elimu.model.v2.gson.content.EmojiGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class EmojisFragment : Fragment() {
+    private var emojisViewModel: EmojisViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.EmojisService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.EmojiDao;
-import ai.elimu.content_provider.room.dao.Emoji_WordDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Emoji;
-import ai.elimu.content_provider.room.entity.Emoji_Word;
-import ai.elimu.model.v2.gson.content.EmojiGson;
-import ai.elimu.model.v2.gson.content.WordGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class EmojisFragment extends Fragment {
-
-    private EmojisViewModel emojisViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        emojisViewModel = new ViewModelProvider(this).get(EmojisViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_emojis, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_emojis);
-        textView = root.findViewById(R.id.text_emojis);
-        emojisViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        emojisViewModel = ViewModelProvider(this).get(EmojisViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_emojis, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_emojis)
+        textView = root.findViewById(R.id.text_emojis)
+        emojisViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Emojis from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        EmojisService emojisService = retrofit.create(EmojisService.class);
-        Call<List<EmojiGson>> emojiGsonsCall = emojisService.listEmojis();
-        Log.i(getClass().getName(), "emojiGsonsCall.request(): " + emojiGsonsCall.request());
-        emojiGsonsCall.enqueue(new Callback<List<EmojiGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val emojisService = retrofit.create(EmojisService::class.java)
+        val emojiGsonsCall = emojisService.listEmojis()
+        Log.i(javaClass.name, "emojiGsonsCall.request(): " + emojiGsonsCall.request())
+        emojiGsonsCall.enqueue(object : Callback<List<EmojiGson>> {
+            override fun onResponse(
+                call: Call<List<EmojiGson>>,
+                response: Response<List<EmojiGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<EmojiGson>> call, Response<List<EmojiGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val emojiGsons = response.body()!!
+                    Log.i(javaClass.name, "emojiGsons.size(): " + emojiGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<EmojiGson> emojiGsons = response.body();
-                    Log.i(getClass().getName(), "emojiGsons.size(): " + emojiGsons.size());
-
-                    if (emojiGsons.size() > 0) {
-                        processResponseBody(emojiGsons);
+                    if (emojiGsons.size > 0) {
+                        processResponseBody(emojiGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<EmojiGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<EmojiGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<EmojiGson> emojiGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(emojiGsons: List<EmojiGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                EmojiDao emojiDao = roomDb.emojiDao();
-                Emoji_WordDao emoji_WordDao = roomDb.emoji_WordDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val emojiDao = roomDb.emojiDao()
+                val emoji_WordDao = roomDb.emoji_WordDao()
 
                 // Empty the database table before downloading up-to-date content
-                emoji_WordDao.deleteAll();
-                emojiDao.deleteAll();
+                emoji_WordDao.deleteAll()
+                emojiDao.deleteAll()
 
-                for (EmojiGson emojiGson : emojiGsons) {
-                    Log.i(getClass().getName(), "emojiGson.getId(): " + emojiGson.getId());
+                for (emojiGson in emojiGsons) {
+                    Log.i(javaClass.name, "emojiGson.getId(): " + emojiGson.id)
 
                     // Store the Emoji in the database
-                    Emoji emoji = GsonToRoomConverter.getEmoji(emojiGson);
-                    emojiDao.insert(emoji);
-                    Log.i(getClass().getName(), "Stored Emoji in database with ID " + emoji.getId());
+                    val emoji = getEmoji(emojiGson)
+                    emojiDao.insert(emoji)
+                    Log.i(javaClass.name, "Stored Emoji in database with ID " + emoji!!.id)
 
                     // Store all the Emoji's Word labels in the database
-                    Set<WordGson> wordGsons = emojiGson.getWords();
-                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                    for (WordGson wordGson : wordGsons) {
-                        Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                        Emoji_Word emoji_Word = new Emoji_Word();
-                        emoji_Word.setEmoji_id(emojiGson.getId());
-                        emoji_Word.setWords_id(wordGson.getId());
-                        emoji_WordDao.insert(emoji_Word);
-                        Log.i(getClass().getName(), "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.getEmoji_id() + ", words_id: " + emoji_Word.getWords_id());
+                    val wordGsons = emojiGson.words
+                    Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                    for (wordGson in wordGsons) {
+                        Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
+                        val emoji_Word = Emoji_Word()
+                        emoji_Word.emoji_id = emojiGson.id
+                        emoji_Word.words_id = wordGson.id
+                        emoji_WordDao.insert(emoji_Word)
+                        Log.i(
+                            javaClass.name,
+                            "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.emoji_id + ", words_id: " + emoji_Word.words_id
+                        )
                     }
                 }
 
                 // Update the UI
-                List<Emoji> emojis = emojiDao.loadAll();
-                Log.i(getClass().getName(), "emojis.size(): " + emojis.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("emojis.size(): " + emojis.size());
-                    Snackbar.make(textView, "emojis.size(): " + emojis.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val emojis = emojiDao.loadAll()
+                Log.i(javaClass.name, "emojis.size(): " + emojis.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "emojis.size(): " + emojis.size
+                    Snackbar.make(textView!!, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
+                        .show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
