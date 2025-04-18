@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.emoji
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentEmojisBinding
 import ai.elimu.content_provider.rest.EmojisService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getEmoji
 import ai.elimu.content_provider.room.db.RoomDb
@@ -12,8 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,30 +23,26 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class EmojisFragment : Fragment() {
+
     private var emojisViewModel: EmojisViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentEmojisBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
         emojisViewModel = ViewModelProvider(this).get(EmojisViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_emojis, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_emojis)
-        textView = root.findViewById(R.id.text_emojis)
+        binding = FragmentEmojisBinding.inflate(layoutInflater)
         emojisViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
-                textView?.text = s
+                binding.textEmojis.text = s
             }
         })
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -72,15 +67,15 @@ class EmojisFragment : Fragment() {
                     val emojiGsons = response.body()!!
                     Log.i(javaClass.name, "emojiGsons.size(): " + emojiGsons.size)
 
-                    if (emojiGsons.size > 0) {
+                    if (emojiGsons.isNotEmpty()) {
                         processResponseBody(emojiGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textEmojis, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarEmojis.visibility = View.GONE
                 }
             }
 
@@ -90,10 +85,10 @@ class EmojisFragment : Fragment() {
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textEmojis, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarEmojis.visibility = View.GONE
             }
         })
     }
@@ -108,10 +103,10 @@ class EmojisFragment : Fragment() {
 
                 val roomDb = RoomDb.getDatabase(context)
                 val emojiDao = roomDb.emojiDao()
-                val emoji_WordDao = roomDb.emoji_WordDao()
+                val emojiWordDao = roomDb.emoji_WordDao()
 
                 // Empty the database table before downloading up-to-date content
-                emoji_WordDao.deleteAll()
+                emojiWordDao.deleteAll()
                 emojiDao.deleteAll()
 
                 for (emojiGson in emojiGsons) {
@@ -130,7 +125,7 @@ class EmojisFragment : Fragment() {
                         val emoji_Word = Emoji_Word()
                         emoji_Word.emoji_id = emojiGson.id
                         emoji_Word.words_id = wordGson.id
-                        emoji_WordDao.insert(emoji_Word)
+                        emojiWordDao.insert(emoji_Word)
                         Log.i(
                             javaClass.name,
                             "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.emoji_id + ", words_id: " + emoji_Word.words_id
@@ -142,10 +137,10 @@ class EmojisFragment : Fragment() {
                 val emojis = emojiDao.loadAll()
                 Log.i(javaClass.name, "emojis.size(): " + emojis.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "emojis.size(): " + emojis.size
-                    Snackbar.make(textView!!, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
+                    binding.textEmojis.text = "emojis.size(): " + emojis.size
+                    Snackbar.make(binding.textEmojis, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarEmojis.visibility = View.GONE
                 }
             }
         })
