@@ -167,7 +167,7 @@ class VideosFragment : Fragment() {
                 val videos = videoDao.loadAll()
                 Log.i(javaClass.name, "videos.size(): " + videos.size)
                 activity?.runOnUiThread {
-                    binding.textVideos.text = "videos.size(): " + videos.size
+                    binding.textVideos.text = getString(R.string.videos_size, videos.size)
                     Snackbar.make(binding.textVideos, "videos.size(): " + videos.size, Snackbar.LENGTH_LONG)
                         .show()
                     binding.progressBarVideos.visibility = View.GONE

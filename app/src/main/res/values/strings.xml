@@ -18,4 +18,5 @@
     <string name="menu_storybooks">Storybooks</string>
     <string name="menu_videos">Videos</string>
     <string name="words_size">words.size(): %d</string>
+    <string name="videos_size">videos.size(): %d</string>
 </resources>
