@@ -1,145 +1,135 @@
-package ai.elimu.content_provider.ui.word;
+package ai.elimu.content_provider.ui.word
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.WordsService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getWord
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.model.v2.gson.content.WordGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class WordsFragment : Fragment() {
+    private var wordsViewModel: WordsViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.WordsService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.WordDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Word;
-import ai.elimu.model.v2.gson.content.WordGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class WordsFragment extends Fragment {
-
-    private WordsViewModel wordsViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        wordsViewModel = new ViewModelProvider(this).get(WordsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_words, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_words);
-        textView = root.findViewById(R.id.text_words);
-        wordsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        wordsViewModel = ViewModelProvider(this)[WordsViewModel::class.java]
+        val root = inflater.inflate(R.layout.fragment_words, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_words)
+        textView = root.findViewById(R.id.text_words)
+        wordsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Words from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        WordsService wordsService = retrofit.create(WordsService.class);
-        Call<List<WordGson>> wordGsonsCall = wordsService.listWords();
-        Log.i(getClass().getName(), "wordGsonsCall.request(): " + wordGsonsCall.request());
-        wordGsonsCall.enqueue(new Callback<List<WordGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val wordsService = retrofit.create(WordsService::class.java)
+        val wordGsonsCall = wordsService.listWords()
+        Log.i(javaClass.name, "wordGsonsCall.request(): " + wordGsonsCall.request())
+        wordGsonsCall.enqueue(object : Callback<List<WordGson>> {
+            override fun onResponse(
+                call: Call<List<WordGson>>,
+                response: Response<List<WordGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<WordGson>> call, Response<List<WordGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val wordGsons = response.body()!!
+                    Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<WordGson> wordGsons = response.body();
-                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-
-                    if (wordGsons.size() > 0) {
-                        processResponseBody(wordGsons);
+                    if (wordGsons.isNotEmpty()) {
+                        processResponseBody(wordGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<WordGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<WordGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<WordGson> wordGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(wordGsons: List<WordGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                WordDao wordDao = roomDb.wordDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val wordDao = roomDb.wordDao()
 
                 // Empty the database table before downloading up-to-date content
-                wordDao.deleteAll();
+                wordDao.deleteAll()
 
-                for (WordGson wordGson : wordGsons) {
-                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
+                for (wordGson in wordGsons) {
+                    Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
 
                     // Store the Word in the database
-                    Word word = GsonToRoomConverter.getWord(wordGson);
-                    wordDao.insert(word);
-                    Log.i(getClass().getName(), "Stored Word in database with ID " + word.getId());
+                    val word = getWord(wordGson)
+                    wordDao.insert(word)
+                    Log.i(javaClass.name, "Stored Word in database with ID " + word!!.id)
                 }
 
                 // Update the UI
-                List<Word> words = wordDao.loadAllOrderedByUsageCount();
-                Log.i(getClass().getName(), "words.size(): " + words.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("words.size(): " + words.size());
-                    Snackbar.make(textView, "words.size(): " + words.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val words = wordDao.loadAllOrderedByUsageCount()
+                Log.i(javaClass.name, "words.size(): " + words.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "words.size(): " + words.size
+                    Snackbar.make(textView!!, "words.size(): " + words.size, Snackbar.LENGTH_LONG)
+                        .show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
