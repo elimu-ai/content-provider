@@ -50,7 +50,7 @@ class EmojisFragment : Fragment() {
         super.onStart()
 
         // Download Emojis from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val emojisService = retrofit.create(EmojisService::class.java)
         val emojiGsonsCall = emojisService.listEmojis()
@@ -64,7 +64,7 @@ class EmojisFragment : Fragment() {
 
                 Log.i(javaClass.name, "response: $response")
                 if (response.isSuccessful) {
-                    val emojiGsons = response.body()!!
+                    val emojiGsons = response.body() ?: return
                     Log.i(javaClass.name, "emojiGsons.size(): " + emojiGsons.size)
 
                     if (emojiGsons.isNotEmpty()) {
@@ -114,21 +114,23 @@ class EmojisFragment : Fragment() {
 
                     // Store the Emoji in the database
                     val emoji = getEmoji(emojiGson)
-                    emojiDao.insert(emoji)
-                    Log.i(javaClass.name, "Stored Emoji in database with ID " + emoji!!.id)
+                    emoji?.let {
+                        emojiDao.insert(emoji)
+                        Log.i(javaClass.name, "Stored Emoji in database with ID " + emoji.id)
+                    }
 
                     // Store all the Emoji's Word labels in the database
                     val wordGsons = emojiGson.words
                     Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
                     for (wordGson in wordGsons) {
                         Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
-                        val emoji_Word = Emoji_Word()
-                        emoji_Word.emoji_id = emojiGson.id
-                        emoji_Word.words_id = wordGson.id
-                        emojiWordDao.insert(emoji_Word)
+                        val emojiWord = Emoji_Word()
+                        emojiWord.emoji_id = emojiGson.id
+                        emojiWord.words_id = wordGson.id
+                        emojiWordDao.insert(emojiWord)
                         Log.i(
                             javaClass.name,
-                            "Stored Emoji_Word in database. Emoji_id: " + emoji_Word.emoji_id + ", words_id: " + emoji_Word.words_id
+                            "Stored Emoji_Word in database. Emoji_id: " + emojiWord.emoji_id + ", words_id: " + emojiWord.words_id
                         )
                     }
                 }
@@ -136,7 +138,7 @@ class EmojisFragment : Fragment() {
                 // Update the UI
                 val emojis = emojiDao.loadAll()
                 Log.i(javaClass.name, "emojis.size(): " + emojis.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textEmojis.text = "emojis.size(): " + emojis.size
                     Snackbar.make(binding.textEmojis, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
                         .show()
