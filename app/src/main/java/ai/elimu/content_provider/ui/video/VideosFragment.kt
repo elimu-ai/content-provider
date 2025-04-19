@@ -27,7 +27,7 @@ import java.io.IOException
 import java.util.concurrent.Executors
 
 class VideosFragment : Fragment() {
-    private var videosViewModel: VideosViewModel? = null
+    private lateinit var videosViewModel: VideosViewModel
     private lateinit var binding: FragmentVideosBinding
 
     override fun onCreateView(
@@ -39,7 +39,7 @@ class VideosFragment : Fragment() {
 
         videosViewModel = ViewModelProvider(this)[VideosViewModel::class.java]
         binding = FragmentVideosBinding.inflate(layoutInflater)
-        videosViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        videosViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 binding.textVideos.text = s
@@ -53,7 +53,7 @@ class VideosFragment : Fragment() {
         super.onStart()
 
         // Download Videos from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val videosService = retrofit.create(VideosService::class.java)
         val videoGsonsCall = videosService.listVideos()
@@ -67,7 +67,7 @@ class VideosFragment : Fragment() {
 
                 Log.i(javaClass.name, "response: $response")
                 if (response.isSuccessful) {
-                    val videoGsons = response.body()!!
+                    val videoGsons = response.body() ?: return
                     Log.i(javaClass.name, "videoGsons.size(): " + videoGsons.size)
 
                     if (videoGsons.isNotEmpty()) {
@@ -122,29 +122,33 @@ class VideosFragment : Fragment() {
                     // Check if the corresponding video file has already been downloaded
                     val videoFile = getVideoFile(videoGson, context)
                     Log.i(javaClass.name, "videoFile: $videoFile")
-                    Log.i(javaClass.name, "videoFile.exists(): " + videoFile!!.exists())
-                    if (!videoFile.exists()) {
-                        // Download file
-                        val fileUrl = videoGson.fileUrl
-                        Log.i(javaClass.name, "fileUrl: $fileUrl")
-                        val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
-                        Log.i(javaClass.name, "bytes.length: " + bytes.size)
-
-                        // Store the downloaded file in the external storage directory
-                        try {
-                            val fileOutputStream = FileOutputStream(videoFile)
-                            fileOutputStream.write(bytes)
-                        } catch (e: FileNotFoundException) {
-                            Log.e(javaClass.name, null, e)
-                        } catch (e: IOException) {
-                            Log.e(javaClass.name, null, e)
-                        }
+                    videoFile?.let {
                         Log.i(javaClass.name, "videoFile.exists(): " + videoFile.exists())
+                        if (!videoFile.exists()) {
+                            // Download file
+                            val fileUrl = videoGson.fileUrl
+                            Log.i(javaClass.name, "fileUrl: $fileUrl")
+                            val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
+                            Log.i(javaClass.name, "bytes.length: " + bytes.size)
+
+                            // Store the downloaded file in the external storage directory
+                            try {
+                                val fileOutputStream = FileOutputStream(videoFile)
+                                fileOutputStream.write(bytes)
+                            } catch (e: FileNotFoundException) {
+                                Log.e(javaClass.name, null, e)
+                            } catch (e: IOException) {
+                                Log.e(javaClass.name, null, e)
+                            }
+                            Log.i(javaClass.name, "videoFile.exists(): " + videoFile.exists())
+                        }
                     }
 
-                    // Store the Video in the database
-                    videoDao.insert(video)
-                    Log.i(javaClass.name, "Stored Video in database with ID " + video!!.id)
+                    video?.let {
+                        // Store the Video in the database
+                        videoDao.insert(video)
+                        Log.i(javaClass.name, "Stored Video in database with ID " + video.id)
+                    }
 
                     //                    // Store all the Video's Word labels in the database
 //                    Set<WordGson> wordGsons = videoGson.getWords();
@@ -162,7 +166,7 @@ class VideosFragment : Fragment() {
                 // Update the UI
                 val videos = videoDao.loadAll()
                 Log.i(javaClass.name, "videos.size(): " + videos.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textVideos.text = "videos.size(): " + videos.size
                     Snackbar.make(binding.textVideos, "videos.size(): " + videos.size, Snackbar.LENGTH_LONG)
                         .show()
