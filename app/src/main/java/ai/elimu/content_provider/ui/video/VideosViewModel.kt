@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.video;
+package ai.elimu.content_provider.ui.video
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class VideosViewModel extends ViewModel {
+class VideosViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public VideosViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("VideosViewModel");
+    init {
+        text.value = "VideosViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }
