@@ -1,172 +1,160 @@
-package ai.elimu.content_provider.ui.video;
+package ai.elimu.content_provider.ui.video
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.VideosService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.VideoDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Video;
-import ai.elimu.content_provider.util.FileHelper;
-import ai.elimu.content_provider.util.MultimediaDownloader;
-import ai.elimu.model.v2.gson.content.VideoGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.VideosService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getVideo
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.util.FileHelper.getVideoFile
+import ai.elimu.content_provider.util.MultimediaDownloader
+import ai.elimu.model.v2.gson.content.VideoGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.concurrent.Executors
 
 //import ai.elimu.content_provider.room.dao.Video_WordDao;
 //import ai.elimu.content_provider.room.entity.Video_Word;
+class VideosFragment : Fragment() {
+    private var videosViewModel: VideosViewModel? = null
 
-public class VideosFragment extends Fragment {
+    private var progressBar: ProgressBar? = null
 
-    private VideosViewModel videosViewModel;
+    private var textView: TextView? = null
 
-    private ProgressBar progressBar;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        videosViewModel = new ViewModelProvider(this).get(VideosViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_videos, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_videos);
-        textView = root.findViewById(R.id.text_videos);
-        videosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        videosViewModel = ViewModelProvider(this)[VideosViewModel::class.java]
+        val root = inflater.inflate(R.layout.fragment_videos, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_videos)
+        textView = root.findViewById(R.id.text_videos)
+        videosViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Videos from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        VideosService videosService = retrofit.create(VideosService.class);
-        Call<List<VideoGson>> videoGsonsCall = videosService.listVideos();
-        Log.i(getClass().getName(), "videoGsonsCall.request(): " + videoGsonsCall.request());
-        videoGsonsCall.enqueue(new Callback<List<VideoGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val videosService = retrofit.create(VideosService::class.java)
+        val videoGsonsCall = videosService.listVideos()
+        Log.i(javaClass.name, "videoGsonsCall.request(): " + videoGsonsCall.request())
+        videoGsonsCall.enqueue(object : Callback<List<VideoGson>> {
+            override fun onResponse(
+                call: Call<List<VideoGson>>,
+                response: Response<List<VideoGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<VideoGson>> call, Response<List<VideoGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val videoGsons = response.body()!!
+                    Log.i(javaClass.name, "videoGsons.size(): " + videoGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<VideoGson> videoGsons = response.body();
-                    Log.i(getClass().getName(), "videoGsons.size(): " + videoGsons.size());
-
-                    if (videoGsons.size() > 0) {
-                        processResponseBody(videoGsons);
+                    if (videoGsons.isNotEmpty()) {
+                        processResponseBody(videoGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<VideoGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<VideoGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<VideoGson> videoGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(videoGsons: List<VideoGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                VideoDao videoDao = roomDb.videoDao();
-//                Video_WordDao video_WordDao = roomDb.video_WordDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val videoDao = roomDb.videoDao()
+
+                //                Video_WordDao video_WordDao = roomDb.video_WordDao();
 
                 // Empty the database table before downloading up-to-date content
 //                video_WordDao.deleteAll();
-                videoDao.deleteAll();
+                videoDao.deleteAll()
+
                 // TODO: also delete corresponding video files (only those that are no longer used)
+                for (videoGson in videoGsons) {
+                    Log.i(javaClass.name, "videoGson.getId(): " + videoGson.id)
 
-                for (VideoGson videoGson : videoGsons) {
-                    Log.i(getClass().getName(), "videoGson.getId(): " + videoGson.getId());
-
-                    Video video = GsonToRoomConverter.getVideo(videoGson);
+                    val video = getVideo(videoGson)
 
                     // Check if the corresponding video file has already been downloaded
-                    File videoFile = FileHelper.getVideoFile(videoGson, getContext());
-                    Log.i(getClass().getName(), "videoFile: " + videoFile);
-                    Log.i(getClass().getName(), "videoFile.exists(): " + videoFile.exists());
+                    val videoFile = getVideoFile(videoGson, context)
+                    Log.i(javaClass.name, "videoFile: $videoFile")
+                    Log.i(javaClass.name, "videoFile.exists(): " + videoFile!!.exists())
                     if (!videoFile.exists()) {
                         // Download file
-                        String fileUrl = videoGson.getFileUrl();
-                        Log.i(getClass().getName(), "fileUrl: " + fileUrl);
-                        byte[] bytes = MultimediaDownloader.downloadFileBytes(fileUrl);
-                        Log.i(getClass().getName(), "bytes.length: " + bytes.length);
+                        val fileUrl = videoGson.fileUrl
+                        Log.i(javaClass.name, "fileUrl: $fileUrl")
+                        val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
+                        Log.i(javaClass.name, "bytes.length: " + bytes.size)
 
                         // Store the downloaded file in the external storage directory
                         try {
-                            FileOutputStream fileOutputStream = new FileOutputStream(videoFile);
-                            fileOutputStream.write(bytes);
-                        } catch (FileNotFoundException e) {
-                            Log.e(getClass().getName(), null, e);
-                        } catch (IOException e) {
-                            Log.e(getClass().getName(), null, e);
+                            val fileOutputStream = FileOutputStream(videoFile)
+                            fileOutputStream.write(bytes)
+                        } catch (e: FileNotFoundException) {
+                            Log.e(javaClass.name, null, e)
+                        } catch (e: IOException) {
+                            Log.e(javaClass.name, null, e)
                         }
-                        Log.i(getClass().getName(), "videoFile.exists(): " + videoFile.exists());
+                        Log.i(javaClass.name, "videoFile.exists(): " + videoFile.exists())
                     }
 
                     // Store the Video in the database
-                    videoDao.insert(video);
-                    Log.i(getClass().getName(), "Stored Video in database with ID " + video.getId());
+                    videoDao.insert(video)
+                    Log.i(javaClass.name, "Stored Video in database with ID " + video!!.id)
 
-//                    // Store all the Video's Word labels in the database
+                    //                    // Store all the Video's Word labels in the database
 //                    Set<WordGson> wordGsons = videoGson.getWords();
 //                    Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
 //                    for (WordGson wordGson : wordGsons) {
@@ -180,14 +168,15 @@ public class VideosFragment extends Fragment {
                 }
 
                 // Update the UI
-                List<Video> videos = videoDao.loadAll();
-                Log.i(getClass().getName(), "videos.size(): " + videos.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("videos.size(): " + videos.size());
-                    Snackbar.make(textView, "videos.size(): " + videos.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val videos = videoDao.loadAll()
+                Log.i(javaClass.name, "videos.size(): " + videos.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "videos.size(): " + videos.size
+                    Snackbar.make(textView!!, "videos.size(): " + videos.size, Snackbar.LENGTH_LONG)
+                        .show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
