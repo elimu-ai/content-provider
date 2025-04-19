@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.video
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentVideosBinding
 import ai.elimu.content_provider.rest.VideosService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getVideo
 import ai.elimu.content_provider.room.db.RoomDb
@@ -13,8 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,33 +26,26 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Executors
 
-//import ai.elimu.content_provider.room.dao.Video_WordDao;
-//import ai.elimu.content_provider.room.entity.Video_Word;
 class VideosFragment : Fragment() {
     private var videosViewModel: VideosViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentVideosBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
         videosViewModel = ViewModelProvider(this)[VideosViewModel::class.java]
-        val root = inflater.inflate(R.layout.fragment_videos, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_videos)
-        textView = root.findViewById(R.id.text_videos)
+        binding = FragmentVideosBinding.inflate(layoutInflater)
         videosViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
-                textView?.text = s
+                binding.textVideos.text = s
             }
         })
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -83,10 +75,10 @@ class VideosFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textVideos, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarVideos.visibility = View.GONE
                 }
             }
 
@@ -96,10 +88,10 @@ class VideosFragment : Fragment() {
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textVideos, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarVideos.visibility = View.GONE
             }
         })
     }
@@ -171,10 +163,10 @@ class VideosFragment : Fragment() {
                 val videos = videoDao.loadAll()
                 Log.i(javaClass.name, "videos.size(): " + videos.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "videos.size(): " + videos.size
-                    Snackbar.make(textView!!, "videos.size(): " + videos.size, Snackbar.LENGTH_LONG)
+                    binding.textVideos.text = "videos.size(): " + videos.size
+                    Snackbar.make(binding.textVideos, "videos.size(): " + videos.size, Snackbar.LENGTH_LONG)
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarVideos.visibility = View.GONE
                 }
             }
         })
