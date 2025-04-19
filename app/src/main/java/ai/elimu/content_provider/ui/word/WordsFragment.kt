@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.word
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentWordsBinding
 import ai.elimu.content_provider.rest.WordsService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getWord
 import ai.elimu.content_provider.room.db.RoomDb
@@ -11,8 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,30 +22,27 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class WordsFragment : Fragment() {
+
     private lateinit var wordsViewModel: WordsViewModel
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentWordsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
         wordsViewModel = ViewModelProvider(this)[WordsViewModel::class.java]
-        val root = inflater.inflate(R.layout.fragment_words, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_words)
-        textView = root.findViewById(R.id.text_words)
+        binding = FragmentWordsBinding.inflate(layoutInflater)
         wordsViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
-                textView?.text = s
+                binding.textWords.text = s
             }
         })
-        return root
+
+        return binding.root
     }
 
     override fun onStart() {
@@ -76,10 +72,10 @@ class WordsFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textWords, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarWords.visibility = View.GONE
                 }
             }
 
@@ -89,10 +85,10 @@ class WordsFragment : Fragment() {
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textWords, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarWords.visibility = View.GONE
             }
         })
     }
@@ -124,10 +120,10 @@ class WordsFragment : Fragment() {
                 val words = wordDao.loadAllOrderedByUsageCount()
                 Log.i(javaClass.name, "words.size(): " + words.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "words.size(): " + words.size
-                    Snackbar.make(textView!!, "words.size(): " + words.size, Snackbar.LENGTH_LONG)
+                    binding.textWords.text = getString(R.string.words_size, words.size)
+                    Snackbar.make(binding.textWords, "words.size(): " + words.size, Snackbar.LENGTH_LONG)
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarWords.visibility = View.GONE
                 }
             }
         })
