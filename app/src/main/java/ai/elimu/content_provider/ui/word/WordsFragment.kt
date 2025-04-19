@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -72,9 +73,13 @@ class WordsFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(binding.textWords, response.toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                        .show()
+                    context?.let {
+                        val backgroundColor = ContextCompat.getColor(it, R.color.deep_orange_darken_4)
+                        Snackbar.make(binding.textWords, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(backgroundColor)
+                            .show()
+                    }
+
                     binding.progressBarWords.visibility = View.GONE
                 }
             }
@@ -84,10 +89,13 @@ class WordsFragment : Fragment() {
 
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
-                // Handle error
-                Snackbar.make(binding.textWords, t.cause.toString(), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                    .show()
+                context?.let {
+                    // Handle error
+                    val backgroundColor = ContextCompat.getColor(it, R.color.deep_orange_darken_4)
+                    Snackbar.make(binding.textWords, t.cause.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(backgroundColor)
+                        .show()
+                }
                 binding.progressBarWords.visibility = View.GONE
             }
         })
