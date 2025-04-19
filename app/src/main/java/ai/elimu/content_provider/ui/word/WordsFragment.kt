@@ -23,7 +23,7 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class WordsFragment : Fragment() {
-    private var wordsViewModel: WordsViewModel? = null
+    private lateinit var wordsViewModel: WordsViewModel
 
     private var progressBar: ProgressBar? = null
 
@@ -40,7 +40,7 @@ class WordsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_words, container, false)
         progressBar = root.findViewById(R.id.progress_bar_words)
         textView = root.findViewById(R.id.text_words)
-        wordsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        wordsViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 textView?.text = s

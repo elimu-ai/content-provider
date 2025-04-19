@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.word;
+package ai.elimu.content_provider.ui.word
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class WordsViewModel extends ViewModel {
+class WordsViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public WordsViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("WordsViewModel");
+    init {
+        text.value = "WordsViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }
