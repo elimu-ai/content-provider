@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.letter
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentLettersBinding
 import ai.elimu.content_provider.rest.LettersService
 import ai.elimu.content_provider.room.GsonToRoomConverter
 import ai.elimu.content_provider.room.db.RoomDb
@@ -11,8 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,11 +22,9 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class LettersFragment : Fragment() {
+
     private var lettersViewModel: LettersViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentLettersBinding
 
     private val TAG = javaClass.name
 
@@ -41,16 +38,14 @@ class LettersFragment : Fragment() {
         lettersViewModel = ViewModelProvider(this).get(
             LettersViewModel::class.java
         )
-        val root = inflater.inflate(R.layout.fragment_letters, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_letters)
-        textView = root.findViewById(R.id.text_letters) as? TextView
+        binding = FragmentLettersBinding.inflate(layoutInflater)
         lettersViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(TAG, "onChanged")
-                textView?.text = s
+                binding.textLetters.text = s
             }
         })
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -80,10 +75,10 @@ class LettersFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textLetters, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarLetters.visibility = View.GONE
                 }
             }
 
@@ -93,10 +88,10 @@ class LettersFragment : Fragment() {
                 Log.e(TAG, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textLetters, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarLetters.visibility = View.GONE
             }
         })
     }
@@ -130,13 +125,13 @@ class LettersFragment : Fragment() {
                 val letters = letterDao.loadAllOrderedByUsageCount()
                 Log.i(TAG, "letters.size(): " + letters.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "letters.size(): " + letters.size
+                    binding.textLetters.text = "letters.size(): " + letters.size
                     Snackbar.make(
-                        textView!!,
+                        binding.textLetters,
                         "letters.size(): " + letters.size,
                         Snackbar.LENGTH_LONG
                     ).show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarLetters.visibility = View.GONE
                 }
             }
         })
