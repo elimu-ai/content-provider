@@ -23,21 +23,19 @@ import java.util.concurrent.Executors
 
 class NumbersFragment : Fragment() {
 
-    private var numbersViewModel: NumbersViewModel? = null
+    private lateinit var numbersViewModel: NumbersViewModel
     private lateinit var binding: FragmentNumbersBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
-        numbersViewModel = ViewModelProvider(this).get(
-            NumbersViewModel::class.java
-        )
+        numbersViewModel = ViewModelProvider(this)[NumbersViewModel::class.java]
         binding = FragmentNumbersBinding.inflate(layoutInflater)
-        numbersViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        numbersViewModel.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 binding.textNumbers.text = s
@@ -51,7 +49,7 @@ class NumbersFragment : Fragment() {
         super.onStart()
 
         // Download Numbers from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val numbersService = retrofit.create(NumbersService::class.java)
         val numberGsonsCall = numbersService.listNumbers()
@@ -65,7 +63,7 @@ class NumbersFragment : Fragment() {
 
                 Log.i(javaClass.name, "response: $response")
                 if (response.isSuccessful) {
-                    val numberGsons = response.body()!!
+                    val numberGsons = response.body() ?: return
                     Log.i(javaClass.name, "numberGsons.size(): " + numberGsons.size)
 
                     if (numberGsons.size > 0) {
@@ -115,15 +113,16 @@ class NumbersFragment : Fragment() {
                     Log.i(javaClass.name, "numberGson.getId(): " + numberGson.id)
 
                     // Store the Number in the database
-                    val number = getNumber(numberGson)
-                    numberDao.insert(number)
-                    Log.i(javaClass.name, "Stored Number in database with ID " + number!!.id)
+                    getNumber(numberGson)?.let { number ->
+                        numberDao.insert(number)
+                        Log.i(javaClass.name, "Stored Number in database with ID " + number.id)
+                    }
                 }
 
                 // Update the UI
                 val numbers = numberDao.loadAllOrderedByValue()
                 Log.i(javaClass.name, "numbers.size(): " + numbers.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textNumbers.text = getString(R.string.numbers_size, numbers.size)
                     Snackbar.make(
                         binding.textNumbers,
