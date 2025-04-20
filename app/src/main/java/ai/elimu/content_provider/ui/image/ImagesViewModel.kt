@@ -1,23 +1,20 @@
-package ai.elimu.content_provider.ui.image;
+package ai.elimu.content_provider.ui.image
 
-import android.util.Log;
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+class ImagesViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-public class ImagesViewModel extends ViewModel {
-
-    private MutableLiveData<String> text;
-
-    public ImagesViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("ImagesViewModel");
+    init {
+        text.value = "ImagesViewModel"
     }
 
-    public LiveData<String> getText() {
-        Log.i(getClass().getName(), "getText");
+    fun getText(): LiveData<String> {
+        Log.i(javaClass.name, "getText")
 
-        return text;
+        return text
     }
 }

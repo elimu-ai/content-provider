@@ -45,7 +45,7 @@ class ImagesFragment : Fragment() {
 
         imagesViewModel = ViewModelProvider(this)[ImagesViewModel::class.java]
         binding = FragmentImagesBinding.inflate(layoutInflater)
-        imagesViewModel.text.observe(viewLifecycleOwner) { s ->
+        imagesViewModel.getText().observe(viewLifecycleOwner) { s ->
             Log.i(TAG, "onChanged")
             binding.textImages.text = s
         }
