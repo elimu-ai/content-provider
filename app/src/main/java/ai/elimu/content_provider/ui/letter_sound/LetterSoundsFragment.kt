@@ -163,7 +163,7 @@ class LetterSoundsFragment : Fragment() {
                 val letterSounds = letterSoundDao.loadAll()
                 Log.i(TAG, "letterSounds.size(): " + letterSounds.size)
                 activity?.runOnUiThread {
-                    binding.textLetterSounds.text = "letterSounds.size(): " + letterSounds.size
+                    binding.textLetterSounds.text = getString(R.string.lettersounds_size, letterSounds.size)
                     Snackbar.make(
                         binding.textLetterSounds,
                         "letterSounds.size(): " + letterSounds.size,
