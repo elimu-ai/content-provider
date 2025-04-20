@@ -112,10 +112,10 @@ class StoryBooksFragment : Fragment() {
             val storyBookDao = roomDb.storyBookDao()
             val storyBookChapterDao = roomDb.storyBookChapterDao()
             val storyBookParagraphDao = roomDb.storyBookParagraphDao()
-            val storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao()
+            val storyBookParagraphWordDao = roomDb.storyBookParagraph_WordDao()
 
             // Empty the database table before downloading up-to-date content
-            storyBookParagraph_WordDao.deleteAll()
+            storyBookParagraphWordDao.deleteAll()
             storyBookParagraphDao.deleteAll()
             storyBookChapterDao.deleteAll()
             storyBookDao.deleteAll()
@@ -170,15 +170,15 @@ class StoryBooksFragment : Fragment() {
                             Log.i(TAG, "wordGson: $wordGson")
                             if (wordGson != null) {
                                 Log.i(TAG, "wordGson.getId(): " + wordGson.id)
-                                val storyBookParagraph_Word = StoryBookParagraph_Word()
-                                storyBookParagraph_Word.storyBookParagraph_id =
+                                val storyBookParagraphWord = StoryBookParagraph_Word()
+                                storyBookParagraphWord.storyBookParagraph_id =
                                     storyBookParagraphGson.id
-                                storyBookParagraph_Word.words_id = wordGson.id
-                                storyBookParagraph_Word.words_ORDER = i
-                                storyBookParagraph_WordDao.insert(storyBookParagraph_Word)
+                                storyBookParagraphWord.words_id = wordGson.id
+                                storyBookParagraphWord.words_ORDER = i
+                                storyBookParagraphWordDao.insert(storyBookParagraphWord)
                                 Log.i(
                                     TAG,
-                                    "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.storyBookParagraph_id + ", words_id: " + storyBookParagraph_Word.words_id + ", words_ORDER: " + storyBookParagraph_Word.words_ORDER
+                                    "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraphWord.storyBookParagraph_id + ", words_id: " + storyBookParagraphWord.words_id + ", words_ORDER: " + storyBookParagraphWord.words_ORDER
                                 )
                             }
                         }
