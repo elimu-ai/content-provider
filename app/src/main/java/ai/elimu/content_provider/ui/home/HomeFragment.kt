@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView = root.findViewById<TextView>(R.id.text_home)
-        homeViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        homeViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 textView.text = s
