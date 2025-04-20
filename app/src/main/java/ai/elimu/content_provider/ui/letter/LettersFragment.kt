@@ -65,7 +65,7 @@ class LettersFragment : Fragment() {
                     val letterGsons = response.body() ?: return
                     Log.i(TAG, "letterGsons.size(): " + letterGsons.size)
 
-                    if (letterGsons.size > 0) {
+                    if (letterGsons.isNotEmpty()) {
                         processResponseBody(letterGsons)
                     }
                 } else {
