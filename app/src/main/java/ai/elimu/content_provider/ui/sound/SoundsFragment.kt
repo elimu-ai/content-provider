@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -70,10 +71,13 @@ class SoundsFragment : Fragment() {
                         processResponseBody(soundGsons)
                     }
                 } else {
-                    // Handle error
-                    Snackbar.make(binding.textSounds, response.toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                        .show()
+                    context?.let { context ->
+                        // Handle error
+                        Snackbar.make(binding.textSounds, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                            .show()
+                    }
+
                     binding.progressBarSounds.visibility = View.GONE
                 }
             }
@@ -83,10 +87,13 @@ class SoundsFragment : Fragment() {
 
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
-                // Handle error
-                Snackbar.make(binding.textSounds, t.cause.toString(), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                    .show()
+                context?.let { context ->
+                    // Handle error
+                    Snackbar.make(binding.textSounds, t.cause.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                        .show()
+                }
+
                 binding.progressBarSounds.visibility = View.GONE
             }
         })
