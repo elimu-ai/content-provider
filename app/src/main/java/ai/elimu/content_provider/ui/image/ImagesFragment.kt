@@ -108,10 +108,10 @@ class ImagesFragment : Fragment() {
 
             val roomDb = RoomDb.getDatabase(context)
             val imageDao = roomDb.imageDao()
-            val image_WordDao = roomDb.image_WordDao()
+            val imageWordDao = roomDb.image_WordDao()
 
             // Empty the database table before downloading up-to-date content
-            image_WordDao.deleteAll()
+            imageWordDao.deleteAll()
             imageDao.deleteAll()
 
             // TODO: also delete corresponding image files (only those that are no longer used)
@@ -158,13 +158,13 @@ class ImagesFragment : Fragment() {
                 Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
                 for (wordGson in wordGsons) {
                     Log.i(TAG, "wordGson.getId(): " + wordGson.id)
-                    val image_Word = Image_Word()
-                    image_Word.image_id = imageGson.id
-                    image_Word.words_id = wordGson.id
-                    image_WordDao.insert(image_Word)
+                    val imageWord = Image_Word()
+                    imageWord.image_id = imageGson.id
+                    imageWord.words_id = wordGson.id
+                    imageWordDao.insert(imageWord)
                     Log.i(
                         TAG,
-                        "Stored Image_Word in database. Image_id: " + image_Word.image_id + ", words_id: " + image_Word.words_id
+                        "Stored Image_Word in database. Image_id: " + imageWord.image_id + ", words_id: " + imageWord.words_id
                     )
                 }
             }
