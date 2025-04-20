@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.letter_sound
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentLetterSoundsBinding
 import ai.elimu.content_provider.rest.LetterSoundsService
 import ai.elimu.content_provider.room.GsonToRoomConverter
 import ai.elimu.content_provider.room.db.RoomDb
@@ -13,8 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -24,11 +23,9 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class LetterSoundsFragment : Fragment() {
+
     private var letterSoundsViewModel: LetterSoundsViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentLetterSoundsBinding
 
     private val TAG = javaClass.name
 
@@ -40,14 +37,12 @@ class LetterSoundsFragment : Fragment() {
         Log.i(TAG, "onCreateView")
 
         letterSoundsViewModel = ViewModelProvider(this)[LetterSoundsViewModel::class.java]
-        val root = inflater.inflate(R.layout.fragment_letter_sounds, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_letter_sounds)
-        textView = root.findViewById(R.id.text_letter_sounds) as? TextView
+        binding = FragmentLetterSoundsBinding.inflate(layoutInflater)
         letterSoundsViewModel?.text?.observe(viewLifecycleOwner) { s ->
             Log.i(TAG, "onChanged")
-            textView?.text = s
+            binding.textLetterSounds.text = s
         }
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -79,10 +74,10 @@ class LetterSoundsFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textLetterSounds, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarLetterSounds.visibility = View.GONE
                 }
             }
 
@@ -92,10 +87,10 @@ class LetterSoundsFragment : Fragment() {
                 Log.e(TAG, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textLetterSounds, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarLetterSounds.visibility = View.GONE
             }
         })
     }
@@ -168,13 +163,13 @@ class LetterSoundsFragment : Fragment() {
                 val letterSounds = letterSoundDao.loadAll()
                 Log.i(TAG, "letterSounds.size(): " + letterSounds.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "letterSounds.size(): " + letterSounds.size
+                    binding.textLetterSounds.text = "letterSounds.size(): " + letterSounds.size
                     Snackbar.make(
-                        textView!!,
+                        binding.textLetterSounds,
                         "letterSounds.size(): " + letterSounds.size,
                         Snackbar.LENGTH_LONG
                     ).show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarLetterSounds.visibility = View.GONE
                 }
             }
         })
