@@ -69,7 +69,7 @@ class StoryBooksFragment : Fragment() {
                     val storyBookGsons = response.body() ?: return
                     Log.i(TAG, "storyBookGsons.size(): " + storyBookGsons.size)
 
-                    if (storyBookGsons.size > 0) {
+                    if (storyBookGsons.isNotEmpty()) {
                         processResponseBody(storyBookGsons)
                     }
                 } else {
