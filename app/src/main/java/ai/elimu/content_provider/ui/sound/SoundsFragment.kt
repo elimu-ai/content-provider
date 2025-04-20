@@ -66,7 +66,7 @@ class SoundsFragment : Fragment() {
                     val soundGsons = response.body()!!
                     Log.i(javaClass.name, "soundGsons.size(): " + soundGsons.size)
 
-                    if (soundGsons.size > 0) {
+                    if (soundGsons.isNotEmpty()) {
                         processResponseBody(soundGsons)
                     }
                 } else {
