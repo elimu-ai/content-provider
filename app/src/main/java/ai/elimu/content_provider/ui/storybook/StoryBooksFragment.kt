@@ -1,180 +1,183 @@
-package ai.elimu.content_provider.ui.storybook;
+package ai.elimu.content_provider.ui.storybook
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.StoryBooksService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getStoryBook
+import ai.elimu.content_provider.room.GsonToRoomConverter.getStoryBookChapter
+import ai.elimu.content_provider.room.GsonToRoomConverter.getStoryBookParagraph
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word
+import ai.elimu.model.v2.gson.content.StoryBookGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class StoryBooksFragment : Fragment() {
+    private var storyBooksViewModel: StoryBooksViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.StoryBooksService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
-import ai.elimu.content_provider.room.dao.StoryBookDao;
-import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
-import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.StoryBook;
-import ai.elimu.content_provider.room.entity.StoryBookChapter;
-import ai.elimu.content_provider.room.entity.StoryBookParagraph;
-import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
-import ai.elimu.model.v2.gson.content.StoryBookChapterGson;
-import ai.elimu.model.v2.gson.content.StoryBookGson;
-import ai.elimu.model.v2.gson.content.StoryBookParagraphGson;
-import ai.elimu.model.v2.gson.content.WordGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class StoryBooksFragment extends Fragment {
-
-    private StoryBooksViewModel storyBooksViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        storyBooksViewModel = new ViewModelProvider(this).get(StoryBooksViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_storybooks, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_storybooks);
-        textView = root.findViewById(R.id.text_storybooks);
-        storyBooksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        storyBooksViewModel = ViewModelProvider(this).get(
+            StoryBooksViewModel::class.java
+        )
+        val root = inflater.inflate(R.layout.fragment_storybooks, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_storybooks)
+        textView = root.findViewById(R.id.text_storybooks)
+        storyBooksViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download StoryBooks from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        StoryBooksService storyBooksService = retrofit.create(StoryBooksService.class);
-        Call<List<StoryBookGson>> call = storyBooksService.listStoryBooks();
-        Log.i(getClass().getName(), "call.request(): " + call.request());
-        call.enqueue(new Callback<List<StoryBookGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val storyBooksService = retrofit.create(
+            StoryBooksService::class.java
+        )
+        val call = storyBooksService.listStoryBooks()
+        Log.i(javaClass.name, "call.request(): " + call.request())
+        call.enqueue(object : Callback<List<StoryBookGson>> {
+            override fun onResponse(
+                call: Call<List<StoryBookGson>>,
+                response: Response<List<StoryBookGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<StoryBookGson>> call, Response<List<StoryBookGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val storyBookGsons = response.body()!!
+                    Log.i(javaClass.name, "storyBookGsons.size(): " + storyBookGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<StoryBookGson> storyBookGsons = response.body();
-                    Log.i(getClass().getName(), "storyBookGsons.size(): " + storyBookGsons.size());
-
-                    if (storyBookGsons.size() > 0) {
-                        processResponseBody(storyBookGsons);
+                    if (storyBookGsons.size > 0) {
+                        processResponseBody(storyBookGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<StoryBookGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<StoryBookGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<StoryBookGson> storyBookGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(storyBookGsons: List<StoryBookGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                StoryBookDao storyBookDao = roomDb.storyBookDao();
-                StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
-                StoryBookParagraphDao storyBookParagraphDao = roomDb.storyBookParagraphDao();
-                StoryBookParagraph_WordDao storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val storyBookDao = roomDb.storyBookDao()
+                val storyBookChapterDao = roomDb.storyBookChapterDao()
+                val storyBookParagraphDao = roomDb.storyBookParagraphDao()
+                val storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao()
 
                 // Empty the database table before downloading up-to-date content
-                storyBookParagraph_WordDao.deleteAll();
-                storyBookParagraphDao.deleteAll();
-                storyBookChapterDao.deleteAll();
-                storyBookDao.deleteAll();
+                storyBookParagraph_WordDao.deleteAll()
+                storyBookParagraphDao.deleteAll()
+                storyBookChapterDao.deleteAll()
+                storyBookDao.deleteAll()
 
-                for (StoryBookGson storyBookGson : storyBookGsons) {
-                    Log.i(getClass().getName(), "storyBookGson.getId(): " + storyBookGson.getId());
+                for (storyBookGson in storyBookGsons) {
+                    Log.i(javaClass.name, "storyBookGson.getId(): " + storyBookGson.id)
 
                     // Store the StoryBook in the database
-                    StoryBook storyBook = GsonToRoomConverter.getStoryBook(storyBookGson);
-                    storyBookDao.insert(storyBook);
-                    Log.i(getClass().getName(), "Stored StoryBook in database with ID " + storyBook.getId());
+                    val storyBook = getStoryBook(storyBookGson)
+                    storyBookDao.insert(storyBook)
+                    Log.i(javaClass.name, "Stored StoryBook in database with ID " + storyBook!!.id)
 
-                    List<StoryBookChapterGson> storyBookChapterGsons = storyBookGson.getStoryBookChapters();
-                    Log.i(getClass().getName(), "storyBookChapterGsons.size(): " + storyBookChapterGsons.size());
-                    for (StoryBookChapterGson storyBookChapterGson : storyBookChapterGsons) {
-                        StoryBookChapter storyBookChapter = GsonToRoomConverter.getStoryBookChapter(storyBookChapterGson);
-                        storyBookChapter.setStoryBookId(storyBookGson.getId());
-                        storyBookChapterDao.insert(storyBookChapter);
-                        Log.i(getClass().getName(), "Stored StoryBookChapter in database with ID " + storyBookChapter.getId());
+                    val storyBookChapterGsons = storyBookGson.storyBookChapters
+                    Log.i(
+                        javaClass.name,
+                        "storyBookChapterGsons.size(): " + storyBookChapterGsons.size
+                    )
+                    for (storyBookChapterGson in storyBookChapterGsons) {
+                        val storyBookChapter = getStoryBookChapter(storyBookChapterGson)
+                        storyBookChapter!!.storyBookId = storyBookGson.id
+                        storyBookChapterDao.insert(storyBookChapter)
+                        Log.i(
+                            javaClass.name,
+                            "Stored StoryBookChapter in database with ID " + storyBookChapter.id
+                        )
 
-                        List<StoryBookParagraphGson> storyBookParagraphs = storyBookChapterGson.getStoryBookParagraphs();
-                        Log.i(getClass().getName(), "storyBookParagraphs.size(): " + storyBookParagraphs.size());
-                        for (StoryBookParagraphGson storyBookParagraphGson : storyBookParagraphs) {
-                            StoryBookParagraph storyBookParagraph = GsonToRoomConverter.getStoryBookParagraph(storyBookParagraphGson);
-                            storyBookParagraph.setStoryBookChapterId(storyBookChapterGson.getId());
-                            storyBookParagraphDao.insert(storyBookParagraph);
-                            Log.i(getClass().getName(), "Stored StoryBookParagraph in database with ID " + storyBookParagraph.getId());
+                        val storyBookParagraphs = storyBookChapterGson.storyBookParagraphs
+                        Log.i(
+                            javaClass.name,
+                            "storyBookParagraphs.size(): " + storyBookParagraphs.size
+                        )
+                        for (storyBookParagraphGson in storyBookParagraphs) {
+                            val storyBookParagraph = getStoryBookParagraph(storyBookParagraphGson)
+                            storyBookParagraph!!.storyBookChapterId = storyBookChapterGson.id
+                            storyBookParagraphDao.insert(storyBookParagraph)
+                            Log.i(
+                                javaClass.name,
+                                "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
+                            )
 
                             // Store all the StoryBookParagraph's Words in the database
-                            List<WordGson> wordGsons = storyBookParagraphGson.getWords();
-                            Log.i(getClass().getName(), "wordGsons.size(): " + wordGsons.size());
-                            for (int i = 0; i < wordGsons.size(); i++) {
-                                WordGson wordGson = wordGsons.get(i);
-                                Log.i(getClass().getName(), "wordGson: " + wordGson);
+                            val wordGsons = storyBookParagraphGson.words
+                            Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                            for (i in wordGsons.indices) {
+                                val wordGson = wordGsons[i]
+                                Log.i(javaClass.name, "wordGson: $wordGson")
                                 if (wordGson != null) {
-                                    Log.i(getClass().getName(), "wordGson.getId(): " + wordGson.getId());
-                                    StoryBookParagraph_Word storyBookParagraph_Word = new StoryBookParagraph_Word();
-                                    storyBookParagraph_Word.setStoryBookParagraph_id(storyBookParagraphGson.getId());
-                                    storyBookParagraph_Word.setWords_id(wordGson.getId());
-                                    storyBookParagraph_Word.setWords_ORDER(i);
-                                    storyBookParagraph_WordDao.insert(storyBookParagraph_Word);
-                                    Log.i(getClass().getName(), "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.getStoryBookParagraph_id() + ", words_id: " + storyBookParagraph_Word.getWords_id() + ", words_ORDER: " + storyBookParagraph_Word.getWords_ORDER());
+                                    Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
+                                    val storyBookParagraph_Word = StoryBookParagraph_Word()
+                                    storyBookParagraph_Word.storyBookParagraph_id =
+                                        storyBookParagraphGson.id
+                                    storyBookParagraph_Word.words_id = wordGson.id
+                                    storyBookParagraph_Word.words_ORDER = i
+                                    storyBookParagraph_WordDao.insert(storyBookParagraph_Word)
+                                    Log.i(
+                                        javaClass.name,
+                                        "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.storyBookParagraph_id + ", words_id: " + storyBookParagraph_Word.words_id + ", words_ORDER: " + storyBookParagraph_Word.words_ORDER
+                                    )
                                 }
                             }
                         }
@@ -182,14 +185,18 @@ public class StoryBooksFragment extends Fragment {
                 }
 
                 // Update the UI
-                List<StoryBook> storyBooks = storyBookDao.loadAll();
-                Log.i(getClass().getName(), "storyBooks.size(): " + storyBooks.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("storyBooks.size(): " + storyBooks.size());
-                    Snackbar.make(textView, "storyBooks.size(): " + storyBooks.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val storyBooks = storyBookDao.loadAll()
+                Log.i(javaClass.name, "storyBooks.size(): " + storyBooks.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "storyBooks.size(): " + storyBooks.size
+                    Snackbar.make(
+                        textView!!,
+                        "storyBooks.size(): " + storyBooks.size,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
