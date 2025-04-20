@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -39,12 +38,10 @@ class StoryBooksFragment : Fragment() {
 
         storyBooksViewModel = ViewModelProvider(this)[StoryBooksViewModel::class.java]
         binding = FragmentStorybooksBinding.inflate(layoutInflater)
-        storyBooksViewModel.text.observe(viewLifecycleOwner, object : Observer<String?> {
-            override fun onChanged(s: String?) {
-                Log.i(TAG, "onChanged")
-                binding.textStorybooks.text = s
-            }
-        })
+        storyBooksViewModel.text.observe(viewLifecycleOwner) { s ->
+            Log.i(TAG, "onChanged")
+            binding.textStorybooks.text = s
+        }
         return binding.root
     }
 
@@ -102,99 +99,99 @@ class StoryBooksFragment : Fragment() {
         Log.i(TAG, "processResponseBody")
 
         val executorService = Executors.newSingleThreadExecutor()
-        executorService.execute(object : Runnable {
-            override fun run() {
-                Log.i(TAG, "run")
+        executorService.execute {
+            Log.i(TAG, "run")
 
-                val roomDb = RoomDb.getDatabase(context)
-                val storyBookDao = roomDb.storyBookDao()
-                val storyBookChapterDao = roomDb.storyBookChapterDao()
-                val storyBookParagraphDao = roomDb.storyBookParagraphDao()
-                val storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao()
+            val roomDb = RoomDb.getDatabase(context)
+            val storyBookDao = roomDb.storyBookDao()
+            val storyBookChapterDao = roomDb.storyBookChapterDao()
+            val storyBookParagraphDao = roomDb.storyBookParagraphDao()
+            val storyBookParagraph_WordDao = roomDb.storyBookParagraph_WordDao()
 
-                // Empty the database table before downloading up-to-date content
-                storyBookParagraph_WordDao.deleteAll()
-                storyBookParagraphDao.deleteAll()
-                storyBookChapterDao.deleteAll()
-                storyBookDao.deleteAll()
+            // Empty the database table before downloading up-to-date content
+            storyBookParagraph_WordDao.deleteAll()
+            storyBookParagraphDao.deleteAll()
+            storyBookChapterDao.deleteAll()
+            storyBookDao.deleteAll()
 
-                for (storyBookGson in storyBookGsons) {
-                    Log.i(TAG, "storyBookGson.getId(): " + storyBookGson.id)
+            for (storyBookGson in storyBookGsons) {
+                Log.i(TAG, "storyBookGson.getId(): " + storyBookGson.id)
 
-                    // Store the StoryBook in the database
-                    val storyBook = getStoryBook(storyBookGson)
-                    storyBook?.let {
-                        storyBookDao.insert(storyBook)
-                        Log.i(TAG, "Stored StoryBook in database with ID " + storyBook.id)
+                // Store the StoryBook in the database
+                val storyBook = getStoryBook(storyBookGson)
+                storyBook?.let {
+                    storyBookDao.insert(storyBook)
+                    Log.i(TAG, "Stored StoryBook in database with ID " + storyBook.id)
+                }
+
+                val storyBookChapterGsons = storyBookGson.storyBookChapters
+                Log.i(
+                    TAG,
+                    "storyBookChapterGsons.size(): " + storyBookChapterGsons.size
+                )
+                for (storyBookChapterGson in storyBookChapterGsons) {
+                    val storyBookChapter = getStoryBookChapter(storyBookChapterGson)
+                    storyBookChapter?.let {
+                        storyBookChapter.storyBookId = storyBookGson.id
+                        storyBookChapterDao.insert(storyBookChapter)
+                        Log.i(
+                            TAG,
+                            "Stored StoryBookChapter in database with ID " + storyBookChapter.id
+                        )
                     }
 
-                    val storyBookChapterGsons = storyBookGson.storyBookChapters
+                    val storyBookParagraphs = storyBookChapterGson.storyBookParagraphs
                     Log.i(
                         TAG,
-                        "storyBookChapterGsons.size(): " + storyBookChapterGsons.size
+                        "storyBookParagraphs.size(): " + storyBookParagraphs.size
                     )
-                    for (storyBookChapterGson in storyBookChapterGsons) {
-                        val storyBookChapter = getStoryBookChapter(storyBookChapterGson)
-                        storyBookChapter?.let {
-                            storyBookChapter.storyBookId = storyBookGson.id
-                            storyBookChapterDao.insert(storyBookChapter)
-                            Log.i(TAG,
-                                "Stored StoryBookChapter in database with ID " + storyBookChapter.id
+                    for (storyBookParagraphGson in storyBookParagraphs) {
+                        val storyBookParagraph = getStoryBookParagraph(storyBookParagraphGson)
+                        storyBookParagraph?.let {
+                            storyBookParagraph.storyBookChapterId = storyBookChapterGson.id
+                            storyBookParagraphDao.insert(storyBookParagraph)
+                            Log.i(
+                                TAG,
+                                "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
                             )
                         }
 
-                        val storyBookParagraphs = storyBookChapterGson.storyBookParagraphs
-                        Log.i(
-                            TAG,
-                            "storyBookParagraphs.size(): " + storyBookParagraphs.size
-                        )
-                        for (storyBookParagraphGson in storyBookParagraphs) {
-                            val storyBookParagraph = getStoryBookParagraph(storyBookParagraphGson)
-                            storyBookParagraph?.let {
-                                storyBookParagraph.storyBookChapterId = storyBookChapterGson.id
-                                storyBookParagraphDao.insert(storyBookParagraph)
-                                Log.i(TAG,
-                                    "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
+                        // Store all the StoryBookParagraph's Words in the database
+                        val wordGsons = storyBookParagraphGson.words
+                        Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
+                        for (i in wordGsons.indices) {
+                            val wordGson = wordGsons[i]
+                            Log.i(TAG, "wordGson: $wordGson")
+                            if (wordGson != null) {
+                                Log.i(TAG, "wordGson.getId(): " + wordGson.id)
+                                val storyBookParagraph_Word = StoryBookParagraph_Word()
+                                storyBookParagraph_Word.storyBookParagraph_id =
+                                    storyBookParagraphGson.id
+                                storyBookParagraph_Word.words_id = wordGson.id
+                                storyBookParagraph_Word.words_ORDER = i
+                                storyBookParagraph_WordDao.insert(storyBookParagraph_Word)
+                                Log.i(
+                                    TAG,
+                                    "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.storyBookParagraph_id + ", words_id: " + storyBookParagraph_Word.words_id + ", words_ORDER: " + storyBookParagraph_Word.words_ORDER
                                 )
-                            }
-
-                            // Store all the StoryBookParagraph's Words in the database
-                            val wordGsons = storyBookParagraphGson.words
-                            Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
-                            for (i in wordGsons.indices) {
-                                val wordGson = wordGsons[i]
-                                Log.i(TAG, "wordGson: $wordGson")
-                                if (wordGson != null) {
-                                    Log.i(TAG, "wordGson.getId(): " + wordGson.id)
-                                    val storyBookParagraph_Word = StoryBookParagraph_Word()
-                                    storyBookParagraph_Word.storyBookParagraph_id =
-                                        storyBookParagraphGson.id
-                                    storyBookParagraph_Word.words_id = wordGson.id
-                                    storyBookParagraph_Word.words_ORDER = i
-                                    storyBookParagraph_WordDao.insert(storyBookParagraph_Word)
-                                    Log.i(
-                                        TAG,
-                                        "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.storyBookParagraph_id + ", words_id: " + storyBookParagraph_Word.words_id + ", words_ORDER: " + storyBookParagraph_Word.words_ORDER
-                                    )
-                                }
                             }
                         }
                     }
                 }
-
-                // Update the UI
-                val storyBooks = storyBookDao.loadAll()
-                Log.i(TAG, "storyBooks.size(): " + storyBooks.size)
-                activity?.runOnUiThread {
-                    binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
-                    Snackbar.make(
-                        binding.textStorybooks,
-                        "storyBooks.size(): " + storyBooks.size,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    binding.progressBarStorybooks.visibility = View.GONE
-                }
             }
-        })
+
+            // Update the UI
+            val storyBooks = storyBookDao.loadAll()
+            Log.i(TAG, "storyBooks.size(): " + storyBooks.size)
+            activity?.runOnUiThread {
+                binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
+                Snackbar.make(
+                    binding.textStorybooks,
+                    "storyBooks.size(): " + storyBooks.size,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                binding.progressBarStorybooks.visibility = View.GONE
+            }
+        }
     }
 }
