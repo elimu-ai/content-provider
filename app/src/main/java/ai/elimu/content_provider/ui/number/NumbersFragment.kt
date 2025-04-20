@@ -36,7 +36,7 @@ class NumbersFragment : Fragment() {
 
         numbersViewModel = ViewModelProvider(this)[NumbersViewModel::class.java]
         binding = FragmentNumbersBinding.inflate(layoutInflater)
-        numbersViewModel.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        numbersViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 binding.textNumbers.text = s

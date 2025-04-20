@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.number;
+package ai.elimu.content_provider.ui.number
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class NumbersViewModel extends ViewModel {
+class NumbersViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public NumbersViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("NumbersViewModel");
+    init {
+        text.value = "NumbersViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }
