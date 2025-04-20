@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.sound;
+package ai.elimu.content_provider.ui.sound
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class SoundsViewModel extends ViewModel {
+class SoundsViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public SoundsViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("SoundsViewModel");
+    init {
+        text.value = "SoundsViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }

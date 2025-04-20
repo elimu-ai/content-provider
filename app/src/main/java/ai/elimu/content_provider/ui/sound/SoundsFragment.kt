@@ -40,7 +40,7 @@ class SoundsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_sounds, container, false)
         progressBar = root.findViewById(R.id.progress_bar_sounds)
         textView = root.findViewById(R.id.text_sounds)
-        soundsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        soundsViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 textView?.text = s
