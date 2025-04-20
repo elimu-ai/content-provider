@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -73,10 +74,13 @@ class LetterSoundsFragment : Fragment() {
                         processResponseBody(letterSoundGsons)
                     }
                 } else {
-                    // Handle error
-                    Snackbar.make(binding.textLetterSounds, response.toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                        .show()
+                    context?.let { context ->
+                        // Handle error
+                        Snackbar.make(binding.textLetterSounds, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                            .show()
+                    }
+
                     binding.progressBarLetterSounds.visibility = View.GONE
                 }
             }
@@ -86,10 +90,13 @@ class LetterSoundsFragment : Fragment() {
 
                 Log.e(TAG, "t.getCause():", t.cause)
 
-                // Handle error
-                Snackbar.make(binding.textLetterSounds, t.cause.toString(), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                    .show()
+                context?.let { context ->
+                    // Handle error
+                    Snackbar.make(binding.textLetterSounds, t.cause.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                        .show()
+                }
+
                 binding.progressBarLetterSounds.visibility = View.GONE
             }
         })
