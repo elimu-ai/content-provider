@@ -69,7 +69,7 @@ class LetterSoundsFragment : Fragment() {
                     val letterSoundGsons = response.body() ?: return
                     Log.i(TAG, "letterSoundGsons.size(): " + letterSoundGsons.size)
 
-                    if (letterSoundGsons.size > 0) {
+                    if (letterSoundGsons.isNotEmpty()) {
                         processResponseBody(letterSoundGsons)
                     }
                 } else {
