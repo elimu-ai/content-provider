@@ -27,7 +27,7 @@ import java.util.concurrent.Executors
 class StoryBooksFragment : Fragment() {
 
     private val TAG = javaClass.name
-    private var storyBooksViewModel: StoryBooksViewModel? = null
+    private lateinit var storyBooksViewModel: StoryBooksViewModel
     private lateinit var binding: FragmentStorybooksBinding
 
     override fun onCreateView(
@@ -37,11 +37,9 @@ class StoryBooksFragment : Fragment() {
     ): View {
         Log.i(TAG, "onCreateView")
 
-        storyBooksViewModel = ViewModelProvider(this).get(
-            StoryBooksViewModel::class.java
-        )
+        storyBooksViewModel = ViewModelProvider(this)[StoryBooksViewModel::class.java]
         binding = FragmentStorybooksBinding.inflate(layoutInflater)
-        storyBooksViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        storyBooksViewModel.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(TAG, "onChanged")
                 binding.textStorybooks.text = s
@@ -55,7 +53,7 @@ class StoryBooksFragment : Fragment() {
         super.onStart()
 
         // Download StoryBooks from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val storyBooksService = retrofit.create(
             StoryBooksService::class.java
@@ -71,7 +69,7 @@ class StoryBooksFragment : Fragment() {
 
                 Log.i(TAG, "response: $response")
                 if (response.isSuccessful) {
-                    val storyBookGsons = response.body()!!
+                    val storyBookGsons = response.body() ?: return
                     Log.i(TAG, "storyBookGsons.size(): " + storyBookGsons.size)
 
                     if (storyBookGsons.size > 0) {
@@ -125,8 +123,10 @@ class StoryBooksFragment : Fragment() {
 
                     // Store the StoryBook in the database
                     val storyBook = getStoryBook(storyBookGson)
-                    storyBookDao.insert(storyBook)
-                    Log.i(TAG, "Stored StoryBook in database with ID " + storyBook!!.id)
+                    storyBook?.let {
+                        storyBookDao.insert(storyBook)
+                        Log.i(TAG, "Stored StoryBook in database with ID " + storyBook.id)
+                    }
 
                     val storyBookChapterGsons = storyBookGson.storyBookChapters
                     Log.i(
@@ -135,12 +135,13 @@ class StoryBooksFragment : Fragment() {
                     )
                     for (storyBookChapterGson in storyBookChapterGsons) {
                         val storyBookChapter = getStoryBookChapter(storyBookChapterGson)
-                        storyBookChapter!!.storyBookId = storyBookGson.id
-                        storyBookChapterDao.insert(storyBookChapter)
-                        Log.i(
-                            TAG,
-                            "Stored StoryBookChapter in database with ID " + storyBookChapter.id
-                        )
+                        storyBookChapter?.let {
+                            storyBookChapter.storyBookId = storyBookGson.id
+                            storyBookChapterDao.insert(storyBookChapter)
+                            Log.i(TAG,
+                                "Stored StoryBookChapter in database with ID " + storyBookChapter.id
+                            )
+                        }
 
                         val storyBookParagraphs = storyBookChapterGson.storyBookParagraphs
                         Log.i(
@@ -149,12 +150,13 @@ class StoryBooksFragment : Fragment() {
                         )
                         for (storyBookParagraphGson in storyBookParagraphs) {
                             val storyBookParagraph = getStoryBookParagraph(storyBookParagraphGson)
-                            storyBookParagraph!!.storyBookChapterId = storyBookChapterGson.id
-                            storyBookParagraphDao.insert(storyBookParagraph)
-                            Log.i(
-                                TAG,
-                                "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
-                            )
+                            storyBookParagraph?.let {
+                                storyBookParagraph.storyBookChapterId = storyBookChapterGson.id
+                                storyBookParagraphDao.insert(storyBookParagraph)
+                                Log.i(TAG,
+                                    "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
+                                )
+                            }
 
                             // Store all the StoryBookParagraph's Words in the database
                             val wordGsons = storyBookParagraphGson.words
@@ -183,7 +185,7 @@ class StoryBooksFragment : Fragment() {
                 // Update the UI
                 val storyBooks = storyBookDao.loadAll()
                 Log.i(TAG, "storyBooks.size(): " + storyBooks.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
                     Snackbar.make(
                         binding.textStorybooks,
