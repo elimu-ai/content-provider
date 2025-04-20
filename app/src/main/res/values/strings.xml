@@ -23,4 +23,5 @@
     <string name="sounds_size">sounds.size(): %d</string>
     <string name="numbers_size">numbers.size(): %d</string>
     <string name="lettersounds_size">letterSounds.size(): %d</string>
+    <string name="letters_size">letters.size(): %d</string>
 </resources>

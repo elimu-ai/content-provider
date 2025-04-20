@@ -119,7 +119,7 @@ class LettersFragment : Fragment() {
             val letters = letterDao.loadAllOrderedByUsageCount()
             Log.i(TAG, "letters.size(): " + letters.size)
             activity?.runOnUiThread {
-                binding.textLetters.text = "letters.size(): " + letters.size
+                binding.textLetters.text = getString(R.string.letters_size, letters.size)
                 Snackbar.make(
                     binding.textLetters,
                     "letters.size(): " + letters.size,
