@@ -23,7 +23,7 @@ import java.util.concurrent.Executors
 
 class LettersFragment : Fragment() {
 
-    private var lettersViewModel: LettersViewModel? = null
+    private lateinit var lettersViewModel: LettersViewModel
     private lateinit var binding: FragmentLettersBinding
 
     private val TAG = javaClass.name
@@ -32,14 +32,12 @@ class LettersFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(TAG, "onCreateView")
 
-        lettersViewModel = ViewModelProvider(this).get(
-            LettersViewModel::class.java
-        )
+        lettersViewModel = ViewModelProvider(this)[LettersViewModel::class.java]
         binding = FragmentLettersBinding.inflate(layoutInflater)
-        lettersViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
+        lettersViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(TAG, "onChanged")
                 binding.textLetters.text = s
@@ -53,7 +51,7 @@ class LettersFragment : Fragment() {
         super.onStart()
 
         // Download Letters from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val lettersService = retrofit.create(LettersService::class.java)
         val letterGsonsCall = lettersService.listLetters()
@@ -67,7 +65,7 @@ class LettersFragment : Fragment() {
 
                 Log.i(TAG, "response: $response")
                 if (response.isSuccessful) {
-                    val letterGsons = response.body()!!
+                    val letterGsons = response.body() ?: return
                     Log.i(TAG, "letterGsons.size(): " + letterGsons.size)
 
                     if (letterGsons.size > 0) {
@@ -124,7 +122,7 @@ class LettersFragment : Fragment() {
                 // Update the UI
                 val letters = letterDao.loadAllOrderedByUsageCount()
                 Log.i(TAG, "letters.size(): " + letters.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textLetters.text = "letters.size(): " + letters.size
                     Snackbar.make(
                         binding.textLetters,
