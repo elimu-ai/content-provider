@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.number
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentNumbersBinding
 import ai.elimu.content_provider.rest.NumbersService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getNumber
 import ai.elimu.content_provider.room.db.RoomDb
@@ -11,8 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,11 +22,9 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class NumbersFragment : Fragment() {
+
     private var numbersViewModel: NumbersViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentNumbersBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,16 +36,14 @@ class NumbersFragment : Fragment() {
         numbersViewModel = ViewModelProvider(this).get(
             NumbersViewModel::class.java
         )
-        val root = inflater.inflate(R.layout.fragment_numbers, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_numbers)
-        textView = root.findViewById(R.id.text_numbers)
+        binding = FragmentNumbersBinding.inflate(layoutInflater)
         numbersViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
-                textView?.text = s
+                binding.textNumbers.text = s
             }
         })
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -76,15 +71,15 @@ class NumbersFragment : Fragment() {
                     if (numberGsons.size > 0) {
                         processResponseBody(numberGsons)
                     } else {
-                        progressBar?.visibility = View.GONE
-                        textView?.text = getString(R.string.numbers_size, 0)
+                        binding.progressBarNumbers.visibility = View.GONE
+                        binding.textNumbers.text = getString(R.string.numbers_size, 0)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textNumbers, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarNumbers.visibility = View.GONE
                 }
             }
 
@@ -94,10 +89,10 @@ class NumbersFragment : Fragment() {
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textNumbers, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarNumbers.visibility = View.GONE
             }
         })
     }
@@ -129,13 +124,13 @@ class NumbersFragment : Fragment() {
                 val numbers = numberDao.loadAllOrderedByValue()
                 Log.i(javaClass.name, "numbers.size(): " + numbers.size)
                 activity!!.runOnUiThread {
-                    textView?.text = getString(R.string.numbers_size, numbers.size)
+                    binding.textNumbers.text = getString(R.string.numbers_size, numbers.size)
                     Snackbar.make(
-                        textView!!,
+                        binding.textNumbers,
                         "numbers.size(): " + numbers.size,
                         Snackbar.LENGTH_LONG
                     ).show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarNumbers.visibility = View.GONE
                 }
             }
         })
