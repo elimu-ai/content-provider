@@ -1,37 +1,35 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.home
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import ai.elimu.content_provider.R
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class HomeFragment : Fragment() {
+    private var homeViewModel: HomeViewModel? = null
 
-import ai.elimu.content_provider.R;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class HomeFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val textView = root.findViewById<TextView>(R.id.text_home)
+        homeViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 }
