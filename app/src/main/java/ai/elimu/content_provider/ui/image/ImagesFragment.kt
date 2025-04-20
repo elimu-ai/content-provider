@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -78,10 +79,13 @@ class ImagesFragment : Fragment() {
                         processResponseBody(imageGsons)
                     }
                 } else {
-                    // Handle error
-                    Snackbar.make(binding.textImages, response.toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                        .show()
+                    context?.let { context ->
+                        // Handle error
+                        Snackbar.make(binding.textImages, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                            .show()
+                    }
+
                     binding.progressBarImages.visibility = View.GONE
                 }
             }
@@ -91,10 +95,13 @@ class ImagesFragment : Fragment() {
 
                 Log.e(TAG, "t.getCause():", t.cause)
 
-                // Handle error
-                Snackbar.make(binding.textImages, t.cause.toString(), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                    .show()
+                context?.let { context ->
+                    // Handle error
+                    Snackbar.make(binding.textImages, t.cause.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                        .show()
+                }
+
                 binding.progressBarImages.visibility = View.GONE
             }
         })
