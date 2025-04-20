@@ -190,7 +190,7 @@ class StoryBooksFragment : Fragment() {
             val storyBooks = storyBookDao.loadAll()
             Log.i(TAG, "storyBooks.size(): " + storyBooks.size)
             activity?.runOnUiThread {
-                binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
+                binding.textStorybooks.text = getString(R.string.storybooks_size, storyBooks.size)
                 Snackbar.make(
                     binding.textStorybooks,
                     "storyBooks.size(): " + storyBooks.size,
