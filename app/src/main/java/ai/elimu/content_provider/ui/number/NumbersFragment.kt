@@ -66,7 +66,7 @@ class NumbersFragment : Fragment() {
                     val numberGsons = response.body() ?: return
                     Log.i(javaClass.name, "numberGsons.size(): " + numberGsons.size)
 
-                    if (numberGsons.size > 0) {
+                    if (numberGsons.isNotEmpty()) {
                         processResponseBody(numberGsons)
                     } else {
                         binding.progressBarNumbers.visibility = View.GONE
