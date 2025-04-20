@@ -2,6 +2,7 @@ package ai.elimu.content_provider.ui.storybook
 
 import ai.elimu.content_provider.BaseApplication
 import ai.elimu.content_provider.R
+import ai.elimu.content_provider.databinding.FragmentStorybooksBinding
 import ai.elimu.content_provider.rest.StoryBooksService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getStoryBook
 import ai.elimu.content_provider.room.GsonToRoomConverter.getStoryBookChapter
@@ -14,8 +15,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,32 +25,28 @@ import retrofit2.Response
 import java.util.concurrent.Executors
 
 class StoryBooksFragment : Fragment() {
+
     private var storyBooksViewModel: StoryBooksViewModel? = null
-
-    private var progressBar: ProgressBar? = null
-
-    private var textView: TextView? = null
+    private lateinit var binding: FragmentStorybooksBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
         storyBooksViewModel = ViewModelProvider(this).get(
             StoryBooksViewModel::class.java
         )
-        val root = inflater.inflate(R.layout.fragment_storybooks, container, false)
-        progressBar = root.findViewById(R.id.progress_bar_storybooks)
-        textView = root.findViewById(R.id.text_storybooks)
+        binding = FragmentStorybooksBinding.inflate(layoutInflater)
         storyBooksViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
-                textView?.text = s
+                binding.textStorybooks.text = s
             }
         })
-        return root
+        return binding.root
     }
 
     override fun onStart() {
@@ -83,10 +78,10 @@ class StoryBooksFragment : Fragment() {
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.textStorybooks, response.toString(), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                         .show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarStorybooks.visibility = View.GONE
                 }
             }
 
@@ -96,10 +91,10 @@ class StoryBooksFragment : Fragment() {
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.textStorybooks, t.cause.toString(), Snackbar.LENGTH_LONG)
                     .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
                     .show()
-                progressBar!!.visibility = View.GONE
+                binding.progressBarStorybooks.visibility = View.GONE
             }
         })
     }
@@ -188,13 +183,13 @@ class StoryBooksFragment : Fragment() {
                 val storyBooks = storyBookDao.loadAll()
                 Log.i(javaClass.name, "storyBooks.size(): " + storyBooks.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "storyBooks.size(): " + storyBooks.size
+                    binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
                     Snackbar.make(
-                        textView!!,
+                        binding.textStorybooks,
                         "storyBooks.size(): " + storyBooks.size,
                         Snackbar.LENGTH_LONG
                     ).show()
-                    progressBar!!.visibility = View.GONE
+                    binding.progressBarStorybooks.visibility = View.GONE
                 }
             }
         })
