@@ -38,7 +38,7 @@ class StoryBooksFragment : Fragment() {
 
         storyBooksViewModel = ViewModelProvider(this)[StoryBooksViewModel::class.java]
         binding = FragmentStorybooksBinding.inflate(layoutInflater)
-        storyBooksViewModel.text.observe(viewLifecycleOwner) { s ->
+        storyBooksViewModel.getText().observe(viewLifecycleOwner) { s ->
             Log.i(TAG, "onChanged")
             binding.textStorybooks.text = s
         }

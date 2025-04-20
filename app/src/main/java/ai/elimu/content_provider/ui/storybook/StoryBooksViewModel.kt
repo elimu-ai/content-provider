@@ -1,23 +1,20 @@
-package ai.elimu.content_provider.ui.storybook;
+package ai.elimu.content_provider.ui.storybook
 
-import android.util.Log;
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+class StoryBooksViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-public class StoryBooksViewModel extends ViewModel {
-
-    private MutableLiveData<String> text;
-
-    public StoryBooksViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("StoryBooksViewModel");
+    init {
+        text.value = "StoryBooksViewModel"
     }
 
-    public LiveData<String> getText() {
-        Log.i(getClass().getName(), "getText");
+    fun getText(): LiveData<String> {
+        Log.i(javaClass.name, "getText")
 
-        return text;
+        return text
     }
 }
