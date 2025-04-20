@@ -12,7 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 class HomeFragment : Fragment() {
-    private var homeViewModel: HomeViewModel? = null
+
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,10 +22,10 @@ class HomeFragment : Fragment() {
     ): View? {
         Log.i(javaClass.name, "onCreateView")
 
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView = root.findViewById<TextView>(R.id.text_home)
-        homeViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
+        homeViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(javaClass.name, "onChanged")
                 textView.text = s
