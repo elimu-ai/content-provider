@@ -105,12 +105,12 @@ class LetterSoundsFragment : Fragment() {
 
                 val roomDb = RoomDb.getDatabase(context)
                 val letterSoundDao = roomDb.letterSoundDao()
-                val letterSound_LetterDao = roomDb.letterSound_LetterDao()
-                val letterSound_SoundDao = roomDb.letterSound_SoundDao()
+                val letterSoundLetterDao = roomDb.letterSound_LetterDao()
+                val letterSoundSoundDao = roomDb.letterSound_SoundDao()
 
                 // Empty the database table before downloading up-to-date content
-                letterSound_LetterDao.deleteAll()
-                letterSound_SoundDao.deleteAll()
+                letterSoundLetterDao.deleteAll()
+                letterSoundSoundDao.deleteAll()
                 letterSoundDao.deleteAll()
 
                 for (letterSoundGson in letterSoundGsons) {
@@ -131,14 +131,14 @@ class LetterSoundsFragment : Fragment() {
                     Log.i(TAG, "letterGsons.size(): " + letterGsons.size)
                     for ((index, letterGson) in letterGsons.withIndex()) {
                         Log.i(TAG, "letterGson.getId(): " + letterGson.id)
-                        val letterSound_Letter = LetterSound_Letter()
-                        letterSound_Letter.letterSound_id = letterSoundGson.id
-                        letterSound_Letter.letters_id = letterGson.id
-                        letterSound_Letter.letters_ORDER = index
-                        letterSound_LetterDao.insert(letterSound_Letter)
+                        val letterSoundLetter = LetterSound_Letter()
+                        letterSoundLetter.letterSound_id = letterSoundGson.id
+                        letterSoundLetter.letters_id = letterGson.id
+                        letterSoundLetter.letters_ORDER = index
+                        letterSoundLetterDao.insert(letterSoundLetter)
                         Log.i(
                             TAG,
-                            "Stored LetterSound_Letter in database. LetterSound_id: " + letterSound_Letter.letterSound_id + ", letters_id: " + letterSound_Letter.letters_id
+                            "Stored LetterSound_Letter in database. LetterSound_id: " + letterSoundLetter.letterSound_id + ", letters_id: " + letterSoundLetter.letters_id
                         )
                     }
 
@@ -147,14 +147,14 @@ class LetterSoundsFragment : Fragment() {
                     Log.i(TAG, "soundGsons.size():" + soundGsons.size)
                     for ((index, soundGson) in soundGsons.withIndex()) {
                         Log.i(TAG, "soundGson.getId(): " + soundGson.id)
-                        val letterSound_Sound = LetterSound_Sound()
-                        letterSound_Sound.letterSound_id = letterSoundGson.id
-                        letterSound_Sound.sounds_id = soundGson.id
-                        letterSound_Sound.sounds_ORDER = index
-                        letterSound_SoundDao.insert(letterSound_Sound)
+                        val letterSoundSound = LetterSound_Sound()
+                        letterSoundSound.letterSound_id = letterSoundGson.id
+                        letterSoundSound.sounds_id = soundGson.id
+                        letterSoundSound.sounds_ORDER = index
+                        letterSoundSoundDao.insert(letterSoundSound)
                         Log.i(
                             TAG,
-                            "Stored LetterSound_Sound in database. LetterSound_id: " + letterSound_Sound.letterSound_id + ", sounds_id: " + letterSound_Sound.sounds_id
+                            "Stored LetterSound_Sound in database. LetterSound_id: " + letterSoundSound.letterSound_id + ", sounds_id: " + letterSoundSound.sounds_id
                         )
                     }
                 }
