@@ -120,7 +120,7 @@ class SoundsFragment : Fragment() {
                 val sounds = soundDao.loadAllOrderedByUsageCount()
                 Log.i(javaClass.name, "sounds.size(): " + sounds.size)
                 activity?.runOnUiThread {
-                    binding.textSounds.text = "sounds.size(): " + sounds.size
+                    binding.textSounds.text = getString(R.string.sounds_size, sounds.size)
                     Snackbar.make(binding.textSounds, "sounds.size(): " + sounds.size, Snackbar.LENGTH_LONG)
                         .show()
                     binding.progressBarSounds.visibility = View.GONE
