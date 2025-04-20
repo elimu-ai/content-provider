@@ -33,7 +33,7 @@ class LetterSoundsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(TAG, "onCreateView")
 
         letterSoundsViewModel = ViewModelProvider(this)[LetterSoundsViewModel::class.java]
@@ -50,7 +50,7 @@ class LetterSoundsFragment : Fragment() {
         super.onStart()
 
         // Download LetterSounds from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val letterSoundsService = retrofit.create(
             LetterSoundsService::class.java
@@ -66,7 +66,7 @@ class LetterSoundsFragment : Fragment() {
 
                 Log.i(TAG, "response: $response")
                 if (response.isSuccessful) {
-                    val letterSoundGsons = response.body()!!
+                    val letterSoundGsons = response.body() ?: return
                     Log.i(TAG, "letterSoundGsons.size(): " + letterSoundGsons.size)
 
                     if (letterSoundGsons.size > 0) {
@@ -162,7 +162,7 @@ class LetterSoundsFragment : Fragment() {
                 // Update the UI
                 val letterSounds = letterSoundDao.loadAll()
                 Log.i(TAG, "letterSounds.size(): " + letterSounds.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textLetterSounds.text = "letterSounds.size(): " + letterSounds.size
                     Snackbar.make(
                         binding.textLetterSounds,
