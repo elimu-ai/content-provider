@@ -75,6 +75,9 @@ class NumbersFragment : Fragment() {
 
                     if (numberGsons.size > 0) {
                         processResponseBody(numberGsons)
+                    } else {
+                        progressBar?.visibility = View.GONE
+                        textView?.text = getString(R.string.numbers_size, 0)
                     }
                 } else {
                     // Handle error
@@ -126,7 +129,7 @@ class NumbersFragment : Fragment() {
                 val numbers = numberDao.loadAllOrderedByValue()
                 Log.i(javaClass.name, "numbers.size(): " + numbers.size)
                 activity!!.runOnUiThread {
-                    textView!!.text = "numbers.size(): " + numbers.size
+                    textView?.text = getString(R.string.numbers_size, numbers.size)
                     Snackbar.make(
                         textView!!,
                         "numbers.size(): " + numbers.size,
