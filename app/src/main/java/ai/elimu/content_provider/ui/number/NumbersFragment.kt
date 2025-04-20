@@ -1,145 +1,140 @@
-package ai.elimu.content_provider.ui.number;
+package ai.elimu.content_provider.ui.number
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.NumbersService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getNumber
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.model.v2.gson.content.NumberGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class NumbersFragment : Fragment() {
+    private var numbersViewModel: NumbersViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.NumbersService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.NumberDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Number;
-import ai.elimu.model.v2.gson.content.NumberGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class NumbersFragment extends Fragment {
-
-    private NumbersViewModel numbersViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        numbersViewModel = new ViewModelProvider(this).get(NumbersViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_numbers, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_numbers);
-        textView = root.findViewById(R.id.text_numbers);
-        numbersViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        numbersViewModel = ViewModelProvider(this).get(
+            NumbersViewModel::class.java
+        )
+        val root = inflater.inflate(R.layout.fragment_numbers, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_numbers)
+        textView = root.findViewById(R.id.text_numbers)
+        numbersViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Numbers from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        NumbersService numbersService = retrofit.create(NumbersService.class);
-        Call<List<NumberGson>> numberGsonsCall = numbersService.listNumbers();
-        Log.i(getClass().getName(), "numberGsonsCall.request(): " + numberGsonsCall.request());
-        numberGsonsCall.enqueue(new Callback<List<NumberGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val numbersService = retrofit.create(NumbersService::class.java)
+        val numberGsonsCall = numbersService.listNumbers()
+        Log.i(javaClass.name, "numberGsonsCall.request(): " + numberGsonsCall.request())
+        numberGsonsCall.enqueue(object : Callback<List<NumberGson>> {
+            override fun onResponse(
+                call: Call<List<NumberGson>>,
+                response: Response<List<NumberGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<NumberGson>> call, Response<List<NumberGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val numberGsons = response.body()!!
+                    Log.i(javaClass.name, "numberGsons.size(): " + numberGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<NumberGson> numberGsons = response.body();
-                    Log.i(getClass().getName(), "numberGsons.size(): " + numberGsons.size());
-
-                    if (numberGsons.size() > 0) {
-                        processResponseBody(numberGsons);
+                    if (numberGsons.size > 0) {
+                        processResponseBody(numberGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<NumberGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<NumberGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<NumberGson> numberGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(numberGsons: List<NumberGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                NumberDao numberDao = roomDb.numberDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val numberDao = roomDb.numberDao()
 
                 // Empty the database table before downloading up-to-date content
-                numberDao.deleteAll();
+                numberDao.deleteAll()
 
-                for (NumberGson numberGson : numberGsons) {
-                    Log.i(getClass().getName(), "numberGson.getId(): " + numberGson.getId());
+                for (numberGson in numberGsons) {
+                    Log.i(javaClass.name, "numberGson.getId(): " + numberGson.id)
 
                     // Store the Number in the database
-                    Number number = GsonToRoomConverter.getNumber(numberGson);
-                    numberDao.insert(number);
-                    Log.i(getClass().getName(), "Stored Number in database with ID " + number.getId());
+                    val number = getNumber(numberGson)
+                    numberDao.insert(number)
+                    Log.i(javaClass.name, "Stored Number in database with ID " + number!!.id)
                 }
 
                 // Update the UI
-                List<Number> numbers = numberDao.loadAllOrderedByValue();
-                Log.i(getClass().getName(), "numbers.size(): " + numbers.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("numbers.size(): " + numbers.size());
-                    Snackbar.make(textView, "numbers.size(): " + numbers.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val numbers = numberDao.loadAllOrderedByValue()
+                Log.i(javaClass.name, "numbers.size(): " + numbers.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "numbers.size(): " + numbers.size
+                    Snackbar.make(
+                        textView!!,
+                        "numbers.size(): " + numbers.size,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
