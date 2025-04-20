@@ -173,7 +173,7 @@ class ImagesFragment : Fragment() {
             val images = imageDao.loadAll()
             Log.i(TAG, "images.size(): " + images.size)
             withContext(Dispatchers.Main) {
-                binding.textImages.text = "images.size(): " + images.size
+                binding.textImages.text = getString(R.string.images_size, images.size)
                 Snackbar.make(binding.textImages, "images.size(): " + images.size, Snackbar.LENGTH_LONG)
                     .show()
                 binding.progressBarImages.visibility = View.GONE
