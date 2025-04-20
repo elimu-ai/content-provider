@@ -44,7 +44,7 @@ class LettersFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_letters, container, false)
         progressBar = root.findViewById(R.id.progress_bar_letters)
         textView = root.findViewById(R.id.text_letters) as? TextView
-        lettersViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+        lettersViewModel!!.getText().observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
                 Log.i(TAG, "onChanged")
                 textView?.text = s
