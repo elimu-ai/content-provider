@@ -1,19 +1,17 @@
-package ai.elimu.content_provider.ui.home;
+package ai.elimu.content_provider.ui.home
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-public class HomeViewModel extends ViewModel {
+class HomeViewModel : ViewModel() {
+    private val text = MutableLiveData<String>()
 
-    private MutableLiveData<String> text;
-
-    public HomeViewModel() {
-        text = new MutableLiveData<>();
-        text.setValue("HomeViewModel");
+    init {
+        text.value = "HomeViewModel"
     }
 
-    public LiveData<String> getText() {
-        return text;
+    fun getText(): LiveData<String> {
+        return text
     }
 }
