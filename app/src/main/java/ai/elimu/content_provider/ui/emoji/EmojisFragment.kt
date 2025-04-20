@@ -139,7 +139,7 @@ class EmojisFragment : Fragment() {
                 val emojis = emojiDao.loadAll()
                 Log.i(javaClass.name, "emojis.size(): " + emojis.size)
                 activity?.runOnUiThread {
-                    binding.textEmojis.text = "emojis.size(): " + emojis.size
+                    binding.textEmojis.text = getString(R.string.emojis_size, emojis.size)
                     Snackbar.make(binding.textEmojis, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
                         .show()
                     binding.progressBarEmojis.visibility = View.GONE
