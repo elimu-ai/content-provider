@@ -26,6 +26,7 @@ import java.util.concurrent.Executors
 
 class StoryBooksFragment : Fragment() {
 
+    private val TAG = javaClass.name
     private var storyBooksViewModel: StoryBooksViewModel? = null
     private lateinit var binding: FragmentStorybooksBinding
 
@@ -34,7 +35,7 @@ class StoryBooksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.i(javaClass.name, "onCreateView")
+        Log.i(TAG, "onCreateView")
 
         storyBooksViewModel = ViewModelProvider(this).get(
             StoryBooksViewModel::class.java
@@ -42,7 +43,7 @@ class StoryBooksFragment : Fragment() {
         binding = FragmentStorybooksBinding.inflate(layoutInflater)
         storyBooksViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
-                Log.i(javaClass.name, "onChanged")
+                Log.i(TAG, "onChanged")
                 binding.textStorybooks.text = s
             }
         })
@@ -50,7 +51,7 @@ class StoryBooksFragment : Fragment() {
     }
 
     override fun onStart() {
-        Log.i(javaClass.name, "onStart")
+        Log.i(TAG, "onStart")
         super.onStart()
 
         // Download StoryBooks from REST API, and store them in the database
@@ -60,18 +61,18 @@ class StoryBooksFragment : Fragment() {
             StoryBooksService::class.java
         )
         val call = storyBooksService.listStoryBooks()
-        Log.i(javaClass.name, "call.request(): " + call.request())
+        Log.i(TAG, "call.request(): " + call.request())
         call.enqueue(object : Callback<List<StoryBookGson>> {
             override fun onResponse(
                 call: Call<List<StoryBookGson>>,
                 response: Response<List<StoryBookGson>>
             ) {
-                Log.i(javaClass.name, "onResponse")
+                Log.i(TAG, "onResponse")
 
-                Log.i(javaClass.name, "response: $response")
+                Log.i(TAG, "response: $response")
                 if (response.isSuccessful) {
                     val storyBookGsons = response.body()!!
-                    Log.i(javaClass.name, "storyBookGsons.size(): " + storyBookGsons.size)
+                    Log.i(TAG, "storyBookGsons.size(): " + storyBookGsons.size)
 
                     if (storyBookGsons.size > 0) {
                         processResponseBody(storyBookGsons)
@@ -86,9 +87,9 @@ class StoryBooksFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<StoryBookGson>>, t: Throwable) {
-                Log.e(javaClass.name, "onFailure", t)
+                Log.e(TAG, "onFailure", t)
 
-                Log.e(javaClass.name, "t.getCause():", t.cause)
+                Log.e(TAG, "t.getCause():", t.cause)
 
                 // Handle error
                 Snackbar.make(binding.textStorybooks, t.cause.toString(), Snackbar.LENGTH_LONG)
@@ -100,12 +101,12 @@ class StoryBooksFragment : Fragment() {
     }
 
     private fun processResponseBody(storyBookGsons: List<StoryBookGson>) {
-        Log.i(javaClass.name, "processResponseBody")
+        Log.i(TAG, "processResponseBody")
 
         val executorService = Executors.newSingleThreadExecutor()
         executorService.execute(object : Runnable {
             override fun run() {
-                Log.i(javaClass.name, "run")
+                Log.i(TAG, "run")
 
                 val roomDb = RoomDb.getDatabase(context)
                 val storyBookDao = roomDb.storyBookDao()
@@ -120,16 +121,16 @@ class StoryBooksFragment : Fragment() {
                 storyBookDao.deleteAll()
 
                 for (storyBookGson in storyBookGsons) {
-                    Log.i(javaClass.name, "storyBookGson.getId(): " + storyBookGson.id)
+                    Log.i(TAG, "storyBookGson.getId(): " + storyBookGson.id)
 
                     // Store the StoryBook in the database
                     val storyBook = getStoryBook(storyBookGson)
                     storyBookDao.insert(storyBook)
-                    Log.i(javaClass.name, "Stored StoryBook in database with ID " + storyBook!!.id)
+                    Log.i(TAG, "Stored StoryBook in database with ID " + storyBook!!.id)
 
                     val storyBookChapterGsons = storyBookGson.storyBookChapters
                     Log.i(
-                        javaClass.name,
+                        TAG,
                         "storyBookChapterGsons.size(): " + storyBookChapterGsons.size
                     )
                     for (storyBookChapterGson in storyBookChapterGsons) {
@@ -137,13 +138,13 @@ class StoryBooksFragment : Fragment() {
                         storyBookChapter!!.storyBookId = storyBookGson.id
                         storyBookChapterDao.insert(storyBookChapter)
                         Log.i(
-                            javaClass.name,
+                            TAG,
                             "Stored StoryBookChapter in database with ID " + storyBookChapter.id
                         )
 
                         val storyBookParagraphs = storyBookChapterGson.storyBookParagraphs
                         Log.i(
-                            javaClass.name,
+                            TAG,
                             "storyBookParagraphs.size(): " + storyBookParagraphs.size
                         )
                         for (storyBookParagraphGson in storyBookParagraphs) {
@@ -151,18 +152,18 @@ class StoryBooksFragment : Fragment() {
                             storyBookParagraph!!.storyBookChapterId = storyBookChapterGson.id
                             storyBookParagraphDao.insert(storyBookParagraph)
                             Log.i(
-                                javaClass.name,
+                                TAG,
                                 "Stored StoryBookParagraph in database with ID " + storyBookParagraph.id
                             )
 
                             // Store all the StoryBookParagraph's Words in the database
                             val wordGsons = storyBookParagraphGson.words
-                            Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                            Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
                             for (i in wordGsons.indices) {
                                 val wordGson = wordGsons[i]
-                                Log.i(javaClass.name, "wordGson: $wordGson")
+                                Log.i(TAG, "wordGson: $wordGson")
                                 if (wordGson != null) {
-                                    Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
+                                    Log.i(TAG, "wordGson.getId(): " + wordGson.id)
                                     val storyBookParagraph_Word = StoryBookParagraph_Word()
                                     storyBookParagraph_Word.storyBookParagraph_id =
                                         storyBookParagraphGson.id
@@ -170,7 +171,7 @@ class StoryBooksFragment : Fragment() {
                                     storyBookParagraph_Word.words_ORDER = i
                                     storyBookParagraph_WordDao.insert(storyBookParagraph_Word)
                                     Log.i(
-                                        javaClass.name,
+                                        TAG,
                                         "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraph_Word.storyBookParagraph_id + ", words_id: " + storyBookParagraph_Word.words_id + ", words_ORDER: " + storyBookParagraph_Word.words_ORDER
                                     )
                                 }
@@ -181,7 +182,7 @@ class StoryBooksFragment : Fragment() {
 
                 // Update the UI
                 val storyBooks = storyBookDao.loadAll()
-                Log.i(javaClass.name, "storyBooks.size(): " + storyBooks.size)
+                Log.i(TAG, "storyBooks.size(): " + storyBooks.size)
                 activity!!.runOnUiThread {
                     binding.textStorybooks.text = "storyBooks.size(): " + storyBooks.size
                     Snackbar.make(
