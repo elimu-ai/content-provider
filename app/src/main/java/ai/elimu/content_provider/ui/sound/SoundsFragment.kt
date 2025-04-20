@@ -1,145 +1,135 @@
-package ai.elimu.content_provider.ui.sound;
+package ai.elimu.content_provider.ui.sound
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import ai.elimu.content_provider.BaseApplication
+import ai.elimu.content_provider.R
+import ai.elimu.content_provider.rest.SoundsService
+import ai.elimu.content_provider.room.GsonToRoomConverter.getSound
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.model.v2.gson.content.SoundGson
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.Executors
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+class SoundsFragment : Fragment() {
+    private var soundsViewModel: SoundsViewModel? = null
 
-import com.google.android.material.snackbar.Snackbar;
+    private var progressBar: ProgressBar? = null
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    private var textView: TextView? = null
 
-import ai.elimu.content_provider.BaseApplication;
-import ai.elimu.content_provider.R;
-import ai.elimu.content_provider.rest.SoundsService;
-import ai.elimu.content_provider.room.GsonToRoomConverter;
-import ai.elimu.content_provider.room.dao.SoundDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Sound;
-import ai.elimu.model.v2.gson.content.SoundGson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(javaClass.name, "onCreateView")
 
-public class SoundsFragment extends Fragment {
-
-    private SoundsViewModel soundsViewModel;
-
-    private ProgressBar progressBar;
-
-    private TextView textView;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreateView");
-
-        soundsViewModel = new ViewModelProvider(this).get(SoundsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_sounds, container, false);
-        progressBar = root.findViewById(R.id.progress_bar_sounds);
-        textView = root.findViewById(R.id.text_sounds);
-        soundsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Log.i(getClass().getName(), "onChanged");
-                textView.setText(s);
+        soundsViewModel = ViewModelProvider(this).get(SoundsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_sounds, container, false)
+        progressBar = root.findViewById(R.id.progress_bar_sounds)
+        textView = root.findViewById(R.id.text_sounds)
+        soundsViewModel!!.text.observe(viewLifecycleOwner, object : Observer<String?> {
+            override fun onChanged(s: String?) {
+                Log.i(javaClass.name, "onChanged")
+                textView?.text = s
             }
-        });
-        return root;
+        })
+        return root
     }
 
-    @Override
-    public void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.name, "onStart")
+        super.onStart()
 
         // Download Sounds from REST API, and store them in the database
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Retrofit retrofit = baseApplication.getRetrofit();
-        SoundsService soundsService = retrofit.create(SoundsService.class);
-        Call<List<SoundGson>> soundGsonsCall = soundsService.listSounds();
-        Log.i(getClass().getName(), "soundGsonsCall.request(): " + soundGsonsCall.request());
-        soundGsonsCall.enqueue(new Callback<List<SoundGson>>() {
+        val baseApplication = activity!!.application as BaseApplication
+        val retrofit = baseApplication.retrofit
+        val soundsService = retrofit.create(SoundsService::class.java)
+        val soundGsonsCall = soundsService.listSounds()
+        Log.i(javaClass.name, "soundGsonsCall.request(): " + soundGsonsCall.request())
+        soundGsonsCall.enqueue(object : Callback<List<SoundGson>> {
+            override fun onResponse(
+                call: Call<List<SoundGson>>,
+                response: Response<List<SoundGson>>
+            ) {
+                Log.i(javaClass.name, "onResponse")
 
-            @Override
-            public void onResponse(Call<List<SoundGson>> call, Response<List<SoundGson>> response) {
-                Log.i(getClass().getName(), "onResponse");
+                Log.i(javaClass.name, "response: $response")
+                if (response.isSuccessful) {
+                    val soundGsons = response.body()!!
+                    Log.i(javaClass.name, "soundGsons.size(): " + soundGsons.size)
 
-                Log.i(getClass().getName(), "response: " + response);
-                if (response.isSuccessful()) {
-                    List<SoundGson> soundGsons = response.body();
-                    Log.i(getClass().getName(), "soundGsons.size(): " + soundGsons.size());
-
-                    if (soundGsons.size() > 0) {
-                        processResponseBody(soundGsons);
+                    if (soundGsons.size > 0) {
+                        processResponseBody(soundGsons)
                     }
                 } else {
                     // Handle error
-                    Snackbar.make(textView, response.toString(), Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                            .show();
-                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(textView!!, response.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                        .show()
+                    progressBar!!.visibility = View.GONE
                 }
             }
 
-            @Override
-            public void onFailure(Call<List<SoundGson>> call, Throwable t) {
-                Log.e(getClass().getName(), "onFailure", t);
+            override fun onFailure(call: Call<List<SoundGson>>, t: Throwable) {
+                Log.e(javaClass.name, "onFailure", t)
 
-                Log.e(getClass().getName(), "t.getCause():", t.getCause());
+                Log.e(javaClass.name, "t.getCause():", t.cause)
 
                 // Handle error
-                Snackbar.make(textView, t.getCause().toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(getResources().getColor(R.color.deep_orange_darken_4))
-                        .show();
-                progressBar.setVisibility(View.GONE);
+                Snackbar.make(textView!!, t.cause.toString(), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
+                    .show()
+                progressBar!!.visibility = View.GONE
             }
-        });
+        })
     }
 
-    private void processResponseBody(List<SoundGson> soundGsons) {
-        Log.i(getClass().getName(), "processResponseBody");
+    private fun processResponseBody(soundGsons: List<SoundGson>) {
+        Log.i(javaClass.name, "processResponseBody")
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "run");
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.name, "run")
 
-                RoomDb roomDb = RoomDb.getDatabase(getContext());
-                SoundDao soundDao = roomDb.soundDao();
+                val roomDb = RoomDb.getDatabase(context)
+                val soundDao = roomDb.soundDao()
 
                 // Empty the database table before downloading up-to-date content
-                soundDao.deleteAll();
+                soundDao.deleteAll()
 
-                for (SoundGson soundGson : soundGsons) {
-                    Log.i(getClass().getName(), "soundGson.getId(): " + soundGson.getId());
+                for (soundGson in soundGsons) {
+                    Log.i(javaClass.name, "soundGson.getId(): " + soundGson.id)
 
                     // Store the Sound in the database
-                    Sound sound = GsonToRoomConverter.getSound(soundGson);
-                    soundDao.insert(sound);
-                    Log.i(getClass().getName(), "Stored Sound in database with ID " + sound.getId());
+                    val sound = getSound(soundGson)
+                    soundDao.insert(sound)
+                    Log.i(javaClass.name, "Stored Sound in database with ID " + sound!!.id)
                 }
 
                 // Update the UI
-                List<Sound> sounds = soundDao.loadAllOrderedByUsageCount();
-                Log.i(getClass().getName(), "sounds.size(): " + sounds.size());
-                getActivity().runOnUiThread(() -> {
-                    textView.setText("sounds.size(): " + sounds.size());
-                    Snackbar.make(textView, "sounds.size(): " + sounds.size(), Snackbar.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-                });
+                val sounds = soundDao.loadAllOrderedByUsageCount()
+                Log.i(javaClass.name, "sounds.size(): " + sounds.size)
+                activity!!.runOnUiThread {
+                    textView!!.text = "sounds.size(): " + sounds.size
+                    Snackbar.make(textView!!, "sounds.size(): " + sounds.size, Snackbar.LENGTH_LONG)
+                        .show()
+                    progressBar!!.visibility = View.GONE
+                }
             }
-        });
+        })
     }
 }
