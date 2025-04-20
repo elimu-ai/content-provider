@@ -25,4 +25,5 @@
     <string name="lettersounds_size">letterSounds.size(): %d</string>
     <string name="letters_size">letters.size(): %d</string>
     <string name="images_size">images.size(): %d</string>
+    <string name="emojis_size">emojis.size(): %d</string>
 </resources>
