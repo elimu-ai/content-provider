@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -37,12 +36,10 @@ class LettersFragment : Fragment() {
 
         lettersViewModel = ViewModelProvider(this)[LettersViewModel::class.java]
         binding = FragmentLettersBinding.inflate(layoutInflater)
-        lettersViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
-            override fun onChanged(s: String?) {
-                Log.i(TAG, "onChanged")
-                binding.textLetters.text = s
-            }
-        })
+        lettersViewModel.getText().observe(viewLifecycleOwner) { s ->
+            Log.i(TAG, "onChanged")
+            binding.textLetters.text = s
+        }
         return binding.root
     }
 
@@ -98,40 +95,38 @@ class LettersFragment : Fragment() {
         Log.i(TAG, "processResponseBody")
 
         val executorService = Executors.newSingleThreadExecutor()
-        executorService.execute(object : Runnable {
-            override fun run() {
-                Log.i(TAG, "run")
+        executorService.execute {
+            Log.i(TAG, "run")
 
-                val roomDb = RoomDb.getDatabase(context)
-                val letterDao = roomDb.letterDao()
+            val roomDb = RoomDb.getDatabase(context)
+            val letterDao = roomDb.letterDao()
 
-                // Empty the database table before downloading up-to-date content
-                letterDao.deleteAll()
+            // Empty the database table before downloading up-to-date content
+            letterDao.deleteAll()
 
-                for (letterGson in letterGsons) {
-                    Log.i(TAG, "letterGson.getId(): " + letterGson.id)
+            for (letterGson in letterGsons) {
+                Log.i(TAG, "letterGson.getId(): " + letterGson.id)
 
-                    // Store the Letter in the database
-                    val letter = GsonToRoomConverter.getLetter(letterGson)
-                    letter.let {
-                        letterDao.insert(letter)
-                        Log.i(TAG, "Stored Letter in database with ID " + letter.id)
-                    }
-                }
-
-                // Update the UI
-                val letters = letterDao.loadAllOrderedByUsageCount()
-                Log.i(TAG, "letters.size(): " + letters.size)
-                activity?.runOnUiThread {
-                    binding.textLetters.text = "letters.size(): " + letters.size
-                    Snackbar.make(
-                        binding.textLetters,
-                        "letters.size(): " + letters.size,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    binding.progressBarLetters.visibility = View.GONE
+                // Store the Letter in the database
+                val letter = GsonToRoomConverter.getLetter(letterGson)
+                letter.let {
+                    letterDao.insert(letter)
+                    Log.i(TAG, "Stored Letter in database with ID " + letter.id)
                 }
             }
-        })
+
+            // Update the UI
+            val letters = letterDao.loadAllOrderedByUsageCount()
+            Log.i(TAG, "letters.size(): " + letters.size)
+            activity?.runOnUiThread {
+                binding.textLetters.text = "letters.size(): " + letters.size
+                Snackbar.make(
+                    binding.textLetters,
+                    "letters.size(): " + letters.size,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                binding.progressBarLetters.visibility = View.GONE
+            }
+        }
     }
 }
