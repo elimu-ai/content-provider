@@ -49,7 +49,7 @@ class SoundsFragment : Fragment() {
         super.onStart()
 
         // Download Sounds from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val soundsService = retrofit.create(SoundsService::class.java)
         val soundGsonsCall = soundsService.listSounds()
@@ -63,7 +63,7 @@ class SoundsFragment : Fragment() {
 
                 Log.i(javaClass.name, "response: $response")
                 if (response.isSuccessful) {
-                    val soundGsons = response.body()!!
+                    val soundGsons = response.body() ?: return
                     Log.i(javaClass.name, "soundGsons.size(): " + soundGsons.size)
 
                     if (soundGsons.isNotEmpty()) {
@@ -110,15 +110,16 @@ class SoundsFragment : Fragment() {
                     Log.i(javaClass.name, "soundGson.getId(): " + soundGson.id)
 
                     // Store the Sound in the database
-                    val sound = getSound(soundGson)
-                    soundDao.insert(sound)
-                    Log.i(javaClass.name, "Stored Sound in database with ID " + sound!!.id)
+                    getSound(soundGson)?.let { sound ->
+                        soundDao.insert(sound)
+                        Log.i(javaClass.name, "Stored Sound in! database with ID " + sound.id)
+                    }
                 }
 
                 // Update the UI
                 val sounds = soundDao.loadAllOrderedByUsageCount()
                 Log.i(javaClass.name, "sounds.size(): " + sounds.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textSounds.text = "sounds.size(): " + sounds.size
                     Snackbar.make(binding.textSounds, "sounds.size(): " + sounds.size, Snackbar.LENGTH_LONG)
                         .show()
