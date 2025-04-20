@@ -99,79 +99,78 @@ class LetterSoundsFragment : Fragment() {
         Log.i(TAG, "processResponseBody")
 
         val executorService = Executors.newSingleThreadExecutor()
-        executorService.execute(object : Runnable {
-            override fun run() {
-                Log.i(TAG, "run")
+        executorService.execute {
+            Log.i(TAG, "run")
 
-                val roomDb = RoomDb.getDatabase(context)
-                val letterSoundDao = roomDb.letterSoundDao()
-                val letterSoundLetterDao = roomDb.letterSound_LetterDao()
-                val letterSoundSoundDao = roomDb.letterSound_SoundDao()
+            val roomDb = RoomDb.getDatabase(context)
+            val letterSoundDao = roomDb.letterSoundDao()
+            val letterSoundLetterDao = roomDb.letterSound_LetterDao()
+            val letterSoundSoundDao = roomDb.letterSound_SoundDao()
 
-                // Empty the database table before downloading up-to-date content
-                letterSoundLetterDao.deleteAll()
-                letterSoundSoundDao.deleteAll()
-                letterSoundDao.deleteAll()
+            // Empty the database table before downloading up-to-date content
+            letterSoundLetterDao.deleteAll()
+            letterSoundSoundDao.deleteAll()
+            letterSoundDao.deleteAll()
 
-                for (letterSoundGson in letterSoundGsons) {
-                    Log.i(TAG, "letterSoundGson.getId(): " + letterSoundGson.id)
+            for (letterSoundGson in letterSoundGsons) {
+                Log.i(TAG, "letterSoundGson.getId(): " + letterSoundGson.id)
 
-                    // Store the LetterSound in the database
-                    val letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson)
-                    letterSound.let {
-                        letterSoundDao.insert(letterSound)
-                        Log.i(
-                            TAG,
-                            "Stored LetterSound in database with ID " + letterSound.id
-                        )
-                    }
-
-                    // Store all the LetterSound's letters in the database
-                    val letterGsons = letterSoundGson.letters
-                    Log.i(TAG, "letterGsons.size(): " + letterGsons.size)
-                    for ((index, letterGson) in letterGsons.withIndex()) {
-                        Log.i(TAG, "letterGson.getId(): " + letterGson.id)
-                        val letterSoundLetter = LetterSound_Letter()
-                        letterSoundLetter.letterSound_id = letterSoundGson.id
-                        letterSoundLetter.letters_id = letterGson.id
-                        letterSoundLetter.letters_ORDER = index
-                        letterSoundLetterDao.insert(letterSoundLetter)
-                        Log.i(
-                            TAG,
-                            "Stored LetterSound_Letter in database. LetterSound_id: " + letterSoundLetter.letterSound_id + ", letters_id: " + letterSoundLetter.letters_id
-                        )
-                    }
-
-                    // Store all the LetterSound's sounds in the database
-                    val soundGsons = letterSoundGson.sounds
-                    Log.i(TAG, "soundGsons.size():" + soundGsons.size)
-                    for ((index, soundGson) in soundGsons.withIndex()) {
-                        Log.i(TAG, "soundGson.getId(): " + soundGson.id)
-                        val letterSoundSound = LetterSound_Sound()
-                        letterSoundSound.letterSound_id = letterSoundGson.id
-                        letterSoundSound.sounds_id = soundGson.id
-                        letterSoundSound.sounds_ORDER = index
-                        letterSoundSoundDao.insert(letterSoundSound)
-                        Log.i(
-                            TAG,
-                            "Stored LetterSound_Sound in database. LetterSound_id: " + letterSoundSound.letterSound_id + ", sounds_id: " + letterSoundSound.sounds_id
-                        )
-                    }
+                // Store the LetterSound in the database
+                val letterSound = GsonToRoomConverter.getLetterSound(letterSoundGson)
+                letterSound.let {
+                    letterSoundDao.insert(letterSound)
+                    Log.i(
+                        TAG,
+                        "Stored LetterSound in database with ID " + letterSound.id
+                    )
                 }
 
-                // Update the UI
-                val letterSounds = letterSoundDao.loadAll()
-                Log.i(TAG, "letterSounds.size(): " + letterSounds.size)
-                activity?.runOnUiThread {
-                    binding.textLetterSounds.text = getString(R.string.lettersounds_size, letterSounds.size)
-                    Snackbar.make(
-                        binding.textLetterSounds,
-                        "letterSounds.size(): " + letterSounds.size,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    binding.progressBarLetterSounds.visibility = View.GONE
+                // Store all the LetterSound's letters in the database
+                val letterGsons = letterSoundGson.letters
+                Log.i(TAG, "letterGsons.size(): " + letterGsons.size)
+                for ((index, letterGson) in letterGsons.withIndex()) {
+                    Log.i(TAG, "letterGson.getId(): " + letterGson.id)
+                    val letterSoundLetter = LetterSound_Letter()
+                    letterSoundLetter.letterSound_id = letterSoundGson.id
+                    letterSoundLetter.letters_id = letterGson.id
+                    letterSoundLetter.letters_ORDER = index
+                    letterSoundLetterDao.insert(letterSoundLetter)
+                    Log.i(
+                        TAG,
+                        "Stored LetterSound_Letter in database. LetterSound_id: " + letterSoundLetter.letterSound_id + ", letters_id: " + letterSoundLetter.letters_id
+                    )
+                }
+
+                // Store all the LetterSound's sounds in the database
+                val soundGsons = letterSoundGson.sounds
+                Log.i(TAG, "soundGsons.size():" + soundGsons.size)
+                for ((index, soundGson) in soundGsons.withIndex()) {
+                    Log.i(TAG, "soundGson.getId(): " + soundGson.id)
+                    val letterSoundSound = LetterSound_Sound()
+                    letterSoundSound.letterSound_id = letterSoundGson.id
+                    letterSoundSound.sounds_id = soundGson.id
+                    letterSoundSound.sounds_ORDER = index
+                    letterSoundSoundDao.insert(letterSoundSound)
+                    Log.i(
+                        TAG,
+                        "Stored LetterSound_Sound in database. LetterSound_id: " + letterSoundSound.letterSound_id + ", sounds_id: " + letterSoundSound.sounds_id
+                    )
                 }
             }
-        })
+
+            // Update the UI
+            val letterSounds = letterSoundDao.loadAll()
+            Log.i(TAG, "letterSounds.size(): " + letterSounds.size)
+            activity?.runOnUiThread {
+                binding.textLetterSounds.text =
+                    getString(R.string.lettersounds_size, letterSounds.size)
+                Snackbar.make(
+                    binding.textLetterSounds,
+                    "letterSounds.size(): " + letterSounds.size,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                binding.progressBarLetterSounds.visibility = View.GONE
+            }
+        }
     }
 }
