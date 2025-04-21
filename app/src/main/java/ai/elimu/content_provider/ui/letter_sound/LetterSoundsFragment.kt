@@ -72,6 +72,10 @@ class LetterSoundsFragment : Fragment() {
 
                     if (letterSoundGsons.isNotEmpty()) {
                         processResponseBody(letterSoundGsons)
+                    } else {
+                        binding.progressBarLetterSounds.visibility = View.GONE
+                        binding.textLetterSounds.text =
+                            getString(R.string.lettersounds_size, 0)
                     }
                 } else {
                     context?.let { context ->
