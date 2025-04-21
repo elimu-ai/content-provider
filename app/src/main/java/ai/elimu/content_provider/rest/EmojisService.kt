@@ -1,13 +1,10 @@
-package ai.elimu.content_provider.rest;
+package ai.elimu.content_provider.rest
 
-import java.util.List;
+import ai.elimu.model.v2.gson.content.EmojiGson
+import retrofit2.Call
+import retrofit2.http.GET
 
-import ai.elimu.model.v2.gson.content.EmojiGson;
-import retrofit2.Call;
-import retrofit2.http.GET;
-
-public interface EmojisService {
-
+interface EmojisService {
     @GET("content/emojis")
-    Call<List<EmojiGson>> listEmojis();
+    fun listEmojis(): Call<List<EmojiGson>>
 }
