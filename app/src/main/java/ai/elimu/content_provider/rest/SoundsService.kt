@@ -1,13 +1,10 @@
-package ai.elimu.content_provider.rest;
+package ai.elimu.content_provider.rest
 
-import java.util.List;
+import ai.elimu.model.v2.gson.content.SoundGson
+import retrofit2.Call
+import retrofit2.http.GET
 
-import ai.elimu.model.v2.gson.content.SoundGson;
-import retrofit2.Call;
-import retrofit2.http.GET;
-
-public interface SoundsService {
-
+interface SoundsService {
     @GET("content/sounds")
-    Call<List<SoundGson>> listSounds();
+    fun listSounds(): Call<List<SoundGson>>
 }
