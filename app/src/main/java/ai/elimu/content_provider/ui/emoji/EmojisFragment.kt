@@ -25,6 +25,7 @@ import java.util.concurrent.Executors
 
 class EmojisFragment : Fragment() {
 
+    private val TAG = javaClass.name
     private var emojisViewModel: EmojisViewModel? = null
     private lateinit var binding: FragmentEmojisBinding
 
@@ -33,13 +34,13 @@ class EmojisFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.i(javaClass.name, "onCreateView")
+        Log.i(TAG, "onCreateView")
 
         emojisViewModel = ViewModelProvider(this).get(EmojisViewModel::class.java)
         binding = FragmentEmojisBinding.inflate(layoutInflater)
         emojisViewModel?.getText()?.observe(viewLifecycleOwner, object : Observer<String?> {
             override fun onChanged(s: String?) {
-                Log.i(javaClass.name, "onChanged")
+                Log.i(TAG, "onChanged")
                 binding.textEmojis.text = s
             }
         })
@@ -47,7 +48,7 @@ class EmojisFragment : Fragment() {
     }
 
     override fun onStart() {
-        Log.i(javaClass.name, "onStart")
+        Log.i(TAG, "onStart")
         super.onStart()
 
         // Download Emojis from REST API, and store them in the database
@@ -55,18 +56,18 @@ class EmojisFragment : Fragment() {
         val retrofit = baseApplication.retrofit
         val emojisService = retrofit.create(EmojisService::class.java)
         val emojiGsonsCall = emojisService.listEmojis()
-        Log.i(javaClass.name, "emojiGsonsCall.request(): " + emojiGsonsCall.request())
+        Log.i(TAG, "emojiGsonsCall.request(): " + emojiGsonsCall.request())
         emojiGsonsCall.enqueue(object : Callback<List<EmojiGson>> {
             override fun onResponse(
                 call: Call<List<EmojiGson>>,
                 response: Response<List<EmojiGson>>
             ) {
-                Log.i(javaClass.name, "onResponse")
+                Log.i(TAG, "onResponse")
 
-                Log.i(javaClass.name, "response: $response")
+                Log.i(TAG, "response: $response")
                 if (response.isSuccessful) {
                     val emojiGsons = response.body() ?: return
-                    Log.i(javaClass.name, "emojiGsons.size(): " + emojiGsons.size)
+                    Log.i(TAG, "emojiGsons.size(): " + emojiGsons.size)
 
                     if (emojiGsons.isNotEmpty()) {
                         processResponseBody(emojiGsons)
@@ -83,9 +84,9 @@ class EmojisFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<EmojiGson>>, t: Throwable) {
-                Log.e(javaClass.name, "onFailure", t)
+                Log.e(TAG, "onFailure", t)
 
-                Log.e(javaClass.name, "t.getCause():", t.cause)
+                Log.e(TAG, "t.getCause():", t.cause)
 
                 context?.let { context ->
                     // Handle error
@@ -99,12 +100,12 @@ class EmojisFragment : Fragment() {
     }
 
     private fun processResponseBody(emojiGsons: List<EmojiGson>) {
-        Log.i(javaClass.name, "processResponseBody")
+        Log.i(TAG, "processResponseBody")
 
         val executorService = Executors.newSingleThreadExecutor()
         executorService.execute(object : Runnable {
             override fun run() {
-                Log.i(javaClass.name, "run")
+                Log.i(TAG, "run")
 
                 val roomDb = RoomDb.getDatabase(context)
                 val emojiDao = roomDb.emojiDao()
@@ -115,26 +116,26 @@ class EmojisFragment : Fragment() {
                 emojiDao.deleteAll()
 
                 for (emojiGson in emojiGsons) {
-                    Log.i(javaClass.name, "emojiGson.getId(): " + emojiGson.id)
+                    Log.i(TAG, "emojiGson.getId(): " + emojiGson.id)
 
                     // Store the Emoji in the database
                     val emoji = getEmoji(emojiGson)
                     emoji?.let {
                         emojiDao.insert(emoji)
-                        Log.i(javaClass.name, "Stored Emoji in database with ID " + emoji.id)
+                        Log.i(TAG, "Stored Emoji in database with ID " + emoji.id)
                     }
 
                     // Store all the Emoji's Word labels in the database
                     val wordGsons = emojiGson.words
-                    Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                    Log.i(TAG, "wordGsons.size(): " + wordGsons.size)
                     for (wordGson in wordGsons) {
-                        Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
+                        Log.i(TAG, "wordGson.getId(): " + wordGson.id)
                         val emojiWord = Emoji_Word()
                         emojiWord.emoji_id = emojiGson.id
                         emojiWord.words_id = wordGson.id
                         emojiWordDao.insert(emojiWord)
                         Log.i(
-                            javaClass.name,
+                            TAG,
                             "Stored Emoji_Word in database. Emoji_id: " + emojiWord.emoji_id + ", words_id: " + emojiWord.words_id
                         )
                     }
@@ -142,7 +143,7 @@ class EmojisFragment : Fragment() {
 
                 // Update the UI
                 val emojis = emojiDao.loadAll()
-                Log.i(javaClass.name, "emojis.size(): " + emojis.size)
+                Log.i(TAG, "emojis.size(): " + emojis.size)
                 activity?.runOnUiThread {
                     binding.textEmojis.text = getString(R.string.emojis_size, emojis.size)
                     Snackbar.make(binding.textEmojis, "emojis.size(): " + emojis.size, Snackbar.LENGTH_LONG)
