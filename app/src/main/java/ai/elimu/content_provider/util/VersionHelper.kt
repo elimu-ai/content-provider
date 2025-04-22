@@ -1,23 +1,21 @@
-package ai.elimu.content_provider.util;
+package ai.elimu.content_provider.util
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.util.Log;
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
 
 /**
  * Helps detect upgrades from previously installed versions of the app.
  */
-public class VersionHelper {
-
-    public static int getAppVersionCode(Context context) {
-        Log.i(VersionHelper.class.getName(), "getAppVersionCode");
+object VersionHelper {
+    fun getAppVersionCode(context: Context): Int {
+        Log.i(VersionHelper::class.java.name, "getAppVersionCode")
 
         try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException("Could not get package name: " + e);
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            return packageInfo.versionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            throw RuntimeException("Could not get package name: $e")
         }
     }
 
@@ -25,28 +23,30 @@ public class VersionHelper {
      * Stores the version code of the application currently installed. And detects upgrades from previously installed
      * versions.
      */
-    public static void updateAppVersion(Context context) {
-        Log.i(VersionHelper.class.getName(), "updateAppVersion");
+    fun updateAppVersion(context: Context) {
+        Log.i(VersionHelper::class.java.name, "updateAppVersion")
 
         // Check if the application's versionCode was upgraded
-        int oldVersionCode = SharedPreferencesHelper.getAppVersionCode(context);
-        int newVersionCode = VersionHelper.getAppVersionCode(context);
+        var oldVersionCode = SharedPreferencesHelper.getAppVersionCode(context)
+        val newVersionCode = getAppVersionCode(context)
         if (oldVersionCode == 0) {
-            SharedPreferencesHelper.storeAppVersionCode(context, newVersionCode);
-            oldVersionCode = newVersionCode;
+            SharedPreferencesHelper.storeAppVersionCode(context, newVersionCode)
+            oldVersionCode = newVersionCode
         }
-        Log.i(VersionHelper.class.getName(),"oldVersionCode: " + oldVersionCode);
-        Log.i(VersionHelper.class.getName(),"newVersionCode: " + newVersionCode);
+        Log.i(VersionHelper::class.java.name, "oldVersionCode: $oldVersionCode")
+        Log.i(VersionHelper::class.java.name, "newVersionCode: $newVersionCode")
 
         // Handle upgrade from previous version
         if (oldVersionCode < newVersionCode) {
-            Log.i(VersionHelper.class.getName(), "Upgrading application from version " + oldVersionCode + " to " + newVersionCode + "...");
+            Log.i(
+                VersionHelper::class.java.name,
+                "Upgrading application from version $oldVersionCode to $newVersionCode..."
+            )
 
-//            if (oldVersionCode < ???) {
+            //            if (oldVersionCode < ???) {
 //                ...
 //            }
-
-            SharedPreferencesHelper.storeAppVersionCode(context, newVersionCode);
+            SharedPreferencesHelper.storeAppVersionCode(context, newVersionCode)
         }
     }
 }
