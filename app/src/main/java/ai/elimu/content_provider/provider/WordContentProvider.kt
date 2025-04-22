@@ -8,6 +8,7 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 
 class WordContentProvider : ContentProvider() {
     
@@ -16,7 +17,7 @@ class WordContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         Log.i(TAG, "onCreate")
 
-        Log.i(TAG, "URI_WORD: " + URI_WORD)
+        Log.i(TAG, "URI_WORD: $URI_WORD")
 
         return true
     }
@@ -29,7 +30,7 @@ class WordContentProvider : ContentProvider() {
         projection: Array<String>?,
         selection: String?,
         selectionArgs: Array<String>?,
-        sortOrder: String?
+        sortOrder: String?,
     ): Cursor? {
         Log.i(TAG, "query")
 
@@ -123,7 +124,7 @@ class WordContentProvider : ContentProvider() {
         uri: Uri,
         values: ContentValues?,
         selection: String?,
-        selectionArgs: Array<String>?
+        selectionArgs: Array<String>?,
     ): Int {
         Log.i(TAG, "update")
 
@@ -147,17 +148,17 @@ class WordContentProvider : ContentProvider() {
         private const val CODE_WORDS = 1
         private const val CODE_WORD_ID = 2
         private const val CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID = 3
-        val URI_WORD: Uri = Uri.parse("content://" + AUTHORITY + "/" + TABLE_WORDS)
+        val URI_WORD: Uri = ("content://$AUTHORITY/$TABLE_WORDS").toUri()
 
         // The URI matcher
         private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_WORDS, CODE_WORDS)
-            MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/#", CODE_WORD_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_WORDS/#", CODE_WORD_ID)
             MATCHER.addURI(
                 AUTHORITY,
-                TABLE_WORDS + "/by-paragraph-id/#",
+                "$TABLE_WORDS/by-paragraph-id/#",
                 CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID
             )
         }
