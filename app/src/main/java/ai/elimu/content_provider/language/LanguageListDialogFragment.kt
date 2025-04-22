@@ -91,7 +91,8 @@ class LanguageListDialogFragment : BottomSheetDialogFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val language = languages[position]
-            holder.text.text = language.englishName + " (" + language.nativeName + ")"
+            holder.text.text =
+                getString(R.string.language_value, language.englishName, language.nativeName)
             holder.text.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     Log.i(javaClass.name, "onClick")

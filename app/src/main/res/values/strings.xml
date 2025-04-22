@@ -26,4 +26,5 @@
     <string name="letters_size">letters.size(): %d</string>
     <string name="images_size">images.size(): %d</string>
     <string name="emojis_size">emojis.size(): %d</string>
+    <string name="language_value">%1$s (%2$s)</string>
 </resources>
