@@ -50,46 +50,51 @@ class WordContentProvider : ContentProvider() {
 
         val code = MATCHER.match(uri)
         Log.i(TAG, "code: $code")
-        if (code == CODE_WORDS) {
-            // Get the Room Cursor
-            val cursor = wordDao.loadAllOrderedByUsageCountAsCursor()
-            Log.i(TAG, "cursor: $cursor")
+        when (code) {
+            CODE_WORDS -> {
+                // Get the Room Cursor
+                val cursor = wordDao.loadAllOrderedByUsageCountAsCursor()
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID) {
-            // Extract the StoryBookParagraph ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val storyBookParagraphIdAsString = pathSegments[2]
-            val storyBookParagraphId = storyBookParagraphIdAsString.toLong()
-            Log.i(TAG, "storyBookParagraphId: $storyBookParagraphId")
+                return cursor
+            }
+            CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID -> {
+                // Extract the StoryBookParagraph ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val storyBookParagraphIdAsString = pathSegments[2]
+                val storyBookParagraphId = storyBookParagraphIdAsString.toLong()
+                Log.i(TAG, "storyBookParagraphId: $storyBookParagraphId")
 
-            // Get the Room Cursor
-            val cursor = wordDao.loadAllAsCursor(storyBookParagraphId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = wordDao.loadAllAsCursor(storyBookParagraphId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_WORD_ID) {
-            // Extract the Word ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val wordIdAsString = pathSegments[1]
-            val wordId = wordIdAsString.toLong()
-            Log.i(TAG, "wordId: $wordId")
+                return cursor
+            }
+            CODE_WORD_ID -> {
+                // Extract the Word ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val wordIdAsString = pathSegments[1]
+                val wordId = wordIdAsString.toLong()
+                Log.i(TAG, "wordId: $wordId")
 
-            // Get the Room Cursor
-            val cursor = wordDao.loadAsCursor(wordId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = wordDao.loadAsCursor(wordId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
