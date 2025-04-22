@@ -1,52 +1,55 @@
-package ai.elimu.content_provider.util;
+package ai.elimu.content_provider.util
 
-import android.util.Log;
+import android.util.Log
+import org.apache.commons.io.IOUtils
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
-import org.apache.commons.io.IOUtils;
+object MultimediaDownloader {
+    fun downloadFileBytes(urlValue: String): ByteArray? {
+        Log.i(MultimediaDownloader::class.java.name, "downloadFileBytes")
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+        Log.i(MultimediaDownloader::class.java.name, "Downloading from $urlValue")
 
-public class MultimediaDownloader {
-
-    public static byte[] downloadFileBytes(String urlValue) {
-        Log.i(MultimediaDownloader.class.getName(), "downloadFileBytes");
-
-        Log.i(MultimediaDownloader.class.getName(), "Downloading from " + urlValue);
-
-        byte[] bytes = null;
+        var bytes: ByteArray? = null
 
         try {
-            URL url = new URL(urlValue);
+            val url = URL(urlValue)
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.connect();
+            val httpURLConnection = url.openConnection() as HttpURLConnection
+            httpURLConnection.requestMethod = "GET"
+            httpURLConnection.connect()
 
-            int responseCode = httpURLConnection.getResponseCode();
-            Log.i(MultimediaDownloader.class.getName(), "responseCode: " + responseCode);
-            InputStream inputStream = null;
+            val responseCode = httpURLConnection.responseCode
+            Log.i(
+                MultimediaDownloader::class.java.name,
+                "responseCode: $responseCode"
+            )
+            var inputStream: InputStream? = null
             if (responseCode == 200) {
-                inputStream = httpURLConnection.getInputStream();
-                bytes = IOUtils.toByteArray(inputStream);
+                inputStream = httpURLConnection.inputStream
+                bytes = IOUtils.toByteArray(inputStream)
             } else {
-                inputStream = httpURLConnection.getErrorStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String response = "";
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    response += line;
+                inputStream = httpURLConnection.errorStream
+                val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+                var response = ""
+                var line: String
+                while ((bufferedReader.readLine().also { line = it }) != null) {
+                    response += line
                 }
-                Log.e(MultimediaDownloader.class.getName(), "responseCode: " + responseCode + ", response: " + response);
+                Log.e(
+                    MultimediaDownloader::class.java.name,
+                    "responseCode: $responseCode, response: $response"
+                )
             }
-        } catch (IOException e) {
-            Log.e(MultimediaDownloader.class.getName(), null, e);
+        } catch (e: IOException) {
+            Log.e(MultimediaDownloader::class.java.name, null, e)
         }
 
-        return bytes;
+        return bytes
     }
 }
