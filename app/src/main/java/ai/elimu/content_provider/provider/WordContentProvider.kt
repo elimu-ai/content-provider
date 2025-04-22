@@ -1,158 +1,157 @@
-package ai.elimu.content_provider.provider;
+package ai.elimu.content_provider.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
+import ai.elimu.content_provider.BuildConfig
+import ai.elimu.content_provider.room.db.RoomDb
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.net.Uri
+import android.util.Log
 
-import java.util.List;
+class WordContentProvider : ContentProvider() {
+    override fun onCreate(): Boolean {
+        Log.i(javaClass.name, "onCreate")
 
-import ai.elimu.content_provider.BuildConfig;
-import ai.elimu.content_provider.room.dao.WordDao;
-import ai.elimu.content_provider.room.db.RoomDb;
+        Log.i(javaClass.name, "URI_WORD: " + URI_WORD)
 
-public class WordContentProvider extends ContentProvider {
-
-    // The authority of this content provider
-    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.word_provider";
-
-    private static final String TABLE_WORDS = "words";
-    private static final int CODE_WORDS = 1;
-    private static final int CODE_WORD_ID = 2;
-    private static final int CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID = 3;
-    public static final Uri URI_WORD = Uri.parse("content://" + AUTHORITY + "/" + TABLE_WORDS);
-
-    // The URI matcher
-    private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-
-    static {
-        MATCHER.addURI(AUTHORITY, TABLE_WORDS, CODE_WORDS);
-        MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/#", CODE_WORD_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/by-paragraph-id/#", CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID);
-    }
-
-    @Override
-    public boolean onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-
-        Log.i(getClass().getName(), "URI_WORD: " + URI_WORD);
-
-        return true;
+        return true
     }
 
     /**
      * Handles query requests from clients.
      */
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.i(getClass().getName(), "query");
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
+        Log.i(javaClass.name, "query")
 
-        Log.i(getClass().getName(), "uri: " + uri);
-        Log.i(getClass().getName(), "projection: " + projection);
-        Log.i(getClass().getName(), "selection: " + selection);
-        Log.i(getClass().getName(), "selectionArgs: " + selectionArgs);
-        Log.i(getClass().getName(), "sortOrder: " + sortOrder);
+        Log.i(javaClass.name, "uri: $uri")
+        Log.i(javaClass.name, "projection: $projection")
+        Log.i(javaClass.name, "selection: $selection")
+        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
+        Log.i(javaClass.name, "sortOrder: $sortOrder")
 
-        Context context = getContext();
-        Log.i(getClass().getName(), "context: " + context);
+        val context = context
+        Log.i(javaClass.name, "context: $context")
         if (context == null) {
-            return null;
+            return null
         }
 
-        RoomDb roomDb = RoomDb.getDatabase(context);
-        WordDao wordDao = roomDb.wordDao();
+        val roomDb = RoomDb.getDatabase(context)
+        val wordDao = roomDb.wordDao()
 
-        final int code = MATCHER.match(uri);
-        Log.i(getClass().getName(), "code: " + code);
+        val code = MATCHER.match(uri)
+        Log.i(javaClass.name, "code: $code")
         if (code == CODE_WORDS) {
-            final Cursor cursor;
-
             // Get the Room Cursor
-            cursor = wordDao.loadAllOrderedByUsageCountAsCursor();
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = wordDao.loadAllOrderedByUsageCountAsCursor()
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID) {
             // Extract the StoryBookParagraph ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String storyBookParagraphIdAsString = pathSegments.get(2);
-            Long storyBookParagraphId = Long.valueOf(storyBookParagraphIdAsString);
-            Log.i(getClass().getName(), "storyBookParagraphId: " + storyBookParagraphId);
-
-            final Cursor cursor;
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val storyBookParagraphIdAsString = pathSegments[2]
+            val storyBookParagraphId = storyBookParagraphIdAsString.toLong()
+            Log.i(javaClass.name, "storyBookParagraphId: $storyBookParagraphId")
 
             // Get the Room Cursor
-            cursor = wordDao.loadAllAsCursor(storyBookParagraphId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = wordDao.loadAllAsCursor(storyBookParagraphId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_WORD_ID) {
             // Extract the Word ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String wordIdAsString = pathSegments.get(1);
-            Long wordId = Long.valueOf(wordIdAsString);
-            Log.i(getClass().getName(), "wordId: " + wordId);
-
-            final Cursor cursor;
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val wordIdAsString = pathSegments[1]
+            val wordId = wordIdAsString.toLong()
+            Log.i(javaClass.name, "wordId: $wordId")
 
             // Get the Room Cursor
-            cursor = wordDao.loadAsCursor(wordId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = wordDao.loadAsCursor(wordId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else {
-            throw new IllegalArgumentException("Unknown URI: " + uri);
+            throw IllegalArgumentException("Unknown URI: $uri")
         }
     }
 
     /**
      * Handles requests for the MIME type of the data at the given URI.
      */
-    @Override
-    public String getType(Uri uri) {
-        Log.i(getClass().getName(), "getType");
+    override fun getType(uri: Uri): String? {
+        Log.i(javaClass.name, "getType")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to insert a new row.
      */
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Log.i(getClass().getName(), "insert");
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        Log.i(javaClass.name, "insert")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to update one or more rows.
      */
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "update");
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        Log.i(javaClass.name, "update")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handle requests to delete one or more rows.
      */
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "delete");
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        Log.i(javaClass.name, "delete")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    companion object {
+        // The authority of this content provider
+        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.word_provider"
+
+        private const val TABLE_WORDS = "words"
+        private const val CODE_WORDS = 1
+        private const val CODE_WORD_ID = 2
+        private const val CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID = 3
+        val URI_WORD: Uri = Uri.parse("content://" + AUTHORITY + "/" + TABLE_WORDS)
+
+        // The URI matcher
+        private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
+
+        init {
+            MATCHER.addURI(AUTHORITY, TABLE_WORDS, CODE_WORDS)
+            MATCHER.addURI(AUTHORITY, TABLE_WORDS + "/#", CODE_WORD_ID)
+            MATCHER.addURI(
+                AUTHORITY,
+                TABLE_WORDS + "/by-paragraph-id/#",
+                CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID
+            )
+        }
     }
 }
