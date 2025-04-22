@@ -140,18 +140,20 @@ class ImagesFragment : Fragment() {
                         baseApplication.baseUrl + imageGson.fileUrl
                     Log.i(TAG, "fileUrl: $fileUrl")
                     val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
-                    Log.i(TAG, "bytes.length: " + bytes.size)
+                    bytes?.let {
+                        Log.i(TAG, "bytes.length: " + bytes.size)
 
-                    // Store the downloaded file in the external storage directory
-                    try {
-                        val fileOutputStream = FileOutputStream(imageFile)
-                        fileOutputStream.write(bytes)
-                    } catch (e: FileNotFoundException) {
-                        Log.e(TAG, null, e)
-                    } catch (e: IOException) {
-                        Log.e(TAG, null, e)
+                        // Store the downloaded file in the external storage directory
+                        try {
+                            val fileOutputStream = FileOutputStream(imageFile)
+                            fileOutputStream.write(bytes)
+                        } catch (e: FileNotFoundException) {
+                            Log.e(TAG, null, e)
+                        } catch (e: IOException) {
+                            Log.e(TAG, null, e)
+                        }
+                        Log.i(TAG, "imageFile.exists(): " + imageFile?.exists())
                     }
-                    Log.i(TAG, "imageFile.exists(): " + imageFile?.exists())
                 }
 
                 // Store the Image in the database

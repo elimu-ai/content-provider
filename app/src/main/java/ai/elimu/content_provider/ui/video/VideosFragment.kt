@@ -129,18 +129,20 @@ class VideosFragment : Fragment() {
                             val fileUrl = videoGson.fileUrl
                             Log.i(javaClass.name, "fileUrl: $fileUrl")
                             val bytes = MultimediaDownloader.downloadFileBytes(fileUrl)
-                            Log.i(javaClass.name, "bytes.length: " + bytes.size)
+                            bytes?.let {
+                                Log.i(javaClass.name, "bytes.length: " + bytes.size)
 
-                            // Store the downloaded file in the external storage directory
-                            try {
-                                val fileOutputStream = FileOutputStream(videoFile)
-                                fileOutputStream.write(bytes)
-                            } catch (e: FileNotFoundException) {
-                                Log.e(javaClass.name, null, e)
-                            } catch (e: IOException) {
-                                Log.e(javaClass.name, null, e)
+                                // Store the downloaded file in the external storage directory
+                                try {
+                                    val fileOutputStream = FileOutputStream(videoFile)
+                                    fileOutputStream.write(bytes)
+                                } catch (e: FileNotFoundException) {
+                                    Log.e(javaClass.name, null, e)
+                                } catch (e: IOException) {
+                                    Log.e(javaClass.name, null, e)
+                                }
+                                Log.i(javaClass.name, "videoFile.exists(): " + videoFile.exists())
                             }
-                            Log.i(javaClass.name, "videoFile.exists(): " + videoFile.exists())
                         }
                     }
 
