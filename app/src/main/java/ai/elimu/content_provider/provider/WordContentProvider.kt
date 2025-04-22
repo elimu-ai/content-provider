@@ -136,7 +136,7 @@ class WordContentProvider : ContentProvider() {
 
     companion object {
         // The authority of this content provider
-        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.word_provider"
+        private const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.word_provider"
 
         private const val TABLE_WORDS = "words"
         private const val CODE_WORDS = 1
