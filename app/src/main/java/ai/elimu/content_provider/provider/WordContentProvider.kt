@@ -10,10 +10,13 @@ import android.net.Uri
 import android.util.Log
 
 class WordContentProvider : ContentProvider() {
+    
+    private val TAG = "WordContentProvider"
+    
     override fun onCreate(): Boolean {
-        Log.i(javaClass.name, "onCreate")
+        Log.i(TAG, "onCreate")
 
-        Log.i(javaClass.name, "URI_WORD: " + URI_WORD)
+        Log.i(TAG, "URI_WORD: " + URI_WORD)
 
         return true
     }
@@ -28,16 +31,16 @@ class WordContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.name, "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.name, "uri: $uri")
-        Log.i(javaClass.name, "projection: $projection")
-        Log.i(javaClass.name, "selection: $selection")
-        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
-        Log.i(javaClass.name, "sortOrder: $sortOrder")
+        Log.i(TAG, "uri: $uri")
+        Log.i(TAG, "projection: $projection")
+        Log.i(TAG, "selection: $selection")
+        Log.i(TAG, "selectionArgs: $selectionArgs")
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val context = context
-        Log.i(javaClass.name, "context: $context")
+        Log.i(TAG, "context: $context")
         if (context == null) {
             return null
         }
@@ -46,11 +49,11 @@ class WordContentProvider : ContentProvider() {
         val wordDao = roomDb.wordDao()
 
         val code = MATCHER.match(uri)
-        Log.i(javaClass.name, "code: $code")
+        Log.i(TAG, "code: $code")
         if (code == CODE_WORDS) {
             // Get the Room Cursor
             val cursor = wordDao.loadAllOrderedByUsageCountAsCursor()
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -58,14 +61,14 @@ class WordContentProvider : ContentProvider() {
         } else if (code == CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID) {
             // Extract the StoryBookParagraph ID from the URI
             val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            Log.i(TAG, "pathSegments: $pathSegments")
             val storyBookParagraphIdAsString = pathSegments[2]
             val storyBookParagraphId = storyBookParagraphIdAsString.toLong()
-            Log.i(javaClass.name, "storyBookParagraphId: $storyBookParagraphId")
+            Log.i(TAG, "storyBookParagraphId: $storyBookParagraphId")
 
             // Get the Room Cursor
             val cursor = wordDao.loadAllAsCursor(storyBookParagraphId)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -73,14 +76,14 @@ class WordContentProvider : ContentProvider() {
         } else if (code == CODE_WORD_ID) {
             // Extract the Word ID from the URI
             val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            Log.i(TAG, "pathSegments: $pathSegments")
             val wordIdAsString = pathSegments[1]
             val wordId = wordIdAsString.toLong()
-            Log.i(javaClass.name, "wordId: $wordId")
+            Log.i(TAG, "wordId: $wordId")
 
             // Get the Room Cursor
             val cursor = wordDao.loadAsCursor(wordId)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -94,7 +97,7 @@ class WordContentProvider : ContentProvider() {
      * Handles requests for the MIME type of the data at the given URI.
      */
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.name, "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -103,7 +106,7 @@ class WordContentProvider : ContentProvider() {
      * Handles requests to insert a new row.
      */
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        Log.i(javaClass.name, "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -117,7 +120,7 @@ class WordContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        Log.i(javaClass.name, "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -126,7 +129,7 @@ class WordContentProvider : ContentProvider() {
      * Handle requests to delete one or more rows.
      */
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        Log.i(javaClass.name, "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
