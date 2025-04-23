@@ -1,136 +1,148 @@
-package ai.elimu.content_provider.provider;
+package ai.elimu.content_provider.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
+import ai.elimu.content_provider.BuildConfig
+import ai.elimu.content_provider.room.db.RoomDb
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.net.Uri
+import android.util.Log
 
-import java.util.List;
-
-import ai.elimu.content_provider.BuildConfig;
-import ai.elimu.content_provider.room.dao.LetterDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-
-public class LetterContentProvider extends ContentProvider {
-
-    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider";
-    private static final String TABLE_LETTERS = "letters";
-    private static final int CODE_LETTERS = 1;
-    private static final int CODE_LETTER_ID = 2;
-
-    private static final int CODE_LETTERS_BY_LETTER_SOUND_ID = 3;
-    private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-
-    static {
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS, CODE_LETTERS);
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/#", CODE_LETTER_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/by-letter-sound-id/#", CODE_LETTERS_BY_LETTER_SOUND_ID);
+class LetterContentProvider : ContentProvider() {
+    override fun onCreate(): Boolean {
+        Log.i(javaClass.getName(), "onCreate")
+        return true
     }
 
-    @Override
-    public boolean onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-        return true;
-    }
+    override fun query(
+        uri: Uri,
+        projection: Array<String?>?,
+        selection: String?,
+        selectionArgs: Array<String?>?,
+        sortOrder: String?
+    ): Cursor? {
+        Log.i(javaClass.getName(), "query")
 
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.i(getClass().getName(), "query");
+        Log.i(javaClass.getName(), "uri: " + uri)
+        Log.i(javaClass.getName(), "projection: " + projection)
+        Log.i(javaClass.getName(), "selection: " + selection)
+        Log.i(javaClass.getName(), "selectionArgs: " + selectionArgs)
+        Log.i(javaClass.getName(), "sortOrder: " + sortOrder)
 
-        Log.i(getClass().getName(), "uri: " + uri);
-        Log.i(getClass().getName(), "projection: " + projection);
-        Log.i(getClass().getName(), "selection: " + selection);
-        Log.i(getClass().getName(), "selectionArgs: " + selectionArgs);
-        Log.i(getClass().getName(), "sortOrder: " + sortOrder);
-
-        Context context = getContext();
-        Log.i(getClass().getName(), "context: " + context);
+        val context = getContext()
+        Log.i(javaClass.getName(), "context: " + context)
         if (context == null) {
-            return null;
+            return null
         }
 
-        RoomDb roomDb = RoomDb.getDatabase(context);
-        LetterDao letterDao = roomDb.letterDao();
+        val roomDb = RoomDb.getDatabase(context)
+        val letterDao = roomDb.letterDao()
 
-        final int code = MATCHER.match(uri);
-        Log.i(getClass().getName(), "code: " + code);
+        val code: Int = MATCHER.match(uri)
+        Log.i(javaClass.getName(), "code: " + code)
         if (code == CODE_LETTERS) {
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            cursor = letterDao.loadAllOrderedByUsageCount_Cursor();
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            cursor = letterDao.loadAllOrderedByUsageCount_Cursor()
+            Log.i(javaClass.getName(), "cursor: " + cursor)
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.getContentResolver(), uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_LETTERS_BY_LETTER_SOUND_ID) {
             // Extract the letter-sound correspondence ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String letterSoundIdAsString = pathSegments.get(2);
-            Long letterSoundId = Long.valueOf(letterSoundIdAsString);
-            Log.i(getClass().getName(), "letterSoundId: " + letterSoundId);
+            val pathSegments = uri.getPathSegments()
+            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            val letterSoundIdAsString = pathSegments.get(2)
+            val letterSoundId = letterSoundIdAsString.toLong()
+            Log.i(javaClass.getName(), "letterSoundId: " + letterSoundId)
 
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            cursor = letterDao.loadAllByLetterSound(letterSoundId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            cursor = letterDao.loadAllByLetterSound(letterSoundId)
+            Log.i(javaClass.getName(), "cursor: " + cursor)
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.getContentResolver(), uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_LETTER_ID) {
             // Extract the Letter ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String letterIdAsString = pathSegments.get(1);
-            Long letterId = Long.valueOf(letterIdAsString);
-            Log.i(getClass().getName(), "letterId: " + letterId);
+            val pathSegments = uri.getPathSegments()
+            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            val letterIdAsString = pathSegments.get(1)
+            val letterId = letterIdAsString.toLong()
+            Log.i(javaClass.getName(), "letterId: " + letterId)
 
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            cursor = letterDao.load_Cursor(letterId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            cursor = letterDao.load_Cursor(letterId)
+            Log.i(javaClass.getName(), "cursor: " + cursor)
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.getContentResolver(), uri)
 
-            return cursor;
+            return cursor
         } else {
-            throw new IllegalArgumentException("Unknown URI: " + uri);
+            throw IllegalArgumentException("Unknown URI: " + uri)
         }
     }
 
-    @Override
-    public String getType(Uri uri) {
-        Log.i(getClass().getName(), "getType");
+    override fun getType(uri: Uri): String? {
+        Log.i(javaClass.getName(), "getType")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Log.i(getClass().getName(), "insert");
+    override fun insert(
+        uri: Uri,
+        values: ContentValues?,
+    ): Uri? {
+        Log.i(javaClass.getName(), "insert")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "update");
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<out String?>?,
+    ): Int {
+        Log.i(javaClass.getName(), "delete")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "delete");
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<out String?>?,
+    ): Int {
+        Log.i(javaClass.getName(), "update")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    companion object {
+        private val AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider"
+        private const val TABLE_LETTERS = "letters"
+        private const val CODE_LETTERS = 1
+        private const val CODE_LETTER_ID = 2
+
+        private const val CODE_LETTERS_BY_LETTER_SOUND_ID = 3
+        private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
+
+        init {
+            MATCHER.addURI(AUTHORITY, TABLE_LETTERS, CODE_LETTERS)
+            MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/#", CODE_LETTER_ID)
+            MATCHER.addURI(
+                AUTHORITY,
+                TABLE_LETTERS + "/by-letter-sound-id/#",
+                CODE_LETTERS_BY_LETTER_SOUND_ID
+            )
+        }
     }
 }
