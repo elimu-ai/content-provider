@@ -19,8 +19,8 @@ lifecycleViewmodelKtx = "2.2.0"
 kotlin = "2.1.10"
 
 [libraries]
-elimu-model = { group = "com.github.elimu-ai", name = "model", version.ref = "elimuModel" }
-elimu-analytics = { group = "com.github.elimu-ai", name = "analytics", version.ref = "elimuAnalytics" }
+elimu-model = { group = "ai.elimu", name = "model", version.ref = "elimuModel" }
+elimu-analytics = { group = "ai.elimu", name = "analytics", version.ref = "elimuAnalytics" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }

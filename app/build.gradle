@@ -49,7 +49,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':utils')
 
-    implementation(libs.elimu.model) // See https://jitpack.io/#elimu-ai/model
+    implementation(libs.elimu.model) // See https://jitpack.io/#ai.elimu/model
 
     implementation(libs.commons.io)
     implementation(libs.material)
