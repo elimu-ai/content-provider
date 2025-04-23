@@ -82,8 +82,8 @@ See https://jitpack.io/#ai.elimu/content-provider/ for the latest version availa
     ```diff
     [versions]
     elimuModel = "model-2.0.89"
-    -elimuContentProvider = "model-1.2.38"
-    +elimuContentProvider = "model-1.2.39-SNAPSHOT"
+    -elimuContentProvider = "1.2.38"
+    +elimuContentProvider = "1.2.39-SNAPSHOT"
     ```
 
 ### Usage Example
