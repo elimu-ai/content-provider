@@ -5,49 +5,37 @@ import android.database.Cursor
 import android.util.Log
 
 object CursorToEmojiGsonConverter {
+    
+    private const val TAG = "CursorToEmojiGsonConverter"
+    
     fun getEmojiGson(cursor: Cursor): EmojiGson {
-        Log.i(CursorToEmojiGsonConverter::class.java.name, "getEmojiGson")
+        Log.i(TAG, "getEmojiGson")
 
-        Log.i(
-            CursorToEmojiGsonConverter::class.java.name,
-            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
-        )
+        Log.i(TAG, "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
         val columnId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnId)
-        Log.i(CursorToEmojiGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
         val revisionNumber = cursor.getInt(columnRevisionNumber)
-        Log.i(
-            CursorToEmojiGsonConverter::class.java.name,
-            "revisionNumber: $revisionNumber"
-        )
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
         val columnUsageCount = cursor.getColumnIndex("usageCount")
         val usageCount = cursor.getInt(columnUsageCount)
-        Log.i(
-            CursorToEmojiGsonConverter::class.java.name,
-            "usageCount: $usageCount"
-        )
+        Log.i(TAG, "usageCount: $usageCount")
 
         val columnGlyph = cursor.getColumnIndex("glyph")
         val glyph = cursor.getString(columnGlyph)
-        Log.i(CursorToEmojiGsonConverter::class.java.name, "glyph: \"$glyph\"")
+        Log.i(TAG, "glyph: \"$glyph\"")
 
         val columnUnicodeVersion = cursor.getColumnIndex("unicodeVersion")
         val unicodeVersion = cursor.getDouble(columnUnicodeVersion)
-        Log.i(
-            CursorToEmojiGsonConverter::class.java.name,
-            "unicodeVersion: $unicodeVersion"
-        )
+        Log.i(TAG, "unicodeVersion: $unicodeVersion")
 
         val columnUnicodeEmojiVersion = cursor.getColumnIndex("unicodeEmojiVersion")
         val unicodeEmojiVersion = cursor.getDouble(columnUnicodeEmojiVersion)
-        Log.i(
-            CursorToEmojiGsonConverter::class.java.name,
-            "unicodeEmojiVersion: $unicodeEmojiVersion"
-        )
+        Log.i(TAG, "unicodeEmojiVersion: $unicodeEmojiVersion")
 
         val emoji = EmojiGson()
         emoji.id = id
