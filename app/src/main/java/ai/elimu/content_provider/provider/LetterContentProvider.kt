@@ -11,7 +11,7 @@ import android.util.Log
 
 class LetterContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        Log.i(javaClass.getName(), "onCreate")
+        Log.i(TAG, "onCreate")
         return true
     }
 
@@ -22,16 +22,16 @@ class LetterContentProvider : ContentProvider() {
         selectionArgs: Array<String?>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.getName(), "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.getName(), "uri: " + uri)
-        Log.i(javaClass.getName(), "projection: " + projection)
-        Log.i(javaClass.getName(), "selection: " + selection)
-        Log.i(javaClass.getName(), "selectionArgs: " + selectionArgs)
-        Log.i(javaClass.getName(), "sortOrder: " + sortOrder)
+        Log.i(TAG, "uri: " + uri)
+        Log.i(TAG, "projection: " + projection)
+        Log.i(TAG, "selection: " + selection)
+        Log.i(TAG, "selectionArgs: " + selectionArgs)
+        Log.i(TAG, "sortOrder: " + sortOrder)
 
         val context = getContext()
-        Log.i(javaClass.getName(), "context: " + context)
+        Log.i(TAG, "context: " + context)
         if (context == null) {
             return null
         }
@@ -40,13 +40,13 @@ class LetterContentProvider : ContentProvider() {
         val letterDao = roomDb.letterDao()
 
         val code: Int = MATCHER.match(uri)
-        Log.i(javaClass.getName(), "code: " + code)
+        Log.i(TAG, "code: " + code)
         if (code == CODE_LETTERS) {
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = letterDao.loadAllOrderedByUsageCount_Cursor()
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -54,16 +54,16 @@ class LetterContentProvider : ContentProvider() {
         } else if (code == CODE_LETTERS_BY_LETTER_SOUND_ID) {
             // Extract the letter-sound correspondence ID from the URI
             val pathSegments = uri.getPathSegments()
-            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            Log.i(TAG, "pathSegments: " + pathSegments)
             val letterSoundIdAsString = pathSegments.get(2)
             val letterSoundId = letterSoundIdAsString.toLong()
-            Log.i(javaClass.getName(), "letterSoundId: " + letterSoundId)
+            Log.i(TAG, "letterSoundId: " + letterSoundId)
 
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = letterDao.loadAllByLetterSound(letterSoundId)
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -71,16 +71,16 @@ class LetterContentProvider : ContentProvider() {
         } else if (code == CODE_LETTER_ID) {
             // Extract the Letter ID from the URI
             val pathSegments = uri.getPathSegments()
-            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            Log.i(TAG, "pathSegments: " + pathSegments)
             val letterIdAsString = pathSegments.get(1)
             val letterId = letterIdAsString.toLong()
-            Log.i(javaClass.getName(), "letterId: " + letterId)
+            Log.i(TAG, "letterId: " + letterId)
 
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = letterDao.load_Cursor(letterId)
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -91,7 +91,7 @@ class LetterContentProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.getName(), "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -100,7 +100,7 @@ class LetterContentProvider : ContentProvider() {
         uri: Uri,
         values: ContentValues?,
     ): Uri? {
-        Log.i(javaClass.getName(), "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -110,7 +110,7 @@ class LetterContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?,
     ): Int {
-        Log.i(javaClass.getName(), "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -121,12 +121,13 @@ class LetterContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?,
     ): Int {
-        Log.i(javaClass.getName(), "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     companion object {
+        private const val TAG = "LetterContentProvider"
         private val AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_provider"
         private const val TABLE_LETTERS = "letters"
         private const val CODE_LETTERS = 1
