@@ -1,50 +1,49 @@
-package ai.elimu.content_provider.util;
+package ai.elimu.content_provider.util
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
+import ai.elimu.model.v2.enums.Language
+import android.content.Context
+import android.text.TextUtils
 
-import ai.elimu.model.v2.enums.Language;
+object SharedPreferencesHelper {
+    private const val SHARED_PREFS: String = "shared_prefs"
 
-public class SharedPreferencesHelper {
+    private const val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
+    private const val PREF_LANGUAGE: String = "pref_language"
 
-    public static final String SHARED_PREFS = "shared_prefs";
-
-    public static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
-    public static final String PREF_LANGUAGE = "pref_language";
-
-    public static void clearAllPreferences(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().apply();
+    fun clearAllPreferences(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
     }
 
 
-    public static void storeAppVersionCode(Context context, int appVersionCode) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, appVersionCode).apply();
+    fun storeAppVersionCode(context: Context, appVersionCode: Int) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, appVersionCode).apply()
     }
 
-    public static int getAppVersionCode(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0);
+    fun getAppVersionCode(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        return sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0)
     }
 
 
-    public static void storeLanguage(Context context, Language language) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString(PREF_LANGUAGE, language.toString()).apply();
+    fun storeLanguage(context: Context?, language: Language) {
+        context ?: return
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString(PREF_LANGUAGE, language.toString()).apply()
     }
 
-    public static Language getLanguage(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        String languageAsString = sharedPreferences.getString(PREF_LANGUAGE, null);
-        if (TextUtils.isEmpty(languageAsString)) {
-            return null;
+    fun getLanguage(context: Context?): Language? {
+        context ?: return null
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        val languageAsString = sharedPreferences.getString(PREF_LANGUAGE, null)
+        return if (TextUtils.isEmpty(languageAsString)) {
+            null
         } else {
             try {
-                return Language.valueOf(languageAsString);
-            } catch (IllegalArgumentException e) {
-                return null;
+                Language.valueOf(languageAsString!!)
+            } catch (e: IllegalArgumentException) {
+                null
             }
         }
     }
