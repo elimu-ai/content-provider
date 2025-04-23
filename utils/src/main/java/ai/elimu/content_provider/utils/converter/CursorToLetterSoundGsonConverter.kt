@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 
 object CursorToLetterSoundGsonConverter {
 
+    private const val TAG = "CursorToLetterSoundGsonConverter"
     private val mainScope by lazy { CoroutineScope(Dispatchers.Main) }
 
     fun getLetterSoundGson(
@@ -23,49 +24,35 @@ object CursorToLetterSoundGsonConverter {
         context: Context,
         contentProviderApplicationId: String
     ): LetterSoundGson {
-        Log.i(CursorToLetterSoundGsonConverter::class.java.name, "getLetterSoundGson")
+        Log.i(TAG, "getLetterSoundGson")
 
-        Log.i(
-            CursorToLetterSoundGsonConverter::class.java.name,
-            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
-        )
+        Log.i(TAG,
+            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
         val columnIndexId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnIndexId)
-        Log.i(CursorToLetterSoundGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber")
         val revisionNumber = cursor.getInt(columnIndexRevisionNumber)
-        Log.i(
-            CursorToLetterSoundGsonConverter::class.java.name,
-            "revisionNumber: $revisionNumber"
-        )
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
         val columnIndexUsageCount = cursor.getColumnIndex("usageCount")
         val usageCount = cursor.getInt(columnIndexUsageCount)
-        Log.i(
-            CursorToLetterSoundGsonConverter::class.java.name,
-            "usageCount: $usageCount"
-        )
+        Log.i(TAG, "usageCount: $usageCount")
 
         val letterGsons = mutableListOf<LetterGson>()
         val lettersUri =
             Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id")
-        Log.i(
-            CursorToLetterSoundGsonConverter::class.java.name,
-            "lettersUri: $lettersUri"
-        )
+        Log.i(TAG, "lettersUri: $lettersUri")
         val lettersCursor = context.contentResolver.query(lettersUri, null, null, null, null)
         if (lettersCursor == null) {
-            Log.e(CursorToLetterSoundGsonConverter::class.java.name, "lettersCursor == null")
+            Log.e(TAG, "lettersCursor == null")
             mainScope.launch {
                 Toast.makeText(context, "lettersCursor == null", Toast.LENGTH_LONG).show()
             }
         } else {
-            Log.i(
-                CursorToLetterSoundGsonConverter::class.java.name,
-                "lettersCursor.getCount(): " + lettersCursor.count
-            )
+            Log.i(TAG, "lettersCursor.getCount(): " + lettersCursor.count)
 
             var isLast = false
             while (!isLast) {
@@ -79,30 +66,21 @@ object CursorToLetterSoundGsonConverter {
             }
 
             lettersCursor.close()
-            Log.i(
-                CursorToLetterSoundGsonConverter::class.java.name,
-                "lettersCursor.isClosed(): " + lettersCursor.isClosed
-            )
+            Log.i(TAG, "lettersCursor.isClosed(): " + lettersCursor.isClosed)
         }
 
         val soundGsons = mutableListOf<SoundGson>()
         val soundsUri =
             Uri.parse("content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id")
-        Log.i(
-            CursorToLetterSoundGsonConverter::class.java.name,
-            "soundsUri: $soundsUri"
-        )
+        Log.i(TAG, "soundsUri: $soundsUri")
         val soundsCursor = context.contentResolver.query(soundsUri, null, null, null, null)
         if (soundsCursor == null) {
-            Log.e(CursorToLetterSoundGsonConverter::class.java.name, "soundsCursor == null")
+            Log.e(TAG, "soundsCursor == null")
             mainScope.launch {
                 Toast.makeText(context, "soundsCursor == null", Toast.LENGTH_LONG).show()
             }
         } else {
-            Log.i(
-                CursorToLetterSoundGsonConverter::class.java.name,
-                "soundsCursor.getCount(): " + soundsCursor.count
-            )
+            Log.i(TAG, "soundsCursor.getCount(): " + soundsCursor.count)
 
             var isLast = false
             while (!isLast) {
@@ -116,10 +94,7 @@ object CursorToLetterSoundGsonConverter {
             }
 
             soundsCursor.close()
-            Log.i(
-                CursorToLetterSoundGsonConverter::class.java.name,
-                "soundsCursor.isClosed(): " + soundsCursor.isClosed
-            )
+            Log.i(TAG, "soundsCursor.isClosed(): " + soundsCursor.isClosed)
         }
 
         return LetterSoundGson().apply {

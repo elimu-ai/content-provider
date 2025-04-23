@@ -5,32 +5,28 @@ import android.database.Cursor
 import android.util.Log
 
 object CursorToSoundGsonConverter {
+    
+    private const val TAG = "CursorToSoundGsonConverter"
+    
     @JvmStatic
     fun getSoundGson(cursor: Cursor): SoundGson {
-        Log.i(CursorToSoundGsonConverter::class.java.name, "getSoundGson")
+        Log.i(TAG, "getSoundGson")
 
-        Log.i(
-            CursorToSoundGsonConverter::class.java.name,
+        Log.i(TAG,
             "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
         )
 
         val columnIndexId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnIndexId)
-        Log.i(CursorToSoundGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnIndexRevisionNumber = cursor.getColumnIndex("revisionNumber")
         val revisionNumber = cursor.getInt(columnIndexRevisionNumber)
-        Log.i(
-            CursorToSoundGsonConverter::class.java.name,
-            "revisionNumber: $revisionNumber"
-        )
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
         val columnIndexValueIpa = cursor.getColumnIndex("valueIpa")
         val valueIpa = cursor.getString(columnIndexValueIpa)
-        Log.i(
-            CursorToSoundGsonConverter::class.java.name,
-            "valueIpa: \"$valueIpa\""
-        )
+        Log.i(TAG, "valueIpa: \"$valueIpa\"")
 
         val soundGson = SoundGson()
         soundGson.id = id

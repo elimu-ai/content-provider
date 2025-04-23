@@ -6,41 +6,32 @@ import android.database.Cursor
 import android.util.Log
 
 object CursorToImageGsonConverter {
+    
+    private const val TAG = "CursorToImageGsonConverter"
+    
     @JvmStatic
     fun getImageGson(cursor: Cursor): ImageGson {
-        Log.i(CursorToImageGsonConverter::class.java.name, "getImageGson")
+        Log.i(TAG, "getImageGson")
 
-        Log.i(
-            CursorToImageGsonConverter::class.java.name,
-            "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString()
-        )
+        Log.i(TAG, "Arrays.toString(cursor.getColumnNames()): " + cursor.columnNames.contentToString())
 
         val columnId = cursor.getColumnIndex("id")
         val id = cursor.getLong(columnId)
-        Log.i(CursorToImageGsonConverter::class.java.name, "id: $id")
+        Log.i(TAG, "id: $id")
 
         val columnRevisionNumber = cursor.getColumnIndex("revisionNumber")
         val revisionNumber = cursor.getInt(columnRevisionNumber)
-        Log.i(
-            CursorToImageGsonConverter::class.java.name,
-            "revisionNumber: $revisionNumber"
-        )
+        Log.i(TAG, "revisionNumber: $revisionNumber")
 
         val columnTitle = cursor.getColumnIndex("title")
         val title = cursor.getString(columnTitle)
-        Log.i(CursorToImageGsonConverter::class.java.name, "title: \"$title\"")
+        Log.i(TAG, "title: \"$title\"")
 
         val columnImageFormat = cursor.getColumnIndex("imageFormat")
         val imageFormatAsString = cursor.getString(columnImageFormat)
-        Log.i(
-            CursorToImageGsonConverter::class.java.name,
-            "imageFormatAsString: $imageFormatAsString"
-        )
+        Log.i(TAG, "imageFormatAsString: $imageFormatAsString")
         val imageFormat = ImageFormat.valueOf(imageFormatAsString)
-        Log.i(
-            CursorToImageGsonConverter::class.java.name,
-            "imageFormat: $imageFormat"
-        )
+        Log.i(TAG, "imageFormat: $imageFormat")
 
         val image = ImageGson()
         image.id = id
