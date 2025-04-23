@@ -1,5 +1,7 @@
 # elimu.ai Content Provider
 
+[![](https://jitpack.io/v/ai.elimu/content-provider.svg)](https://jitpack.io/#ai.elimu/content-provider)
+
 Android application which downloads educational content (e.g. letters, words, audios, storybooks, videos, etc) to the 
 device and provides it to other elimu.ai apps.
 
@@ -35,11 +37,11 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 
    ```
    dependencies {
-       implementation 'com.github.elimu-ai:content-provider:<version>@aar'
+       implementation 'ai.elimu:content-provider:<version>@aar'
    }
    ```
 
-See https://jitpack.io/#elimu-ai/content-provider/ for the latest version available.
+See https://jitpack.io/#ai.elimu/content-provider/ for the latest version available.
 
 <a name="utils-snapshot"></a>
 ### How to Test `-SNAPSHOT` Versions of the Utils Library
@@ -186,7 +188,7 @@ To perform a release, follow these steps:
 1. Pick the new branch you created as the target branch
 1. Create a new tag (e.g. `1.2.19`)
 1. Choose a release title, and click "Publish release"
-1. Ensure that the release appears at https://jitpack.io/#elimu-ai/content-provider with "Status: ok"
+1. Ensure that the release appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
 1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
    - in the `versionCode` in `app/build.gradle`
    - in the `versionName` in `app/build.gradle`
