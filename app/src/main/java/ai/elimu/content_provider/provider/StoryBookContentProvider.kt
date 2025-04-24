@@ -46,72 +46,78 @@ class StoryBookContentProvider : ContentProvider() {
 
         val code = MATCHER.match(uri)
         Log.i(TAG, "code: $code")
-        if (code == CODE_STORYBOOKS) {
-            val cursor: Cursor
+        when (code) {
+            CODE_STORYBOOKS -> {
+                val cursor: Cursor
 
-            // Get the Room Cursor
-            val storyBookDao = roomDb.storyBookDao()
-            cursor = storyBookDao.loadAllAsCursor()
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val storyBookDao = roomDb.storyBookDao()
+                cursor = storyBookDao.loadAllAsCursor()
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_STORYBOOK_ID) {
-            // Extract the StoryBook ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val storyBookIdAsString = pathSegments[1]
-            val storyBookId = storyBookIdAsString.toLong()
-            Log.i(TAG, "storyBookId: $storyBookId")
+                return cursor
+            }
+            CODE_STORYBOOK_ID -> {
+                // Extract the StoryBook ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val storyBookIdAsString = pathSegments[1]
+                val storyBookId = storyBookIdAsString.toLong()
+                Log.i(TAG, "storyBookId: $storyBookId")
 
-            val cursor: Cursor
+                val cursor: Cursor
 
-            // Get the Room Cursor
-            val storyBookDao = roomDb.storyBookDao()
-            cursor = storyBookDao.loadAsCursor(storyBookId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val storyBookDao = roomDb.storyBookDao()
+                cursor = storyBookDao.loadAsCursor(storyBookId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_STORYBOOK_CHAPTERS) {
-            // Extract the StoryBook ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val storyBookIdAsString = pathSegments[1]
-            val storyBookId = storyBookIdAsString.toLong()
-            Log.i(TAG, "storyBookId: $storyBookId")
+                return cursor
+            }
+            CODE_STORYBOOK_CHAPTERS -> {
+                // Extract the StoryBook ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val storyBookIdAsString = pathSegments[1]
+                val storyBookId = storyBookIdAsString.toLong()
+                Log.i(TAG, "storyBookId: $storyBookId")
 
-            val cursor: Cursor
+                val cursor: Cursor
 
-            // Get the Room Cursor
-            val storyBookChapterDao = roomDb.storyBookChapterDao()
-            cursor = storyBookChapterDao.loadAllAsCursor(storyBookId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val storyBookChapterDao = roomDb.storyBookChapterDao()
+                cursor = storyBookChapterDao.loadAllAsCursor(storyBookId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_STORYBOOK_CHAPTER_PARAGRAPHS) {
-            // Extract the StoryBookChapter ID from the URI
-            val pathSegments = uri.pathSegments
-            val storyBookChapterIdAsString = pathSegments[3]
-            val storyBookChapterId = storyBookChapterIdAsString.toLong()
-            Log.i(TAG, "storyBookChapterId: $storyBookChapterId")
+                return cursor
+            }
+            CODE_STORYBOOK_CHAPTER_PARAGRAPHS -> {
+                // Extract the StoryBookChapter ID from the URI
+                val pathSegments = uri.pathSegments
+                val storyBookChapterIdAsString = pathSegments[3]
+                val storyBookChapterId = storyBookChapterIdAsString.toLong()
+                Log.i(TAG, "storyBookChapterId: $storyBookChapterId")
 
-            val cursor: Cursor
+                val cursor: Cursor
 
-            // Get the Room Cursor
-            val storyBookParagraphDao = roomDb.storyBookParagraphDao()
-            cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val storyBookParagraphDao = roomDb.storyBookParagraphDao()
+                cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
