@@ -41,31 +41,35 @@ class LetterSoundContentProvider : ContentProvider() {
 
         val code = MATCHER.match(uri)
         Log.i(TAG, "code: $code")
-        if (code == CODE_LETTER_SOUNDS) {
-            // Get the Room Cursor
-            val cursor = letterSoundDao.loadAll_Cursor()
-            Log.i(TAG, "cursor: $cursor")
+        when (code) {
+            CODE_LETTER_SOUNDS -> {
+                // Get the Room Cursor
+                val cursor = letterSoundDao.loadAll_Cursor()
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_LETTER_SOUND_ID) {
-            // Extract the LetterSound ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val idAsString = pathSegments[1]
-            val id = idAsString.toLong()
-            Log.i(TAG, "id: $id")
+                return cursor
+            }
+            CODE_LETTER_SOUND_ID -> {
+                // Extract the LetterSound ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val idAsString = pathSegments[1]
+                val id = idAsString.toLong()
+                Log.i(TAG, "id: $id")
 
-            // Get the Room Cursor
-            val cursor = letterSoundDao.load_Cursor(id)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = letterSoundDao.load_Cursor(id)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
@@ -108,7 +112,7 @@ class LetterSoundContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_LETTER_SOUNDS, CODE_LETTER_SOUNDS)
-            MATCHER.addURI(AUTHORITY, TABLE_LETTER_SOUNDS + "/#", CODE_LETTER_SOUND_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_LETTER_SOUNDS/#", CODE_LETTER_SOUND_ID)
         }
     }
 }
