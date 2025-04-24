@@ -1,24 +1,22 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import ai.elimu.content_provider.room.entity.Emoji_Word;
+import ai.elimu.content_provider.room.entity.Emoji_Word
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface Emoji_WordDao {
-
+interface Emoji_WordDao {
     @Insert
-    void insert(Emoji_Word emoji_Word);
+    fun insert(emoji_Word: Emoji_Word)
 
     @Update
-    void update(Emoji_Word emoji_Word);
+    fun update(emoji_Word: Emoji_Word)
 
     @Query("DELETE FROM Emoji_Word WHERE Emoji_id = :emojiId")
-    void delete(Long emojiId);
+    fun delete(emojiId: Long?)
 
     @Query("DELETE FROM Emoji_Word")
-    void deleteAll();
+    fun deleteAll()
 }
