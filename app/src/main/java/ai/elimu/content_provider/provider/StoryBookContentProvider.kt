@@ -1,181 +1,184 @@
-package ai.elimu.content_provider.provider;
+package ai.elimu.content_provider.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
+import ai.elimu.content_provider.BuildConfig
+import ai.elimu.content_provider.room.db.RoomDb
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.net.Uri
+import android.util.Log
 
-import java.util.List;
+class StoryBookContentProvider : ContentProvider() {
+    override fun onCreate(): Boolean {
+        Log.i(javaClass.name, "onCreate")
 
-import ai.elimu.content_provider.BuildConfig;
-import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
-import ai.elimu.content_provider.room.dao.StoryBookDao;
-import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
-import ai.elimu.content_provider.room.db.RoomDb;
+        Log.i(javaClass.name, "URI_STORYBOOK: " + URI_STORYBOOK)
 
-public class StoryBookContentProvider extends ContentProvider {
-
-    // The authority of this content provider
-    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.storybook_provider";
-
-    private static final String TABLE_STORYBOOKS = "storybooks";
-    private static final int CODE_STORYBOOKS = 1;
-    private static final int CODE_STORYBOOK_ID = 2;
-    private static final int CODE_STORYBOOK_CHAPTERS = 3;
-    private static final int CODE_STORYBOOK_CHAPTER_PARAGRAPHS = 4;
-    public static final Uri URI_STORYBOOK = Uri.parse("content://" + AUTHORITY + "/" + TABLE_STORYBOOKS);
-
-    // The URI matcher
-    private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-
-    static {
-        MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS, CODE_STORYBOOKS);
-        MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#", CODE_STORYBOOK_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters", CODE_STORYBOOK_CHAPTERS);
-        MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters/#/paragraphs", CODE_STORYBOOK_CHAPTER_PARAGRAPHS);
-    }
-
-    @Override
-    public boolean onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-
-        Log.i(getClass().getName(), "URI_STORYBOOK: " + URI_STORYBOOK);
-
-        return true;
+        return true
     }
 
     /**
      * Handles query requests from clients.
      */
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.i(getClass().getName(), "query");
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
+        Log.i(javaClass.name, "query")
 
-        Log.i(getClass().getName(), "uri: " + uri);
-        Log.i(getClass().getName(), "projection: " + projection);
-        Log.i(getClass().getName(), "selection: " + selection);
-        Log.i(getClass().getName(), "selectionArgs: " + selectionArgs);
-        Log.i(getClass().getName(), "sortOrder: " + sortOrder);
+        Log.i(javaClass.name, "uri: $uri")
+        Log.i(javaClass.name, "projection: $projection")
+        Log.i(javaClass.name, "selection: $selection")
+        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
+        Log.i(javaClass.name, "sortOrder: $sortOrder")
 
-        Context context = getContext();
-        Log.i(getClass().getName(), "context: " + context);
+        val context = context
+        Log.i(javaClass.name, "context: $context")
         if (context == null) {
-            return null;
+            return null
         }
 
-        RoomDb roomDb = RoomDb.getDatabase(context);
+        val roomDb = RoomDb.getDatabase(context)
 
-        final int code = MATCHER.match(uri);
-        Log.i(getClass().getName(), "code: " + code);
+        val code = MATCHER.match(uri)
+        Log.i(javaClass.name, "code: $code")
         if (code == CODE_STORYBOOKS) {
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            StoryBookDao storyBookDao = roomDb.storyBookDao();
-            cursor = storyBookDao.loadAllAsCursor();
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val storyBookDao = roomDb.storyBookDao()
+            cursor = storyBookDao.loadAllAsCursor()
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_STORYBOOK_ID) {
             // Extract the StoryBook ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String storyBookIdAsString = pathSegments.get(1);
-            Long storyBookId = Long.valueOf(storyBookIdAsString);
-            Log.i(getClass().getName(), "storyBookId: " + storyBookId);
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val storyBookIdAsString = pathSegments[1]
+            val storyBookId = storyBookIdAsString.toLong()
+            Log.i(javaClass.name, "storyBookId: $storyBookId")
 
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            StoryBookDao storyBookDao = roomDb.storyBookDao();
-            cursor = storyBookDao.loadAsCursor(storyBookId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val storyBookDao = roomDb.storyBookDao()
+            cursor = storyBookDao.loadAsCursor(storyBookId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_STORYBOOK_CHAPTERS) {
             // Extract the StoryBook ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String storyBookIdAsString = pathSegments.get(1);
-            Long storyBookId = Long.valueOf(storyBookIdAsString);
-            Log.i(getClass().getName(), "storyBookId: " + storyBookId);
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val storyBookIdAsString = pathSegments[1]
+            val storyBookId = storyBookIdAsString.toLong()
+            Log.i(javaClass.name, "storyBookId: $storyBookId")
 
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            StoryBookChapterDao storyBookChapterDao = roomDb.storyBookChapterDao();
-            cursor = storyBookChapterDao.loadAllAsCursor(storyBookId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val storyBookChapterDao = roomDb.storyBookChapterDao()
+            cursor = storyBookChapterDao.loadAllAsCursor(storyBookId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_STORYBOOK_CHAPTER_PARAGRAPHS) {
             // Extract the StoryBookChapter ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            String storyBookChapterIdAsString = pathSegments.get(3);
-            Long storyBookChapterId = Long.valueOf(storyBookChapterIdAsString);
-            Log.i(getClass().getName(), "storyBookChapterId: " + storyBookChapterId);
+            val pathSegments = uri.pathSegments
+            val storyBookChapterIdAsString = pathSegments[3]
+            val storyBookChapterId = storyBookChapterIdAsString.toLong()
+            Log.i(javaClass.name, "storyBookChapterId: $storyBookChapterId")
 
-            final Cursor cursor;
+            val cursor: Cursor
 
             // Get the Room Cursor
-            StoryBookParagraphDao storyBookParagraphDao = roomDb.storyBookParagraphDao();
-            cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val storyBookParagraphDao = roomDb.storyBookParagraphDao()
+            cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else {
-            throw new IllegalArgumentException("Unknown URI: " + uri);
+            throw IllegalArgumentException("Unknown URI: $uri")
         }
     }
 
     /**
      * Handles requests for the MIME type of the data at the given URI.
      */
-    @Override
-    public String getType(Uri uri) {
-        Log.i(getClass().getName(), "getType");
+    override fun getType(uri: Uri): String? {
+        Log.i(javaClass.name, "getType")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to insert a new row.
      */
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Log.i(getClass().getName(), "insert");
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        Log.i(javaClass.name, "insert")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to update one or more rows.
      */
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "update");
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        Log.i(javaClass.name, "update")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handle requests to delete one or more rows.
      */
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "delete");
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        Log.i(javaClass.name, "delete")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    companion object {
+        // The authority of this content provider
+        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.storybook_provider"
+
+        private const val TABLE_STORYBOOKS = "storybooks"
+        private const val CODE_STORYBOOKS = 1
+        private const val CODE_STORYBOOK_ID = 2
+        private const val CODE_STORYBOOK_CHAPTERS = 3
+        private const val CODE_STORYBOOK_CHAPTER_PARAGRAPHS = 4
+        val URI_STORYBOOK: Uri = Uri.parse("content://" + AUTHORITY + "/" + TABLE_STORYBOOKS)
+
+        // The URI matcher
+        private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
+
+        init {
+            MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS, CODE_STORYBOOKS)
+            MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#", CODE_STORYBOOK_ID)
+            MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters", CODE_STORYBOOK_CHAPTERS)
+            MATCHER.addURI(
+                AUTHORITY,
+                TABLE_STORYBOOKS + "/#/chapters/#/paragraphs",
+                CODE_STORYBOOK_CHAPTER_PARAGRAPHS
+            )
+        }
     }
 }
