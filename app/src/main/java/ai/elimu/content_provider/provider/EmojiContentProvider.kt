@@ -58,7 +58,7 @@ class EmojiContentProvider : ContentProvider() {
             // Extract the Emoji ID from the URI
             val pathSegments = uri.pathSegments
             Log.i(TAG, "pathSegments: $pathSegments")
-            val emojiIdAsString = pathSegments.get(1)
+            val emojiIdAsString = pathSegments[1]
             val emojiId = emojiIdAsString.toLong()
             Log.i(TAG, "emojiId: $emojiId")
 
@@ -73,7 +73,7 @@ class EmojiContentProvider : ContentProvider() {
             // Extract the Word ID from the URI
             val pathSegments = uri.pathSegments
             Log.i(TAG, "pathSegments: $pathSegments")
-            val wordIdAsString = pathSegments.get(2)
+            val wordIdAsString = pathSegments[2]
             val wordId = wordIdAsString.toLong()
             Log.i(TAG, "wordId: $wordId")
 
