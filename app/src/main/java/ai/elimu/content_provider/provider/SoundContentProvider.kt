@@ -41,46 +41,51 @@ class SoundContentProvider : ContentProvider() {
 
         val code = MATCHER.match(uri)
         Log.i(javaClass.name, "code: $code")
-        if (code == CODE_SOUNDS) {
-            // Get the Room Cursor
-            val cursor = soundDao.loadAllOrderedByUsageCount_Cursor()
-            Log.i(javaClass.name, "cursor: $cursor")
+        when (code) {
+            CODE_SOUNDS -> {
+                // Get the Room Cursor
+                val cursor = soundDao.loadAllOrderedByUsageCount_Cursor()
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_SOUNDS_BY_LETTER_SOUND_ID) {
-            // Extract the letter-sound correspondence ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
-            val letterSoundIdAsString = pathSegments[2]
-            val letterSoundId = letterSoundIdAsString.toLong()
-            Log.i(javaClass.name, "letterSoundId: $letterSoundId")
+                return cursor
+            }
+            CODE_SOUNDS_BY_LETTER_SOUND_ID -> {
+                // Extract the letter-sound correspondence ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                val letterSoundIdAsString = pathSegments[2]
+                val letterSoundId = letterSoundIdAsString.toLong()
+                Log.i(javaClass.name, "letterSoundId: $letterSoundId")
 
-            // Get the Room Cursor
-            val cursor = soundDao.loadAllByLetterSound(letterSoundId)
-            Log.i(javaClass.name, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = soundDao.loadAllByLetterSound(letterSoundId)
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_SOUND_ID) {
-            // Extract the Sound ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
-            val soundIdAsString = pathSegments[1]
-            val soundId = soundIdAsString.toLong()
-            Log.i(javaClass.name, "soundId: $soundId")
+                return cursor
+            }
+            CODE_SOUND_ID -> {
+                // Extract the Sound ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                val soundIdAsString = pathSegments[1]
+                val soundId = soundIdAsString.toLong()
+                Log.i(javaClass.name, "soundId: $soundId")
 
-            // Get the Room Cursor
-            val cursor = soundDao.load_Cursor(soundId)
-            Log.i(javaClass.name, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = soundDao.load_Cursor(soundId)
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
