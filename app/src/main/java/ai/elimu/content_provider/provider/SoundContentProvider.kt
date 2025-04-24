@@ -130,10 +130,10 @@ class SoundContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_SOUNDS, CODE_SOUNDS)
-            MATCHER.addURI(AUTHORITY, TABLE_SOUNDS + "/#", CODE_SOUND_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_SOUNDS/#", CODE_SOUND_ID)
             MATCHER.addURI(
                 AUTHORITY,
-                TABLE_SOUNDS + "/by-letter-sound-id/#",
+                "$TABLE_SOUNDS/by-letter-sound-id/#",
                 CODE_SOUNDS_BY_LETTER_SOUND_ID
             )
         }
