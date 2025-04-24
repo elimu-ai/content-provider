@@ -1,196 +1,188 @@
-package ai.elimu.content_provider.provider;
+package ai.elimu.content_provider.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.ParcelFileDescriptor;
-import android.util.Log;
+import ai.elimu.content_provider.BuildConfig
+import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.util.FileHelper.getImageFile
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import android.util.Log
+import java.io.FileNotFoundException
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
+class ImageContentProvider : ContentProvider() {
+    private val TAG: String = ImageContentProvider::class.java.name
 
-import ai.elimu.content_provider.BuildConfig;
-import ai.elimu.content_provider.room.dao.ImageDao;
-import ai.elimu.content_provider.room.db.RoomDb;
-import ai.elimu.content_provider.room.entity.Image;
-import ai.elimu.content_provider.util.FileHelper;
+    override fun onCreate(): Boolean {
+        Log.i(javaClass.name, "onCreate")
 
-public class ImageContentProvider extends ContentProvider {
-
-    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.image_provider";
-
-    private static final String TABLE_IMAGES = "images";
-    private static final int CODE_IMAGES = 1;
-    private static final int CODE_IMAGE_ID = 2;
-    private static final int CODE_IMAGES_BY_WORD_LABEL_ID = 3;
-
-    private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-    private String TAG = ImageContentProvider.class.getName();
-
-    static {
-        MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES);
-        MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/#", CODE_IMAGE_ID);
-        MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/by-word-label-id/#", CODE_IMAGES_BY_WORD_LABEL_ID);
-    }
-
-    @Override
-    public boolean onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-
-        return true;
+        return true
     }
 
     /**
      * Handles query requests from clients.
      */
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.i(getClass().getName(), "query");
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
+        Log.i(javaClass.name, "query")
 
-        Log.i(getClass().getName(), "uri: " + uri);
-        Log.i(getClass().getName(), "projection: " + projection);
-        Log.i(getClass().getName(), "selection: " + selection);
-        Log.i(getClass().getName(), "selectionArgs: " + selectionArgs);
-        Log.i(getClass().getName(), "sortOrder: " + sortOrder);
+        Log.i(javaClass.name, "uri: $uri")
+        Log.i(javaClass.name, "projection: $projection")
+        Log.i(javaClass.name, "selection: $selection")
+        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
+        Log.i(javaClass.name, "sortOrder: $sortOrder")
 
-        Context context = getContext();
-        Log.i(getClass().getName(), "context: " + context);
+        val context = context
+        Log.i(javaClass.name, "context: $context")
         if (context == null) {
-            return null;
+            return null
         }
 
-        RoomDb roomDb = RoomDb.getDatabase(context);
-        ImageDao imageDao = roomDb.imageDao();
+        val roomDb = RoomDb.getDatabase(context)
+        val imageDao = roomDb.imageDao()
 
-        final int code = MATCHER.match(uri);
-        Log.i(getClass().getName(), "code: " + code);
+        val code = MATCHER.match(uri)
+        Log.i(javaClass.name, "code: $code")
         if (code == CODE_IMAGES) {
-            final Cursor cursor;
-
             // Get the Room Cursor
-            cursor = imageDao.loadAllAsCursor();
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = imageDao.loadAllAsCursor()
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_IMAGE_ID) {
             // Extract the Image ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String imageIdAsString = pathSegments.get(1);
-            Long imageId = Long.valueOf(imageIdAsString);
-            Log.i(getClass().getName(), "imageId: " + imageId);
-
-            final Cursor cursor;
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val imageIdAsString = pathSegments[1]
+            val imageId = imageIdAsString.toLong()
+            Log.i(javaClass.name, "imageId: $imageId")
 
             // Get the Room Cursor
-            cursor = imageDao.loadAsCursor(imageId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = imageDao.loadAsCursor(imageId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else if (code == CODE_IMAGES_BY_WORD_LABEL_ID) {
             // Extract the Word ID from the URI
-            List<String> pathSegments = uri.getPathSegments();
-            Log.i(getClass().getName(), "pathSegments: " + pathSegments);
-            String wordIdAsString = pathSegments.get(2);
-            Long wordId = Long.valueOf(wordIdAsString);
-            Log.i(getClass().getName(), "wordId: " + wordId);
-
-            final Cursor cursor;
+            val pathSegments = uri.pathSegments
+            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            val wordIdAsString = pathSegments[2]
+            val wordId = wordIdAsString.toLong()
+            Log.i(javaClass.name, "wordId: $wordId")
 
             // Get the Room Cursor
-            cursor = imageDao.loadAllByWordLabelAsCursor(wordId);
-            Log.i(getClass().getName(), "cursor: " + cursor);
+            val cursor = imageDao.loadAllByWordLabelAsCursor(wordId)
+            Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri);
+            cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor;
+            return cursor
         } else {
-            throw new IllegalArgumentException("Unknown URI: " + uri);
+            throw IllegalArgumentException("Unknown URI: $uri")
         }
     }
 
     /**
      * Handles requests for the MIME type of the data at the given URI.
      */
-    @Override
-    public String getType(Uri uri) {
-        Log.i(getClass().getName(), "getType");
+    override fun getType(uri: Uri): String? {
+        Log.i(javaClass.name, "getType")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to insert a new row.
      */
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Log.i(getClass().getName(), "insert");
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        Log.i(javaClass.name, "insert")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handles requests to update one or more rows.
      */
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "update");
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        Log.i(javaClass.name, "update")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     /**
      * Handle requests to delete one or more rows.
      */
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.i(getClass().getName(), "delete");
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        Log.i(javaClass.name, "delete")
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @Override
-    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-        List<String> segments = uri.getPathSegments();
-        if (segments.size() < 2) {
-            throw new FileNotFoundException("Invalid URI: " + uri);
+    @Throws(FileNotFoundException::class)
+    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
+        val segments = uri.pathSegments
+        if (segments.size < 2) {
+            throw FileNotFoundException("Invalid URI: $uri")
         }
-        String fileId = segments.get(1);
+        val fileId = segments[1]
 
-        RoomDb roomDb = RoomDb.getDatabase(getContext());
-        ImageDao imageDao = roomDb.imageDao();
-        
-        long imageId;
+        val roomDb = RoomDb.getDatabase(context)
+        val imageDao = roomDb.imageDao()
+
+        val imageId: Long
         try {
-            imageId = Long.parseLong(fileId);
-        } catch (NumberFormatException e) {
-            Log.e(TAG, "Failed to parse image ID: " + fileId, e);
-            throw new FileNotFoundException("Invalid image ID format: " + fileId);
+            imageId = fileId.toLong()
+        } catch (e: NumberFormatException) {
+            Log.e(TAG, "Failed to parse image ID: $fileId", e)
+            throw FileNotFoundException("Invalid image ID format: $fileId")
         }
 
-        Image image = imageDao.load(imageId);
+        val image = imageDao.load(imageId)
+            ?: throw FileNotFoundException("File not found with id: $imageId")
 
-        if (image == null) {
-            throw new FileNotFoundException("File not found with id: " + imageId);
-        }
-
-        File imageFile = FileHelper.getImageFile(image, getContext());
-        if (imageFile == null) {
-            throw new FileNotFoundException("imageFile not found with id: " + imageId);
-        }
+        val imageFile = getImageFile(image, context)
+            ?: throw FileNotFoundException("imageFile not found with id: $imageId")
         if (!imageFile.exists()) {
-            Log.e(TAG, "imageFile doesn't exist: " + imageFile.getAbsolutePath());
-            throw new FileNotFoundException("File not found: " + imageFile.getAbsolutePath());
+            Log.e(TAG, "imageFile doesn't exist: " + imageFile.absolutePath)
+            throw FileNotFoundException("File not found: " + imageFile.absolutePath)
         }
-        return ParcelFileDescriptor.open(imageFile, ParcelFileDescriptor.MODE_READ_ONLY);
+        return ParcelFileDescriptor.open(imageFile, ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
+    companion object {
+        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.image_provider"
+
+        private const val TABLE_IMAGES = "images"
+        private const val CODE_IMAGES = 1
+        private const val CODE_IMAGE_ID = 2
+        private const val CODE_IMAGES_BY_WORD_LABEL_ID = 3
+
+        private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
+
+        init {
+            MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES)
+            MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/#", CODE_IMAGE_ID)
+            MATCHER.addURI(
+                AUTHORITY,
+                TABLE_IMAGES + "/by-word-label-id/#",
+                CODE_IMAGES_BY_WORD_LABEL_ID
+            )
+        }
+    }
 }
