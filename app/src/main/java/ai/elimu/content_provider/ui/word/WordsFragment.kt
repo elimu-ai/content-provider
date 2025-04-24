@@ -70,6 +70,9 @@ class WordsFragment : Fragment() {
 
                     if (wordGsons.isNotEmpty()) {
                         processResponseBody(wordGsons)
+                    } else {
+                        binding.textWords.text = getString(R.string.words_size, 0)
+                        binding.progressBarWords.visibility = View.GONE
                     }
                 } else {
                     // Handle error
