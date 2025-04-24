@@ -11,9 +11,9 @@ import android.util.Log
 
 class StoryBookContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        Log.i(javaClass.name, "onCreate")
+        Log.i(TAG, "onCreate")
 
-        Log.i(javaClass.name, "URI_STORYBOOK: " + URI_STORYBOOK)
+        Log.i(TAG, "URI_STORYBOOK: " + URI_STORYBOOK)
 
         return true
     }
@@ -28,16 +28,16 @@ class StoryBookContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.name, "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.name, "uri: $uri")
-        Log.i(javaClass.name, "projection: $projection")
-        Log.i(javaClass.name, "selection: $selection")
-        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
-        Log.i(javaClass.name, "sortOrder: $sortOrder")
+        Log.i(TAG, "uri: $uri")
+        Log.i(TAG, "projection: $projection")
+        Log.i(TAG, "selection: $selection")
+        Log.i(TAG, "selectionArgs: $selectionArgs")
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val context = context
-        Log.i(javaClass.name, "context: $context")
+        Log.i(TAG, "context: $context")
         if (context == null) {
             return null
         }
@@ -45,14 +45,14 @@ class StoryBookContentProvider : ContentProvider() {
         val roomDb = RoomDb.getDatabase(context)
 
         val code = MATCHER.match(uri)
-        Log.i(javaClass.name, "code: $code")
+        Log.i(TAG, "code: $code")
         if (code == CODE_STORYBOOKS) {
             val cursor: Cursor
 
             // Get the Room Cursor
             val storyBookDao = roomDb.storyBookDao()
             cursor = storyBookDao.loadAllAsCursor()
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -60,17 +60,17 @@ class StoryBookContentProvider : ContentProvider() {
         } else if (code == CODE_STORYBOOK_ID) {
             // Extract the StoryBook ID from the URI
             val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            Log.i(TAG, "pathSegments: $pathSegments")
             val storyBookIdAsString = pathSegments[1]
             val storyBookId = storyBookIdAsString.toLong()
-            Log.i(javaClass.name, "storyBookId: $storyBookId")
+            Log.i(TAG, "storyBookId: $storyBookId")
 
             val cursor: Cursor
 
             // Get the Room Cursor
             val storyBookDao = roomDb.storyBookDao()
             cursor = storyBookDao.loadAsCursor(storyBookId)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -78,17 +78,17 @@ class StoryBookContentProvider : ContentProvider() {
         } else if (code == CODE_STORYBOOK_CHAPTERS) {
             // Extract the StoryBook ID from the URI
             val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            Log.i(TAG, "pathSegments: $pathSegments")
             val storyBookIdAsString = pathSegments[1]
             val storyBookId = storyBookIdAsString.toLong()
-            Log.i(javaClass.name, "storyBookId: $storyBookId")
+            Log.i(TAG, "storyBookId: $storyBookId")
 
             val cursor: Cursor
 
             // Get the Room Cursor
             val storyBookChapterDao = roomDb.storyBookChapterDao()
             cursor = storyBookChapterDao.loadAllAsCursor(storyBookId)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -98,14 +98,14 @@ class StoryBookContentProvider : ContentProvider() {
             val pathSegments = uri.pathSegments
             val storyBookChapterIdAsString = pathSegments[3]
             val storyBookChapterId = storyBookChapterIdAsString.toLong()
-            Log.i(javaClass.name, "storyBookChapterId: $storyBookChapterId")
+            Log.i(TAG, "storyBookChapterId: $storyBookChapterId")
 
             val cursor: Cursor
 
             // Get the Room Cursor
             val storyBookParagraphDao = roomDb.storyBookParagraphDao()
             cursor = storyBookParagraphDao.loadAllAsCursor(storyBookChapterId)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -119,7 +119,7 @@ class StoryBookContentProvider : ContentProvider() {
      * Handles requests for the MIME type of the data at the given URI.
      */
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.name, "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -128,7 +128,7 @@ class StoryBookContentProvider : ContentProvider() {
      * Handles requests to insert a new row.
      */
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        Log.i(javaClass.name, "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -142,7 +142,7 @@ class StoryBookContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        Log.i(javaClass.name, "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -151,12 +151,13 @@ class StoryBookContentProvider : ContentProvider() {
      * Handle requests to delete one or more rows.
      */
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        Log.i(javaClass.name, "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     companion object {
+        private const val TAG = "StoryBookContentProvider"
         // The authority of this content provider
         const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.storybook_provider"
 
