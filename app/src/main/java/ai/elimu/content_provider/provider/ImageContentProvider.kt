@@ -171,7 +171,7 @@ class ImageContentProvider : ContentProvider() {
     }
 
     companion object {
-        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.image_provider"
+        private const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.image_provider"
 
         private const val TABLE_IMAGES = "images"
         private const val CODE_IMAGES = 1
@@ -182,10 +182,10 @@ class ImageContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_IMAGES, CODE_IMAGES)
-            MATCHER.addURI(AUTHORITY, TABLE_IMAGES + "/#", CODE_IMAGE_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_IMAGES/#", CODE_IMAGE_ID)
             MATCHER.addURI(
                 AUTHORITY,
-                TABLE_IMAGES + "/by-word-label-id/#",
+                "$TABLE_IMAGES/by-word-label-id/#",
                 CODE_IMAGES_BY_WORD_LABEL_ID
             )
         }
