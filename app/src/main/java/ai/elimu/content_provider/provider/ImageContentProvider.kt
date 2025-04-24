@@ -50,46 +50,51 @@ class ImageContentProvider : ContentProvider() {
 
         val code = MATCHER.match(uri)
         Log.i(javaClass.name, "code: $code")
-        if (code == CODE_IMAGES) {
-            // Get the Room Cursor
-            val cursor = imageDao.loadAllAsCursor()
-            Log.i(javaClass.name, "cursor: $cursor")
+        when (code) {
+            CODE_IMAGES -> {
+                // Get the Room Cursor
+                val cursor = imageDao.loadAllAsCursor()
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_IMAGE_ID) {
-            // Extract the Image ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
-            val imageIdAsString = pathSegments[1]
-            val imageId = imageIdAsString.toLong()
-            Log.i(javaClass.name, "imageId: $imageId")
+                return cursor
+            }
+            CODE_IMAGE_ID -> {
+                // Extract the Image ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                val imageIdAsString = pathSegments[1]
+                val imageId = imageIdAsString.toLong()
+                Log.i(javaClass.name, "imageId: $imageId")
 
-            // Get the Room Cursor
-            val cursor = imageDao.loadAsCursor(imageId)
-            Log.i(javaClass.name, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = imageDao.loadAsCursor(imageId)
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_IMAGES_BY_WORD_LABEL_ID) {
-            // Extract the Word ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
-            val wordIdAsString = pathSegments[2]
-            val wordId = wordIdAsString.toLong()
-            Log.i(javaClass.name, "wordId: $wordId")
+                return cursor
+            }
+            CODE_IMAGES_BY_WORD_LABEL_ID -> {
+                // Extract the Word ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                val wordIdAsString = pathSegments[2]
+                val wordId = wordIdAsString.toLong()
+                Log.i(javaClass.name, "wordId: $wordId")
 
-            // Get the Room Cursor
-            val cursor = imageDao.loadAllByWordLabelAsCursor(wordId)
-            Log.i(javaClass.name, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor = imageDao.loadAllByWordLabelAsCursor(wordId)
+                Log.i(javaClass.name, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
