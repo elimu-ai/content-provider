@@ -8,12 +8,13 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 
 class StoryBookContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         Log.i(TAG, "onCreate")
 
-        Log.i(TAG, "URI_STORYBOOK: " + URI_STORYBOOK)
+        Log.i(TAG, "URI_STORYBOOK: $URI_STORYBOOK")
 
         return true
     }
@@ -165,25 +166,25 @@ class StoryBookContentProvider : ContentProvider() {
     companion object {
         private const val TAG = "StoryBookContentProvider"
         // The authority of this content provider
-        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.storybook_provider"
+        private const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.storybook_provider"
 
         private const val TABLE_STORYBOOKS = "storybooks"
         private const val CODE_STORYBOOKS = 1
         private const val CODE_STORYBOOK_ID = 2
         private const val CODE_STORYBOOK_CHAPTERS = 3
         private const val CODE_STORYBOOK_CHAPTER_PARAGRAPHS = 4
-        val URI_STORYBOOK: Uri = Uri.parse("content://" + AUTHORITY + "/" + TABLE_STORYBOOKS)
+        val URI_STORYBOOK: Uri = ("content://$AUTHORITY/$TABLE_STORYBOOKS").toUri()
 
         // The URI matcher
         private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS, CODE_STORYBOOKS)
-            MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#", CODE_STORYBOOK_ID)
-            MATCHER.addURI(AUTHORITY, TABLE_STORYBOOKS + "/#/chapters", CODE_STORYBOOK_CHAPTERS)
+            MATCHER.addURI(AUTHORITY, "$TABLE_STORYBOOKS/#", CODE_STORYBOOK_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_STORYBOOKS/#/chapters", CODE_STORYBOOK_CHAPTERS)
             MATCHER.addURI(
                 AUTHORITY,
-                TABLE_STORYBOOKS + "/#/chapters/#/paragraphs",
+                "$TABLE_STORYBOOKS/#/chapters/#/paragraphs",
                 CODE_STORYBOOK_CHAPTER_PARAGRAPHS
             )
         }
