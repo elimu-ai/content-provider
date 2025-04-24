@@ -28,14 +28,14 @@ class EmojiContentProvider : ContentProvider() {
     ): Cursor? {
         Log.i(TAG, "query")
 
-        Log.i(TAG, "uri: " + uri)
-        Log.i(TAG, "projection: " + projection)
-        Log.i(TAG, "selection: " + selection)
-        Log.i(TAG, "selectionArgs: " + selectionArgs)
-        Log.i(TAG, "sortOrder: " + sortOrder)
+        Log.i(TAG, "uri: $uri")
+        Log.i(TAG, "projection: $projection")
+        Log.i(TAG, "selection: $selection")
+        Log.i(TAG, "selectionArgs: $selectionArgs")
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val context = getContext()
-        Log.i(TAG, "context: " + context)
+        Log.i(TAG, "context: $context")
         if (context == null) {
             return null
         }
@@ -44,53 +44,48 @@ class EmojiContentProvider : ContentProvider() {
         val emojiDao = roomDb.emojiDao()
 
         val code: Int = MATCHER.match(uri)
-        Log.i(TAG, "code: " + code)
+        Log.i(TAG, "code: $code")
         if (code == CODE_EMOJIS) {
-            val cursor: Cursor
 
             // Get the Room Cursor
-            cursor = emojiDao.loadAllAsCursor()
-            Log.i(TAG, "cursor: " + cursor)
+            val cursor: Cursor = emojiDao.loadAllAsCursor()
+            Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri)
+            cursor.setNotificationUri(context.contentResolver, uri)
 
             return cursor
         } else if (code == CODE_EMOJI_ID) {
             // Extract the Emoji ID from the URI
-            val pathSegments = uri.getPathSegments()
-            Log.i(TAG, "pathSegments: " + pathSegments)
+            val pathSegments = uri.pathSegments
+            Log.i(TAG, "pathSegments: $pathSegments")
             val emojiIdAsString = pathSegments.get(1)
             val emojiId = emojiIdAsString.toLong()
-            Log.i(TAG, "emojiId: " + emojiId)
-
-            val cursor: Cursor
+            Log.i(TAG, "emojiId: $emojiId")
 
             // Get the Room Cursor
-            cursor = emojiDao.loadAsCursor(emojiId)
-            Log.i(TAG, "cursor: " + cursor)
+            val cursor: Cursor = emojiDao.loadAsCursor(emojiId)
+            Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri)
+            cursor.setNotificationUri(context.contentResolver, uri)
 
             return cursor
         } else if (code == CODE_EMOJIS_BY_WORD_LABEL_ID) {
             // Extract the Word ID from the URI
-            val pathSegments = uri.getPathSegments()
-            Log.i(TAG, "pathSegments: " + pathSegments)
+            val pathSegments = uri.pathSegments
+            Log.i(TAG, "pathSegments: $pathSegments")
             val wordIdAsString = pathSegments.get(2)
             val wordId = wordIdAsString.toLong()
-            Log.i(TAG, "wordId: " + wordId)
-
-            val cursor: Cursor
+            Log.i(TAG, "wordId: $wordId")
 
             // Get the Room Cursor
-            cursor = emojiDao.loadAllByWordLabelAsCursor(wordId)
-            Log.i(TAG, "cursor: " + cursor)
+            val cursor: Cursor = emojiDao.loadAllByWordLabelAsCursor(wordId)
+            Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.getContentResolver(), uri)
+            cursor.setNotificationUri(context.contentResolver, uri)
 
             return cursor
         } else {
-            throw IllegalArgumentException("Unknown URI: " + uri)
+            throw IllegalArgumentException("Unknown URI: $uri")
         }
     }
 
@@ -144,7 +139,7 @@ class EmojiContentProvider : ContentProvider() {
 
     companion object {
         private const val TAG = "EmojiContentProvider"
-        val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.emoji_provider"
+        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.emoji_provider"
 
         private const val TABLE_EMOJIS = "emojis"
         private const val CODE_EMOJIS = 1
@@ -155,10 +150,10 @@ class EmojiContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_EMOJIS, CODE_EMOJIS)
-            MATCHER.addURI(AUTHORITY, TABLE_EMOJIS + "/#", CODE_EMOJI_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_EMOJIS/#", CODE_EMOJI_ID)
             MATCHER.addURI(
                 AUTHORITY,
-                TABLE_EMOJIS + "/by-word-label-id/#",
+                "$TABLE_EMOJIS/by-word-label-id/#",
                 CODE_EMOJIS_BY_WORD_LABEL_ID
             )
         }
