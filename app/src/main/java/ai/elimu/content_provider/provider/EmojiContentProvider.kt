@@ -11,7 +11,7 @@ import android.util.Log
 
 class EmojiContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        Log.i(javaClass.getName(), "onCreate")
+        Log.i(TAG, "onCreate")
 
         return true
     }
@@ -26,16 +26,16 @@ class EmojiContentProvider : ContentProvider() {
         selectionArgs: Array<String?>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.getName(), "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.getName(), "uri: " + uri)
-        Log.i(javaClass.getName(), "projection: " + projection)
-        Log.i(javaClass.getName(), "selection: " + selection)
-        Log.i(javaClass.getName(), "selectionArgs: " + selectionArgs)
-        Log.i(javaClass.getName(), "sortOrder: " + sortOrder)
+        Log.i(TAG, "uri: " + uri)
+        Log.i(TAG, "projection: " + projection)
+        Log.i(TAG, "selection: " + selection)
+        Log.i(TAG, "selectionArgs: " + selectionArgs)
+        Log.i(TAG, "sortOrder: " + sortOrder)
 
         val context = getContext()
-        Log.i(javaClass.getName(), "context: " + context)
+        Log.i(TAG, "context: " + context)
         if (context == null) {
             return null
         }
@@ -44,13 +44,13 @@ class EmojiContentProvider : ContentProvider() {
         val emojiDao = roomDb.emojiDao()
 
         val code: Int = MATCHER.match(uri)
-        Log.i(javaClass.getName(), "code: " + code)
+        Log.i(TAG, "code: " + code)
         if (code == CODE_EMOJIS) {
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = emojiDao.loadAllAsCursor()
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -58,16 +58,16 @@ class EmojiContentProvider : ContentProvider() {
         } else if (code == CODE_EMOJI_ID) {
             // Extract the Emoji ID from the URI
             val pathSegments = uri.getPathSegments()
-            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            Log.i(TAG, "pathSegments: " + pathSegments)
             val emojiIdAsString = pathSegments.get(1)
             val emojiId = emojiIdAsString.toLong()
-            Log.i(javaClass.getName(), "emojiId: " + emojiId)
+            Log.i(TAG, "emojiId: " + emojiId)
 
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = emojiDao.loadAsCursor(emojiId)
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -75,16 +75,16 @@ class EmojiContentProvider : ContentProvider() {
         } else if (code == CODE_EMOJIS_BY_WORD_LABEL_ID) {
             // Extract the Word ID from the URI
             val pathSegments = uri.getPathSegments()
-            Log.i(javaClass.getName(), "pathSegments: " + pathSegments)
+            Log.i(TAG, "pathSegments: " + pathSegments)
             val wordIdAsString = pathSegments.get(2)
             val wordId = wordIdAsString.toLong()
-            Log.i(javaClass.getName(), "wordId: " + wordId)
+            Log.i(TAG, "wordId: " + wordId)
 
             val cursor: Cursor
 
             // Get the Room Cursor
             cursor = emojiDao.loadAllByWordLabelAsCursor(wordId)
-            Log.i(javaClass.getName(), "cursor: " + cursor)
+            Log.i(TAG, "cursor: " + cursor)
 
             cursor.setNotificationUri(context.getContentResolver(), uri)
 
@@ -98,7 +98,7 @@ class EmojiContentProvider : ContentProvider() {
      * Handles requests for the MIME type of the data at the given URI.
      */
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.getName(), "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -110,7 +110,7 @@ class EmojiContentProvider : ContentProvider() {
         uri: Uri,
         values: ContentValues?,
     ): Uri? {
-        Log.i(javaClass.getName(), "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -123,7 +123,7 @@ class EmojiContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?,
     ): Int {
-        Log.i(javaClass.getName(), "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -137,12 +137,13 @@ class EmojiContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?,
     ): Int {
-        Log.i(javaClass.getName(), "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     companion object {
+        private const val TAG = "EmojiContentProvider"
         val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.emoji_provider"
 
         private const val TABLE_EMOJIS = "emojis"
