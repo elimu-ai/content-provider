@@ -11,7 +11,7 @@ import android.util.Log
 
 class SoundContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        Log.i(javaClass.name, "onCreate")
+        Log.i(TAG, "onCreate")
         return true
     }
 
@@ -22,16 +22,16 @@ class SoundContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.name, "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.name, "uri: $uri")
-        Log.i(javaClass.name, "projection: $projection")
-        Log.i(javaClass.name, "selection: $selection")
-        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
-        Log.i(javaClass.name, "sortOrder: $sortOrder")
+        Log.i(TAG, "uri: $uri")
+        Log.i(TAG, "projection: $projection")
+        Log.i(TAG, "selection: $selection")
+        Log.i(TAG, "selectionArgs: $selectionArgs")
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val context = context
-        Log.i(javaClass.name, "context: $context")
+        Log.i(TAG, "context: $context")
         if (context == null) {
             return null
         }
@@ -40,12 +40,12 @@ class SoundContentProvider : ContentProvider() {
         val soundDao = roomDb.soundDao()
 
         val code = MATCHER.match(uri)
-        Log.i(javaClass.name, "code: $code")
+        Log.i(TAG, "code: $code")
         when (code) {
             CODE_SOUNDS -> {
                 // Get the Room Cursor
                 val cursor = soundDao.loadAllOrderedByUsageCount_Cursor()
-                Log.i(javaClass.name, "cursor: $cursor")
+                Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -54,14 +54,14 @@ class SoundContentProvider : ContentProvider() {
             CODE_SOUNDS_BY_LETTER_SOUND_ID -> {
                 // Extract the letter-sound correspondence ID from the URI
                 val pathSegments = uri.pathSegments
-                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                Log.i(TAG, "pathSegments: $pathSegments")
                 val letterSoundIdAsString = pathSegments[2]
                 val letterSoundId = letterSoundIdAsString.toLong()
-                Log.i(javaClass.name, "letterSoundId: $letterSoundId")
+                Log.i(TAG, "letterSoundId: $letterSoundId")
 
                 // Get the Room Cursor
                 val cursor = soundDao.loadAllByLetterSound(letterSoundId)
-                Log.i(javaClass.name, "cursor: $cursor")
+                Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -70,14 +70,14 @@ class SoundContentProvider : ContentProvider() {
             CODE_SOUND_ID -> {
                 // Extract the Sound ID from the URI
                 val pathSegments = uri.pathSegments
-                Log.i(javaClass.name, "pathSegments: $pathSegments")
+                Log.i(TAG, "pathSegments: $pathSegments")
                 val soundIdAsString = pathSegments[1]
                 val soundId = soundIdAsString.toLong()
-                Log.i(javaClass.name, "soundId: $soundId")
+                Log.i(TAG, "soundId: $soundId")
 
                 // Get the Room Cursor
                 val cursor = soundDao.load_Cursor(soundId)
-                Log.i(javaClass.name, "cursor: $cursor")
+                Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -90,13 +90,13 @@ class SoundContentProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.name, "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        Log.i(javaClass.name, "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -107,18 +107,19 @@ class SoundContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        Log.i(javaClass.name, "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        Log.i(javaClass.name, "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     companion object {
+        private const val TAG = "SoundContentProvider"
         private const val AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.sound_provider"
         private const val TABLE_SOUNDS = "sounds"
         private const val CODE_SOUNDS = 1
