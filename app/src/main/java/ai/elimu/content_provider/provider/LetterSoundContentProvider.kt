@@ -11,7 +11,7 @@ import android.util.Log
 
 class LetterSoundContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        Log.i(javaClass.name, "onCreate")
+        Log.i(TAG, "onCreate")
         return true
     }
 
@@ -22,16 +22,16 @@ class LetterSoundContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log.i(javaClass.name, "query")
+        Log.i(TAG, "query")
 
-        Log.i(javaClass.name, "uri: $uri")
-        Log.i(javaClass.name, "projection: $projection")
-        Log.i(javaClass.name, "selection: $selection")
-        Log.i(javaClass.name, "selectionArgs: $selectionArgs")
-        Log.i(javaClass.name, "sortOrder: $sortOrder")
+        Log.i(TAG, "uri: $uri")
+        Log.i(TAG, "projection: $projection")
+        Log.i(TAG, "selection: $selection")
+        Log.i(TAG, "selectionArgs: $selectionArgs")
+        Log.i(TAG, "sortOrder: $sortOrder")
 
         val context = context
-        Log.i(javaClass.name, "context: $context")
+        Log.i(TAG, "context: $context")
         if (context == null) {
             return null
         }
@@ -40,11 +40,11 @@ class LetterSoundContentProvider : ContentProvider() {
         val letterSoundDao = roomDb.letterSoundDao()
 
         val code = MATCHER.match(uri)
-        Log.i(javaClass.name, "code: $code")
+        Log.i(TAG, "code: $code")
         if (code == CODE_LETTER_SOUNDS) {
             // Get the Room Cursor
             val cursor = letterSoundDao.loadAll_Cursor()
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -52,14 +52,14 @@ class LetterSoundContentProvider : ContentProvider() {
         } else if (code == CODE_LETTER_SOUND_ID) {
             // Extract the LetterSound ID from the URI
             val pathSegments = uri.pathSegments
-            Log.i(javaClass.name, "pathSegments: $pathSegments")
+            Log.i(TAG, "pathSegments: $pathSegments")
             val idAsString = pathSegments[1]
             val id = idAsString.toLong()
-            Log.i(javaClass.name, "id: $id")
+            Log.i(TAG, "id: $id")
 
             // Get the Room Cursor
             val cursor = letterSoundDao.load_Cursor(id)
-            Log.i(javaClass.name, "cursor: $cursor")
+            Log.i(TAG, "cursor: $cursor")
 
             cursor.setNotificationUri(context.contentResolver, uri)
 
@@ -70,13 +70,13 @@ class LetterSoundContentProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        Log.i(javaClass.name, "getType")
+        Log.i(TAG, "getType")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        Log.i(javaClass.name, "insert")
+        Log.i(TAG, "insert")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -87,18 +87,19 @@ class LetterSoundContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        Log.i(javaClass.name, "update")
+        Log.i(TAG, "update")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        Log.i(javaClass.name, "delete")
+        Log.i(TAG, "delete")
 
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     companion object {
+        private const val TAG = "LetterSoundContentProvider"
         private const val AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.letter_sound_provider"
         private const val TABLE_LETTER_SOUNDS = "letter_sounds"
         private const val CODE_LETTER_SOUNDS = 1
