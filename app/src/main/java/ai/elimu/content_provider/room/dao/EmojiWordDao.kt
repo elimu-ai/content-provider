@@ -7,12 +7,12 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface Emoji_WordDao {
+interface EmojiWordDao {
     @Insert
-    fun insert(emoji_Word: Emoji_Word)
+    fun insert(emojiWord: Emoji_Word)
 
     @Update
-    fun update(emoji_Word: Emoji_Word)
+    fun update(emojiWord: Emoji_Word)
 
     @Query("DELETE FROM Emoji_Word WHERE Emoji_id = :emojiId")
     fun delete(emojiId: Long?)

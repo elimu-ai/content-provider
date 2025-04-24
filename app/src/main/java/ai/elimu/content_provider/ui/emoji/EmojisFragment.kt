@@ -105,7 +105,7 @@ class EmojisFragment : Fragment() {
 
             val roomDb = RoomDb.getDatabase(context)
             val emojiDao = roomDb.emojiDao()
-            val emojiWordDao = roomDb.emoji_WordDao()
+            val emojiWordDao = roomDb.emojiWordDao()
 
             // Empty the database table before downloading up-to-date content
             emojiWordDao.deleteAll()
