@@ -136,7 +136,7 @@ object ContentProviderUtil {
     fun getAvailableWordGsons(
         context: Context,
         contentProviderApplicationId: String,
-        analyticsApplicationId: String?
+        analyticsApplicationId: String
     ): List<WordGson> {
         Log.i(TAG, "getAvailableWordGsons")
 
