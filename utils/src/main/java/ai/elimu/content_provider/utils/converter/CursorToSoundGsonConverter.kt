@@ -28,10 +28,11 @@ object CursorToSoundGsonConverter {
         val valueIpa = cursor.getString(columnIndexValueIpa)
         Log.i(TAG, "valueIpa: \"$valueIpa\"")
 
-        val soundGson = SoundGson()
-        soundGson.id = id
-        soundGson.revisionNumber = revisionNumber
-        soundGson.valueIpa = valueIpa
+        val soundGson = SoundGson().apply {
+            this.id = id
+            this.revisionNumber = revisionNumber
+            this.valueIpa = valueIpa
+        }
 
         return soundGson
     }
