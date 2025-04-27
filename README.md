@@ -181,9 +181,8 @@ To perform a release, follow these steps:
 1. Remove `-SNAPSHOT`
    - from the `versionName` in `app/build.gradle`
    - from the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `chore: prepare release 1.2.42`)
-1. Create a new tag (e.g. `1.2.42`)
-1. Commit the changes
+1. Commit the changes (e.g. `chore: prepare release 1.2.3`)
+1. Create a new tag (e.g. `1.2.3`)
 1. Bump the `versionCode` and `versionName`
    - in `app/build.gradle`
    - in `utils/build.gradle`
