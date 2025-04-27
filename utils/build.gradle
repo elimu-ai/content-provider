@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
-    alias(libs.plugins.kotlin.android)
+    alias libs.plugins.kotlin.android
 }
 
 android {
@@ -13,7 +13,6 @@ android {
         targetSdkVersion 35
         versionCode 1002042
         versionName "1.2.42-SNAPSHOT"
-        setProperty("archivesBaseName", "utils-${versionName}")
     }
 
     buildTypes {
@@ -37,22 +36,13 @@ dependencies {
     testImplementation libs.junit
 }
 
-// See https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
-// Usage: ./gradlew clean build publish -PmavenUsername=***** -PmavenPassword=*****
 publishing {
     publications {
-        release(MavenPublication) {
-            artifact("${buildDir}/outputs/aar/utils-${version}-release.aar")
-        }
-    }
-    repositories {
-        maven {
-            credentials(PasswordCredentials)
-            url "https://maven.pkg.github.com/elimu-ai/content-provider"
+        aar(MavenPublication) {
+            artifact("${buildDir}/outputs/aar/utils-release.aar")
         }
     }
 }
-
-tasks.named("publishReleasePublicationToMavenLocal") {
-    dependsOn(":utils:bundleReleaseAar")
+tasks.named("publishAarPublicationToMavenLocal") {
+    mustRunAfter(":utils:bundleReleaseAar")
 }

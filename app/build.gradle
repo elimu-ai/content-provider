@@ -1,8 +1,9 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
+    id 'com.android.application'
+    id 'org.ajoberstar.grgit'
+    id 'maven-publish'
+    alias libs.plugins.kotlin.android
 }
-apply plugin: 'com.android.application'
-apply plugin: 'org.ajoberstar.grgit'
 
 android {
     compileSdk 35
@@ -14,7 +15,6 @@ android {
         targetSdkVersion 35
         versionCode 1002042
         versionName "1.2.42-SNAPSHOT"
-        setProperty("archivesBaseName", "${applicationId}-${versionCode}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -77,6 +77,17 @@ dependencies {
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso)
+}
+
+publishing {
+    publications {
+        apk(MavenPublication) {
+            artifact("${buildDir}/outputs/apk/release/app-release-unsigned.apk")
+        }
+    }
+}
+tasks.named("publishApkPublicationToMavenLocal") {
+    mustRunAfter(":app:assembleRelease")
 }
 
 task ensureCleanRepo {
