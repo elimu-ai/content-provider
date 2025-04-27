@@ -182,7 +182,7 @@ To perform a release, follow these steps:
    - from the `versionName` in `app/build.gradle`
    - from the `versionName` in `utils/build.gradle`
 1. Commit the changes (e.g. `chore: prepare release 1.2.42`)
-1. Create a new tag (e.g. `1.2.42`)4
+1. Create a new tag (e.g. `1.2.42`)
 2. Commit the changes
 1. Add `-SNAPSHOT`
    - to the `versionName` in `app/build.gradle`
