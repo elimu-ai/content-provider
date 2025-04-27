@@ -1,9 +1,9 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
+    id 'com.android.application'
+    id 'org.ajoberstar.grgit'
+    id 'maven-publish'
+    alias libs.plugins.kotlin.android
 }
-apply plugin: 'com.android.application'
-apply plugin: 'org.ajoberstar.grgit'
-apply plugin: 'maven-publish'
 
 android {
     compileSdk 35
