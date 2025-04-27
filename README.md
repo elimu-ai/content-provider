@@ -178,25 +178,17 @@ migration succeeded:
 
 To perform a release, follow these steps:
 
-1. Create a new branch for the release
 1. Remove `-SNAPSHOT`
    - from the `versionName` in `app/build.gradle`
    - from the `versionName` in `utils/build.gradle`
-   - from the `version` in `utils/build.gradle` under `publishing`
-1. Commit the changes
-1. Click "Draft a new release" at https://github.com/elimu-ai/content-provider/releases
-1. Pick the new branch you created as the target branch
-1. Create a new tag (e.g. `1.2.19`)
-1. Choose a release title, and click "Publish release"
+1. Commit the changes (e.g. `chore: prepare release 1.2.42`)
+1. Create a new tag (e.g. `1.2.42`)4
+2. Commit the changes
+1. Add `-SNAPSHOT`
+   - to the `versionName` in `app/build.gradle`
+   - to the `versionName` in `utils/build.gradle`
+1. Commit the changes (e.g. `prepare for next development iteration`)
 1. Ensure that the release appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
-1. Prepare for next development iteration by bumping the version and adding `-SNAPSHOT`
-   - in the `versionCode` in `app/build.gradle`
-   - in the `versionName` in `app/build.gradle`
-   - in the `versionCode` in `utils/build.gradle`
-   - in the `versionName` in `utils/build.gradle`
-   - in the `version` in `utils/build.gradle` under `publishing`
-1. Commit the changes
-   - Create a pull request for merging your branch into `main`
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
