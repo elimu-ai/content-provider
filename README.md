@@ -187,7 +187,7 @@ To perform a release, follow these steps:
 1. Add `-SNAPSHOT`
    - to the `versionName` in `app/build.gradle`
    - to the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `prepare for next development iteration`)
+1. Commit the changes (e.g. `chore: prepare for next development iteration`)
 1. Ensure that the release appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
 
 > [!IMPORTANT]
