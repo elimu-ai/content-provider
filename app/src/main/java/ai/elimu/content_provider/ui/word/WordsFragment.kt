@@ -51,7 +51,7 @@ class WordsFragment : Fragment() {
         super.onStart()
 
         // Download Words from REST API, and store them in the database
-        val baseApplication = activity!!.application as BaseApplication
+        val baseApplication = activity?.application as? BaseApplication ?: return
         val retrofit = baseApplication.retrofit
         val wordsService = retrofit.create(WordsService::class.java)
         val wordGsonsCall = wordsService.listWords()
@@ -65,14 +65,13 @@ class WordsFragment : Fragment() {
 
                 Log.i(javaClass.name, "response: $response")
                 if (response.isSuccessful) {
-                    val wordGsons = response.body()!!
-                    Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
+                    val wordGsons = response.body()
+                    wordGsons?.let {
+                        Log.i(javaClass.name, "wordGsons.size(): " + wordGsons.size)
 
-                    if (wordGsons.isNotEmpty()) {
-                        processResponseBody(wordGsons)
-                    } else {
-                        binding.textWords.text = getString(R.string.words_size, 0)
-                        binding.progressBarWords.visibility = View.GONE
+                        if (wordGsons.isNotEmpty()) {
+                            processResponseBody(wordGsons)
+                        }
                     }
                 } else {
                     // Handle error
@@ -122,15 +121,16 @@ class WordsFragment : Fragment() {
                     Log.i(javaClass.name, "wordGson.getId(): " + wordGson.id)
 
                     // Store the Word in the database
-                    val word = getWord(wordGson)
-                    wordDao.insert(word)
-                    Log.i(javaClass.name, "Stored Word in database with ID " + word!!.id)
+                    getWord(wordGson)?.let { word ->
+                        wordDao.insert(word)
+                        Log.i(javaClass.name, "Stored Word in database with ID " + word.id)
+                    }
                 }
 
                 // Update the UI
                 val words = wordDao.loadAllOrderedByUsageCount()
                 Log.i(javaClass.name, "words.size(): " + words.size)
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     binding.textWords.text = getString(R.string.words_size, words.size)
                     Snackbar.make(binding.textWords, "words.size(): " + words.size, Snackbar.LENGTH_LONG)
                         .show()
