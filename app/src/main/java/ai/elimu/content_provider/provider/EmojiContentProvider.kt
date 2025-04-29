@@ -42,47 +42,52 @@ class EmojiContentProvider : ContentProvider() {
 
         val code: Int = MATCHER.match(uri)
         Log.i(TAG, "code: $code")
-        if (code == CODE_EMOJIS) {
+        when (code) {
+            CODE_EMOJIS -> {
 
-            // Get the Room Cursor
-            val cursor: Cursor = emojiDao.loadAllAsCursor()
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = emojiDao.loadAllAsCursor()
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_EMOJI_ID) {
-            // Extract the Emoji ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val emojiIdAsString = pathSegments[1]
-            val emojiId = emojiIdAsString.toLong()
-            Log.i(TAG, "emojiId: $emojiId")
+                return cursor
+            }
+            CODE_EMOJI_ID -> {
+                // Extract the Emoji ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val emojiIdAsString = pathSegments[1]
+                val emojiId = emojiIdAsString.toLong()
+                Log.i(TAG, "emojiId: $emojiId")
 
-            // Get the Room Cursor
-            val cursor: Cursor = emojiDao.loadAsCursor(emojiId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = emojiDao.loadAsCursor(emojiId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_EMOJIS_BY_WORD_LABEL_ID) {
-            // Extract the Word ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val wordIdAsString = pathSegments[2]
-            val wordId = wordIdAsString.toLong()
-            Log.i(TAG, "wordId: $wordId")
+                return cursor
+            }
+            CODE_EMOJIS_BY_WORD_LABEL_ID -> {
+                // Extract the Word ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val wordIdAsString = pathSegments[2]
+                val wordId = wordIdAsString.toLong()
+                Log.i(TAG, "wordId: $wordId")
 
-            // Get the Room Cursor
-            val cursor: Cursor = emojiDao.loadAllByWordLabelAsCursor(wordId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = emojiDao.loadAllByWordLabelAsCursor(wordId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
