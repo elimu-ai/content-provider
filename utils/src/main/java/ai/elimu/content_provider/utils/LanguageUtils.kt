@@ -2,14 +2,14 @@ package ai.elimu.content_provider.utils
 
 import ai.elimu.model.v2.enums.Language
 import android.content.Context
-import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 
 object LanguageUtils {
 
     fun getLanguage(context: Context, providerId: String): Language? {
-        val uri = Uri.parse("content://" + providerId
-                + ".provider.shared_data/shared_data")
+        val uri = ("content://" + providerId
+                + ".provider.shared_data/shared_data").toUri()
         val cursor = context.contentResolver.query(uri,
             null, null, null, null
         )
