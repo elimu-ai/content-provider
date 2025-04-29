@@ -25,8 +25,7 @@ public class Converters {
 
     @TypeConverter
     public static String toString(ImageFormat imageFormat) {
-        String value = imageFormat.toString();
-        return value;
+        return imageFormat.toString();
     }
 
 
@@ -41,8 +40,7 @@ public class Converters {
 
     @TypeConverter
     public static String toString(VideoFormat videoFormat) {
-        String value = videoFormat.toString();
-        return value;
+        return videoFormat.toString();
     }
 
 
