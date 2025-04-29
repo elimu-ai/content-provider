@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import java.util.Locale
+import androidx.core.net.toUri
 
 object CursorToStoryBookParagraphGsonConverter {
 
@@ -37,7 +38,7 @@ object CursorToStoryBookParagraphGsonConverter {
 
         var wordGsons: MutableList<WordGson>? = null
         val wordsUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words/by-paragraph-id/$id")
+            "content://$contentProviderApplicationId.provider.word_provider/words/by-paragraph-id/$id".toUri()
         Log.i(CursorToImageGsonConverter::class.java.name, "wordsUri: $wordsUri")
         val wordsCursor = context.contentResolver.query(wordsUri, null, null, null, null)
         if (wordsCursor == null) {
