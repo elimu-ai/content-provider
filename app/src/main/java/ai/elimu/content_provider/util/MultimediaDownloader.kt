@@ -10,10 +10,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object MultimediaDownloader {
+    
+    private const val TAG = "MultimediaDownloader"
+    
     fun downloadFileBytes(urlValue: String): ByteArray? {
-        Log.i(MultimediaDownloader::class.java.name, "downloadFileBytes")
+        Log.i(TAG, "downloadFileBytes")
 
-        Log.i(MultimediaDownloader::class.java.name, "Downloading from $urlValue")
+        Log.i(TAG, "Downloading from $urlValue")
 
         var bytes: ByteArray? = null
 
@@ -26,7 +29,7 @@ object MultimediaDownloader {
 
             val responseCode = httpURLConnection.responseCode
             Log.i(
-                MultimediaDownloader::class.java.name,
+                TAG,
                 "responseCode: $responseCode"
             )
             var inputStream: InputStream? = null
@@ -42,12 +45,12 @@ object MultimediaDownloader {
                     response += line
                 }
                 Log.e(
-                    MultimediaDownloader::class.java.name,
+                    TAG,
                     "responseCode: $responseCode, response: $response"
                 )
             }
         } catch (e: IOException) {
-            Log.e(MultimediaDownloader::class.java.name, null, e)
+            Log.e(TAG, null, e)
         }
 
         return bytes
