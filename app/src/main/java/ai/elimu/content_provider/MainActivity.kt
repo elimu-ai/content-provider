@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.nav_storybooks,
                     R.id.nav_videos
                 )
-                    .setDrawerLayout(drawer)
+                    .setOpenableLayout(drawer)
                     .build()
 
             val navigationView = findViewById<NavigationView>(R.id.nav_view)
