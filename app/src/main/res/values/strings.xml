@@ -28,4 +28,5 @@
     <string name="emojis_size">emojis.size(): %d</string>
     <string name="language_value">%1$s (%2$s)</string>
     <string name="drawer_header_multimedia">Multimedia</string>
+    <string name="select_your_language">Select your language</string>
 </resources>
