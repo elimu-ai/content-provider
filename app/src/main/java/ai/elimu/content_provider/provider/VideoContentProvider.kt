@@ -172,8 +172,8 @@ class VideoContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_VIDEOS, CODE_VIDEOS)
-            MATCHER.addURI(AUTHORITY, TABLE_VIDEOS + "/#", CODE_VIDEO_ID)
-            MATCHER.addURI(AUTHORITY, TABLE_VIDEOS + "/by-title/*", CODE_VIDEO_TITLE)
+            MATCHER.addURI(AUTHORITY, "$TABLE_VIDEOS/#", CODE_VIDEO_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_VIDEOS/by-title/*", CODE_VIDEO_TITLE)
         }
     }
 }
