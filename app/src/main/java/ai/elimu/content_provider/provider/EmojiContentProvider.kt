@@ -141,7 +141,7 @@ class EmojiContentProvider : ContentProvider() {
 
     companion object {
         private const val TAG = "EmojiContentProvider"
-        const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.emoji_provider"
+        private const val AUTHORITY: String = BuildConfig.APPLICATION_ID + ".provider.emoji_provider"
 
         private const val TABLE_EMOJIS = "emojis"
         private const val CODE_EMOJIS = 1
