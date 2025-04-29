@@ -32,7 +32,7 @@ object MultimediaDownloader {
                 TAG,
                 "responseCode: $responseCode"
             )
-            var inputStream: InputStream? = null
+            val inputStream: InputStream?
             if (responseCode == 200) {
                 inputStream = httpURLConnection.inputStream
                 bytes = IOUtils.toByteArray(inputStream)
