@@ -7,12 +7,12 @@ import ai.elimu.model.v2.gson.content.LetterSoundGson
 import ai.elimu.model.v2.gson.content.SoundGson
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 object CursorToLetterSoundGsonConverter {
 
@@ -43,7 +43,7 @@ object CursorToLetterSoundGsonConverter {
 
         val letterGsons = mutableListOf<LetterGson>()
         val lettersUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id")
+            "content://$contentProviderApplicationId.provider.letter_provider/letters/by-letter-sound-id/$id".toUri()
         Log.i(TAG, "lettersUri: $lettersUri")
         val lettersCursor = context.contentResolver.query(lettersUri, null, null, null, null)
         if (lettersCursor == null) {
@@ -71,7 +71,7 @@ object CursorToLetterSoundGsonConverter {
 
         val soundGsons = mutableListOf<SoundGson>()
         val soundsUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id")
+            "content://$contentProviderApplicationId.provider.sound_provider/sounds/by-letter-sound-id/$id".toUri()
         Log.i(TAG, "soundsUri: $soundsUri")
         val soundsCursor = context.contentResolver.query(soundsUri, null, null, null, null)
         if (soundsCursor == null) {
