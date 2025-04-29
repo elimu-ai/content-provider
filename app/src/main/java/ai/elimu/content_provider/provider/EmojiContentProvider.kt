@@ -34,11 +34,8 @@ class EmojiContentProvider : ContentProvider() {
         Log.i(TAG, "selectionArgs: $selectionArgs")
         Log.i(TAG, "sortOrder: $sortOrder")
 
-        val context = getContext()
+        val context = context ?: return null
         Log.i(TAG, "context: $context")
-        if (context == null) {
-            return null
-        }
 
         val roomDb = RoomDb.getDatabase(context)
         val emojiDao = roomDb.emojiDao()
