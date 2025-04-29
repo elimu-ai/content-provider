@@ -20,11 +20,11 @@ import ai.elimu.model.v2.gson.content.StoryBookParagraphGson
 import ai.elimu.model.v2.gson.content.VideoGson
 import ai.elimu.model.v2.gson.content.WordGson
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
 
 object ContentProviderUtil {
 
@@ -44,7 +44,7 @@ object ContentProviderUtil {
         val letterGsons: MutableList<LetterGson> = ArrayList()
 
         val uri =
-            Uri.parse("content://$contentProviderApplicationId.provider.letter_provider/letters")
+            "content://$contentProviderApplicationId.provider.letter_provider/letters".toUri()
         Log.i(TAG, "uri: $uri")
         val cursor = context.contentResolver.query(uri, null, null, null, null)
         Log.i(TAG, "cursor: $cursor")
@@ -88,7 +88,7 @@ object ContentProviderUtil {
         val letterSoundGsons: MutableList<LetterSoundGson> = ArrayList()
 
         val uri =
-            Uri.parse("content://$contentProviderApplicationId.provider.letter_sound_provider/letter_sounds")
+            "content://$contentProviderApplicationId.provider.letter_sound_provider/letter_sounds".toUri()
         Log.i(TAG, "uri: $uri")
         val cursor = context.contentResolver.query(uri, null, null, null, null)
         Log.i(TAG, "cursor: $cursor")
@@ -182,7 +182,7 @@ object ContentProviderUtil {
         val wordGsons: MutableList<WordGson> = ArrayList()
 
         val wordsUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words")
+            "content://$contentProviderApplicationId.provider.word_provider/words".toUri()
         Log.i(TAG, "wordsUri: $wordsUri")
         val wordsCursor = context.contentResolver.query(wordsUri, null, null, null, null)
         Log.i(TAG, "wordsCursor: $wordsCursor")
@@ -231,7 +231,7 @@ object ContentProviderUtil {
         var wordGson: WordGson? = null
 
         val wordUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.word_provider/words/$wordId")
+            "content://$contentProviderApplicationId.provider.word_provider/words/$wordId".toUri()
         Log.i(TAG, "wordUri: $wordUri")
         val wordCursor = context.contentResolver.query(wordUri, null, null, null, null)
         Log.i(TAG, "wordCursor: $wordCursor")
@@ -273,7 +273,7 @@ object ContentProviderUtil {
         val emojiGsons: MutableList<EmojiGson> = ArrayList()
 
         val emojisUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.emoji_provider/emojis/by-word-label-id/$wordId")
+            "content://$contentProviderApplicationId.provider.emoji_provider/emojis/by-word-label-id/$wordId".toUri()
         Log.i(TAG, "emojisUri: $emojisUri")
         val emojisCursor = context.contentResolver.query(emojisUri, null, null, null, null)
         Log.i(TAG, "emojisCursor: $emojisCursor")
@@ -322,7 +322,7 @@ object ContentProviderUtil {
         var imageGson: ImageGson? = null
 
         val imageUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.image_provider/images/$imageId")
+            "content://$contentProviderApplicationId.provider.image_provider/images/$imageId".toUri()
         Log.i(TAG, "imageUri: $imageUri")
         val imageCursor = context.contentResolver.query(imageUri, null, null, null, null)
         Log.i(TAG, "imageCursor: $imageCursor")
@@ -363,7 +363,7 @@ object ContentProviderUtil {
         val storyBookGsons: MutableList<StoryBookGson> = ArrayList()
 
         val storyBooksUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks")
+            "content://$contentProviderApplicationId.provider.storybook_provider/storybooks".toUri()
         Log.i(
             TAG,
             "storyBooksUri: $storyBooksUri"
@@ -419,7 +419,7 @@ object ContentProviderUtil {
         var storyBookGson: StoryBookGson? = null
 
         val storyBookUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId")
+            "content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId".toUri()
         Log.i(TAG, "storyBookUri: $storyBookUri")
         val storyBookCursor = context.contentResolver.query(storyBookUri, null, null, null, null)
         Log.i(
@@ -483,7 +483,7 @@ object ContentProviderUtil {
         storyBookChapterGsons.add(coverChapterGson)
 
         val storyBookChaptersUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId/chapters")
+            "content://$contentProviderApplicationId.provider.storybook_provider/storybooks/$storyBookId/chapters".toUri()
         Log.i(
             TAG,
             "storyBookChaptersUri: $storyBookChaptersUri"
@@ -549,7 +549,7 @@ object ContentProviderUtil {
         val videoGsons: MutableList<VideoGson> = ArrayList()
 
         val videosUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.video_provider/videos")
+            "content://$contentProviderApplicationId.provider.video_provider/videos".toUri()
         Log.i(
             ContentProviderUtil::class.java.name,
             "videosUri: $videosUri"
