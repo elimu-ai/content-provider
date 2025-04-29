@@ -1,6 +1,6 @@
-# elimu.ai Content Provider
-
 [![](https://jitpack.io/v/ai.elimu/content-provider.svg)](https://jitpack.io/#ai.elimu/content-provider)
+
+# elimu.ai Content Provider
 
 Android application which downloads educational content (e.g. letters, words, audios, storybooks, videos, etc) to the 
 device and provides it to other elimu.ai apps.
@@ -46,26 +46,11 @@ See https://jitpack.io/#ai.elimu/content-provider/ for the latest version availa
 <a name="utils-snapshot"></a>
 ### How to Test `-SNAPSHOT` Versions of the Utils Library
 
-1. In `utils/build.gradle`, add `mavenLocal()`:
-    ```diff
-    publishing {
-        publications {
-            ...
-        }
-        repositories {
-            maven {
-                credentials(PasswordCredentials)
-                url "https://maven.pkg.github.com/elimu-ai/content-provider"
-            }
-    +        mavenLocal()
-        }
-    }
-    ```
-2. Publish the library to your local Maven repository:
+1. Publish the library to your local Maven repository:
     ```sh
     ./gradlew clean utils:publishReleasePublicationToMavenLocal
     ```
-3. In the app that will be testing the `-SNAPSHOT` version of the library, also add `mavenLocal()`:
+2. In the app that will be testing the `-SNAPSHOT` version of the library, add `mavenLocal()`:
     ```diff
     allprojects {
         repositories {
@@ -78,12 +63,12 @@ See https://jitpack.io/#ai.elimu/content-provider/ for the latest version availa
         }
     }
     ```
-4. Then change to your snapshot version of the library:
+3. Then change to your `-SNAPSHOT` version of the library:
     ```diff
     [versions]
-    elimuModel = "model-2.0.89"
-    -elimuContentProvider = "1.2.38"
-    +elimuContentProvider = "1.2.39-SNAPSHOT"
+    elimuModel = "model-2.0.101"
+    -elimuContentProvider = "1.2.42"
+    +elimuContentProvider = "1.2.43-SNAPSHOT"
     ```
 
 ### Usage Example
@@ -178,19 +163,9 @@ migration succeeded:
 
 To perform a release, follow these steps:
 
-1. Remove `-SNAPSHOT`
-   - from the `versionName` in `app/build.gradle`
-   - from the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `chore: prepare release 1.2.3`)
-1. Create a new tag (e.g. `1.2.3`)
-1. Bump the `versionCode` and `versionName`
-   - in `app/build.gradle`
-   - in `utils/build.gradle`
-1. Add `-SNAPSHOT`
-   - to the `versionName` in `app/build.gradle`
-   - to the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `chore: prepare for next development iteration`)
-1. Ensure that the release appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
+1. Merge your PR into the `main` branch
+1. Wait for the ["Gradle Release"](https://github.com/elimu-ai/content-provider/actions/workflows/gradle-release.yml) workflow to complete
+1. Ensure that the new release version appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
