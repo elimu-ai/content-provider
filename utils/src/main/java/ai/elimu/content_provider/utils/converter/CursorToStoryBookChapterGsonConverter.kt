@@ -6,9 +6,9 @@ import ai.elimu.model.v2.gson.content.StoryBookChapterGson
 import ai.elimu.model.v2.gson.content.StoryBookParagraphGson
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.core.net.toUri
 
 object CursorToStoryBookChapterGsonConverter {
     
@@ -38,7 +38,7 @@ object CursorToStoryBookChapterGsonConverter {
         Log.i(TAG, "imageId: $imageId")
         if (imageId != null) {
             val imageUri =
-                Uri.parse("content://$contentProviderApplicationId.provider.image_provider/images/$imageId")
+                "content://$contentProviderApplicationId.provider.image_provider/images/$imageId".toUri()
             Log.i(TAG, "imageUri: $imageUri")
             val imageCursor = context.contentResolver.query(imageUri, null, null, null, null)
             if (imageCursor == null) {
@@ -64,7 +64,7 @@ object CursorToStoryBookChapterGsonConverter {
 
         var paragraphGsons: MutableList<StoryBookParagraphGson?>? = null
         val paragraphsUri =
-            Uri.parse("content://$contentProviderApplicationId.provider.storybook_provider/storybooks/0/chapters/$id/paragraphs")
+            "content://$contentProviderApplicationId.provider.storybook_provider/storybooks/0/chapters/$id/paragraphs".toUri()
         Log.i(TAG, "paragraphsUri: $paragraphsUri")
         val paragraphsCursor = context.contentResolver.query(paragraphsUri, null, null, null, null)
         if (paragraphsCursor == null) {
