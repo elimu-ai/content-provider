@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,9 +41,9 @@ class VideosFragment : Fragment() {
         videosViewModel = ViewModelProvider(this)[VideosViewModel::class.java]
         binding = FragmentVideosBinding.inflate(layoutInflater)
         videosViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
-            override fun onChanged(s: String?) {
+            override fun onChanged(value: String?) {
                 Log.i(javaClass.name, "onChanged")
-                binding.textVideos.text = s
+                binding.textVideos.text = value
             }
         })
         return binding.root
@@ -74,10 +75,13 @@ class VideosFragment : Fragment() {
                         processResponseBody(videoGsons)
                     }
                 } else {
-                    // Handle error
-                    Snackbar.make(binding.textVideos, response.toString(), Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                        .show()
+                    context?.let { context ->
+                        // Handle error
+                        Snackbar.make(binding.textVideos, response.toString(), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                            .show()
+                    }
+
                     binding.progressBarVideos.visibility = View.GONE
                 }
             }
@@ -87,10 +91,13 @@ class VideosFragment : Fragment() {
 
                 Log.e(javaClass.name, "t.getCause():", t.cause)
 
-                // Handle error
-                Snackbar.make(binding.textVideos, t.cause.toString(), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(resources.getColor(R.color.deep_orange_darken_4))
-                    .show()
+                context?.let { context ->
+                    // Handle error
+                    Snackbar.make(binding.textVideos, t.cause.toString(), Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(context, R.color.deep_orange_darken_4))
+                        .show()
+                }
+
                 binding.progressBarVideos.visibility = View.GONE
             }
         })
