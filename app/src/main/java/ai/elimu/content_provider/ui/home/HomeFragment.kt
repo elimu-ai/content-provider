@@ -19,15 +19,15 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(javaClass.name, "onCreateView")
 
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         binding = FragmentHomeBinding.inflate(layoutInflater)
         homeViewModel.getText().observe(viewLifecycleOwner, object : Observer<String?> {
-            override fun onChanged(s: String?) {
+            override fun onChanged(value: String?) {
                 Log.i(javaClass.name, "onChanged")
-                binding.textHome.text = s
+                binding.textHome.text = value
             }
         })
         return binding.root
