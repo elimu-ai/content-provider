@@ -41,7 +41,7 @@
         </menu>
     </item>
 
-    <item android:title="Multimedia">
+    <item android:title="@string/drawer_header_multimedia">
         <menu>
             <group android:checkableBehavior="single">
                 <item
