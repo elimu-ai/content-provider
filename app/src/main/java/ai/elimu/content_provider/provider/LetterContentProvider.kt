@@ -135,7 +135,7 @@ class LetterContentProvider : ContentProvider() {
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_LETTERS, CODE_LETTERS)
-            MATCHER.addURI(AUTHORITY, TABLE_LETTERS + "/#", CODE_LETTER_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_LETTERS/#", CODE_LETTER_ID)
             MATCHER.addURI(
                 AUTHORITY,
                 "$TABLE_LETTERS/by-letter-sound-id/#",
