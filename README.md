@@ -178,19 +178,9 @@ migration succeeded:
 
 To perform a release, follow these steps:
 
-1. Remove `-SNAPSHOT`
-   - from the `versionName` in `app/build.gradle`
-   - from the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `chore: prepare release 1.2.3`)
-1. Create a new tag (e.g. `1.2.3`)
-1. Bump the `versionCode` and `versionName`
-   - in `app/build.gradle`
-   - in `utils/build.gradle`
-1. Add `-SNAPSHOT`
-   - to the `versionName` in `app/build.gradle`
-   - to the `versionName` in `utils/build.gradle`
-1. Commit the changes (e.g. `chore: prepare for next development iteration`)
-1. Ensure that the release appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
+1. Merge your PR into the `main` branch
+1. Wait for the ["Gradle Release"](https://github.com/elimu-ai/content-provider/actions/workflows/gradle-release.yml) workflow to complete
+1. Ensure that the new release version appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
