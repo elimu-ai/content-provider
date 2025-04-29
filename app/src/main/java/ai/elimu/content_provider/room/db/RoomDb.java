@@ -10,9 +10,6 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import ai.elimu.content_provider.room.dao.LetterSoundDao;
 import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
 import ai.elimu.content_provider.room.dao.LetterSound_SoundDao;
@@ -83,8 +80,6 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract VideoDao videoDao();
 
     private static volatile RoomDb INSTANCE;
-
-    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
 
     public static RoomDb getDatabase(final Context context) {
         if (INSTANCE == null) {
