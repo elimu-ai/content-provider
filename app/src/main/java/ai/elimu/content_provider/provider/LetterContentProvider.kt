@@ -38,47 +38,52 @@ class LetterContentProvider : ContentProvider() {
 
         val code: Int = MATCHER.match(uri)
         Log.i(TAG, "code: $code")
-        if (code == CODE_LETTERS) {
+        when (code) {
+            CODE_LETTERS -> {
 
-            // Get the Room Cursor
-            val cursor: Cursor = letterDao.loadAllOrderedByUsageCount_Cursor()
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = letterDao.loadAllOrderedByUsageCount_Cursor()
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_LETTERS_BY_LETTER_SOUND_ID) {
-            // Extract the letter-sound correspondence ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val letterSoundIdAsString = pathSegments[2]
-            val letterSoundId = letterSoundIdAsString.toLong()
-            Log.i(TAG, "letterSoundId: $letterSoundId")
+                return cursor
+            }
+            CODE_LETTERS_BY_LETTER_SOUND_ID -> {
+                // Extract the letter-sound correspondence ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val letterSoundIdAsString = pathSegments[2]
+                val letterSoundId = letterSoundIdAsString.toLong()
+                Log.i(TAG, "letterSoundId: $letterSoundId")
 
-            // Get the Room Cursor
-            val cursor: Cursor = letterDao.loadAllByLetterSound(letterSoundId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = letterDao.loadAllByLetterSound(letterSoundId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else if (code == CODE_LETTER_ID) {
-            // Extract the Letter ID from the URI
-            val pathSegments = uri.pathSegments
-            Log.i(TAG, "pathSegments: $pathSegments")
-            val letterIdAsString = pathSegments[1]
-            val letterId = letterIdAsString.toLong()
-            Log.i(TAG, "letterId: $letterId")
+                return cursor
+            }
+            CODE_LETTER_ID -> {
+                // Extract the Letter ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(TAG, "pathSegments: $pathSegments")
+                val letterIdAsString = pathSegments[1]
+                val letterId = letterIdAsString.toLong()
+                Log.i(TAG, "letterId: $letterId")
 
-            // Get the Room Cursor
-            val cursor: Cursor = letterDao.load_Cursor(letterId)
-            Log.i(TAG, "cursor: $cursor")
+                // Get the Room Cursor
+                val cursor: Cursor = letterDao.load_Cursor(letterId)
+                Log.i(TAG, "cursor: $cursor")
 
-            cursor.setNotificationUri(context.contentResolver, uri)
+                cursor.setNotificationUri(context.contentResolver, uri)
 
-            return cursor
-        } else {
-            throw IllegalArgumentException("Unknown URI: $uri")
+                return cursor
+            }
+            else -> {
+                throw IllegalArgumentException("Unknown URI: $uri")
+            }
         }
     }
 
