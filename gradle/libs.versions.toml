@@ -15,7 +15,7 @@ lifecycleExtensions = "2.2.0"
 room = "2.7.1"
 androidXJunit = "1.2.1"
 androidXEspresso = "3.6.1"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 lifecycleViewmodelKtx = "2.8.7"
 kotlin = "2.1.20"
 
