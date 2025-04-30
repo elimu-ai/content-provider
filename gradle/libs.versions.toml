@@ -1,8 +1,7 @@
 [versions]
-elimuModel = "model-2.0.102"
-elimuAnalytics = "3.1.37"
+elimuAppstore = "2.5.0"
 commonsIo = "2.19.0"
-agp = "8.5.2"
+agp = "8.6.0"
 material = "1.12.0"
 retrofit = "2.11.0"
 junit = "4.13.2"
@@ -15,13 +14,11 @@ lifecycleExtensions = "2.2.0"
 room = "2.7.1"
 androidXJunit = "1.2.1"
 androidXEspresso = "3.6.1"
-coreKtx = "1.15.0"
 lifecycleViewmodelKtx = "2.8.7"
 kotlin = "2.1.20"
 
 [libraries]
-elimu-model = { group = "ai.elimu", name = "model", version.ref = "elimuModel" }
-elimu-analytics = { group = "ai.elimu", name = "analytics", version.ref = "elimuAnalytics" }
+elimu-appstore = { group = "ai.elimu", name = "appstore", version.ref = "elimuAppstore" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -40,7 +37,6 @@ androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
 [plugins]

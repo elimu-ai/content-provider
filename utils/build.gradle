@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 1002057
-        versionName "1.2.57-SNAPSHOT"
+        versionCode 1003000
+        versionName "1.3.0-SNAPSHOT"
     }
 
     buildTypes {
@@ -33,18 +33,27 @@ android {
 }
 
 dependencies {
-    implementation(libs.elimu.model) // https://jitpack.io/#ai.elimu/model
-    implementation(libs.elimu.analytics) // https://jitpack.io/#ai.elimu/analytics
+    implementation(libs.elimu.appstore) // https://jitpack.io/#ai.elimu/appstore
 
-    implementation libs.androidx.core.ktx
-
-    testImplementation libs.junit
+    testImplementation(libs.junit)
 }
 
 publishing {
     publications {
         aar(MavenPublication) {
+            groupId = "ai.elimu"
+            artifactId = "content-provider"
+            version = android.defaultConfig.versionName
             artifact("${buildDir}/outputs/aar/utils-release.aar")
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
         }
     }
 }

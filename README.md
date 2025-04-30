@@ -169,7 +169,6 @@ To perform a release, follow these steps:
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
-> * https://github.com/elimu-ai/common-utils/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/kukariri/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/herufi/blob/main/gradle/libs.versions.toml
 > * https://github.com/elimu-ai/vitabu/blob/main/gradle/libs.versions.toml
@@ -181,7 +180,7 @@ To perform a release, follow these steps:
   <img src="https://github.com/elimu-ai/webapp/blob/main/src/main/webapp/static/img/logo-text-256x78.png" />
 </p>
 <p align="center">
-  elimu.ai - Free open-source learning software for out-of-school children ✨🚀
+  elimu.ai - Free open-source learning software for out-of-school children 🚀✨
 </p>
 <p align="center">
   <a href="https://elimu.ai">Website 🌐</a>

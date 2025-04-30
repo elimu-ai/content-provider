@@ -2,7 +2,6 @@ package ai.elimu.content_provider
 
 import ai.elimu.content_provider.language.SelectLanguageActivity
 import ai.elimu.content_provider.util.SharedPreferencesHelper
-import ai.elimu.content_provider.utils.LanguageUtils
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -30,8 +29,7 @@ class MainActivity : AppCompatActivity() {
         val language = SharedPreferencesHelper.getLanguage(
             applicationContext
         )
-        Log.i("getLanguage", "language: $language. \nFrom utils: " +
-                "${LanguageUtils.getLanguage(this@MainActivity, BuildConfig.APPLICATION_ID)}")
+        Log.i(javaClass.name, "language: ${language}")
         if (language == null) {
             // Redirect to language selection
 
