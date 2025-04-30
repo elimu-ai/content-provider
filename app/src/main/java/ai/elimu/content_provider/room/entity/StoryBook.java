@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import ai.elimu.model.v2.enums.ReadingLevel;
 
 /**
- * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
+ * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
  */
 @Entity
 public class StoryBook extends Content {
