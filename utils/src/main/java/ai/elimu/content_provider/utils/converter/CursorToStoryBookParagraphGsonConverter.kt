@@ -4,7 +4,6 @@ import ai.elimu.model.v2.gson.content.StoryBookParagraphGson
 import ai.elimu.model.v2.gson.content.WordGson
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import java.util.Locale
