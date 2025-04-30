@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 /**
- * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
+ * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
  */
 @Entity(primaryKeys = {"Emoji_id", "words_id"})
 public class Emoji_Word {
