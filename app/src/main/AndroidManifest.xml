@@ -81,17 +81,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/video_file_path"/>
         </provider>
-
-        <provider
-            android:name=".provider.SharedDataProvider"
-            android:authorities="${applicationId}.provider.shared_data"
-            android:enabled="true"
-            android:exported="true"
-            android:grantUriPermissions="true">
-
-            <grant-uri-permission android:pathPattern=".*"/>
-
-        </provider>
-
     </application>
 </manifest>
