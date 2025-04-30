@@ -15,8 +15,8 @@ android {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 1002056
-        versionName "1.2.56-SNAPSHOT"
+        versionCode 1003000
+        versionName "1.3.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -49,9 +49,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':utils')
 
-    implementation(libs.elimu.model) // https://jitpack.io/#ai.elimu/model
+    implementation(libs.elimu.appstore) // https://jitpack.io/#ai.elimu/appstore
 
     implementation(libs.commons.io)
     implementation(libs.material)
@@ -70,7 +69,6 @@ dependencies {
 
     // Room components
     implementation(libs.androidx.room.runtime)
-    implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.viewmodel.ktx
     annotationProcessor(libs.androidx.room.compiler)
     androidTestImplementation(libs.androidx.room.testing)
