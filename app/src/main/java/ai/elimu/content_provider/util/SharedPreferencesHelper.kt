@@ -3,6 +3,7 @@ package ai.elimu.content_provider.util
 import ai.elimu.model.v2.enums.Language
 import android.content.Context
 import android.text.TextUtils
+import androidx.core.content.edit
 
 object SharedPreferencesHelper {
     private const val SHARED_PREFS: String = "shared_prefs"
@@ -12,13 +13,13 @@ object SharedPreferencesHelper {
 
     fun clearAllPreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-        sharedPreferences.edit().clear().apply()
+        sharedPreferences.edit { clear() }
     }
 
 
     fun storeAppVersionCode(context: Context, appVersionCode: Int) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, appVersionCode).apply()
+        sharedPreferences.edit { putInt(PREF_APP_VERSION_CODE, appVersionCode) }
     }
 
     fun getAppVersionCode(context: Context): Int {
@@ -30,7 +31,7 @@ object SharedPreferencesHelper {
     fun storeLanguage(context: Context?, language: Language) {
         context ?: return
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString(PREF_LANGUAGE, language.toString()).apply()
+        sharedPreferences.edit { putString(PREF_LANGUAGE, language.toString()) }
     }
 
     fun getLanguage(context: Context?): Language? {
