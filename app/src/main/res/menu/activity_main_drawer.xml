@@ -10,7 +10,7 @@
             android:title="@string/menu_home" />
     </group>
 
-    <item android:title="Text">
+    <item android:title="@string/drawer_header_text">
         <menu>
             <group android:checkableBehavior="single">
                 <item
