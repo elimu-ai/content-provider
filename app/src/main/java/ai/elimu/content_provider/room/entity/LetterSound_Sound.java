@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 /**
- * For documentation, see https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model
+ * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
  */
 @Entity(primaryKeys = {"LetterSound_id", "sounds_ORDER"})
 public class LetterSound_Sound {
