@@ -88,7 +88,7 @@ By default, both `debug` and `release` are pointing to a webapp
 [prod server](https://github.com/elimu-ai/webapp/blob/main/INSTALL.md). And if you want 
 to  run the webapp yourself on `localhost` while testing the Content Provider app, you can change 
 the return value of the `getBaseUrl` method in 
-[BaseApplication.java](app/src/main/java/ai/elimu/content_provider/BaseApplication.java):
+[BaseApplication.kt](app/src/main/java/ai/elimu/content_provider/BaseApplication.kt):
 ```java
 //        return url;
         return "http://192.168.xxx.xxx:8080/webapp";
