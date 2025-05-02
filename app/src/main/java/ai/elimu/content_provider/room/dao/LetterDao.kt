@@ -16,13 +16,13 @@ interface LetterDao {
     fun load(id: Long?): Letter?
 
     @Query("SELECT * FROM Letter WHERE id = :id")
-    fun load_Cursor(id: Long?): Cursor
+    fun loadCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
     fun loadAllOrderedByUsageCount(): MutableList<Letter>
 
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
-    fun loadAllOrderedByUsageCount_Cursor(): Cursor
+    fun loadAllOrderedByUsageCountCursor(): Cursor
 
     @Query("SELECT * FROM Letter l WHERE l.id IN (SELECT letters_id FROM LetterSound_Letter WHERE LetterSound_id = :letterSoundId)")
     fun loadAllByLetterSound(letterSoundId: Long?): Cursor
