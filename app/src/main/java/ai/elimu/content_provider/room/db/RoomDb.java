@@ -11,7 +11,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import ai.elimu.content_provider.room.dao.LetterSoundDao;
-import ai.elimu.content_provider.room.dao.LetterSound_LetterDao;
+import ai.elimu.content_provider.room.dao.LetterSoundLetterDao;
 import ai.elimu.content_provider.room.dao.LetterSound_SoundDao;
 import ai.elimu.content_provider.room.dao.SoundDao;
 import ai.elimu.content_provider.room.dao.EmojiDao;
@@ -53,7 +53,7 @@ public abstract class RoomDb extends RoomDatabase {
 
     public abstract LetterSoundDao letterSoundDao();
 
-    public abstract LetterSound_LetterDao letterSound_LetterDao();
+    public abstract LetterSoundLetterDao letterSound_LetterDao();
 
     public abstract LetterSound_SoundDao letterSound_SoundDao();
 
