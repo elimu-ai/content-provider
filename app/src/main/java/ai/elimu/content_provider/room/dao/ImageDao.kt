@@ -1,40 +1,35 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.Image;
+import ai.elimu.content_provider.room.entity.Image
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface ImageDao {
-
+interface ImageDao {
     @Insert
-    void insert(Image image);
+    fun insert(image: Image)
 
     @Query("SELECT * FROM Image WHERE id = :id")
-    Image load(Long id);
+    fun load(id: Long?): Image?
 
     @Query("SELECT * FROM Image WHERE id = :id")
-    Cursor loadAsCursor(Long id);
+    fun loadAsCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Image")
-    List<Image> loadAll();
+    fun loadAll(): MutableList<Image>
 
     @Query("SELECT * FROM Image")
-    Cursor loadAllAsCursor();
+    fun loadAllAsCursor(): Cursor
 
     @Query("SELECT * FROM Image i WHERE i.id IN (SELECT Image_id FROM Image_Word WHERE words_id = :wordId)")
-    Cursor loadAllByWordLabelAsCursor(Long wordId);
+    fun loadAllByWordLabelAsCursor(wordId: Long?): Cursor
 
     @Update
-    void update(Image image);
+    fun update(image: Image)
 
     @Query("DELETE FROM Image")
-    void deleteAll();
+    fun deleteAll()
 }
