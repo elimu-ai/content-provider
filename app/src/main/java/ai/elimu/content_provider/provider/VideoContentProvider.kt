@@ -149,7 +149,7 @@ class VideoContentProvider : ContentProvider() {
 
         val roomDb = RoomDb.getDatabase(context)
         val videoDao = roomDb.videoDao()
-        val video = videoDao.load(fileId.toLong())
+        val video = videoDao.load(fileId.toLong()) ?: throw FileNotFoundException("File not found!")
 
         val videoFile = FileHelper.getVideoFile(video, context)
             ?: throw FileNotFoundException("File not found!")
