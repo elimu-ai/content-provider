@@ -1,37 +1,32 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.StoryBook;
+import ai.elimu.content_provider.room.entity.StoryBook
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface StoryBookDao {
-
+interface StoryBookDao {
     @Insert
-    void insert(StoryBook storyBook);
+    fun insert(storyBook: StoryBook)
 
     @Query("SELECT * FROM StoryBook WHERE id = :id")
-    StoryBook load(Long id);
+    fun load(id: Long?): StoryBook?
 
     @Query("SELECT * FROM StoryBook WHERE id = :id")
-    Cursor loadAsCursor(Long id);
+    fun loadAsCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM StoryBook ORDER BY readingLevel,title")
-    List<StoryBook> loadAll();
+    fun loadAll(): MutableList<StoryBook>
 
     @Query("SELECT * FROM StoryBook ORDER BY readingLevel,title")
-    Cursor loadAllAsCursor();
+    fun loadAllAsCursor(): Cursor
 
     @Update
-    void update(StoryBook storyBook);
+    fun update(storyBook: StoryBook)
 
     @Query("DELETE FROM StoryBook")
-    void deleteAll();
+    fun deleteAll()
 }
