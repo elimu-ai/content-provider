@@ -41,7 +41,7 @@ object MultimediaDownloader {
                 val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 var response = ""
                 var line: String
-                while ((bufferedReader.readLine().also { line = it }) != null) {
+                while ((bufferedReader.readLine().also { line = it ?: "" }) != null) {
                     response += line
                 }
                 Log.e(
