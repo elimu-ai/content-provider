@@ -1,43 +1,35 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.Video;
+import ai.elimu.content_provider.room.entity.Video
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface VideoDao {
-
+interface VideoDao {
     @Insert
-    void insert(Video video);
+    fun insert(video: Video)
 
     @Query("SELECT * FROM Video WHERE id = :id")
-    Video load(Long id);
+    fun load(id: Long?): Video?
 
     @Query("SELECT * FROM Video WHERE id = :id")
-    Cursor loadAsCursor(Long id);
+    fun loadAsCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Video")
-    List<Video> loadAll();
+    fun loadAll(): MutableList<Video>
 
     @Query("SELECT * FROM Video")
-    Cursor loadAllAsCursor();
-
-//    @Query("SELECT * FROM Video i WHERE i.id IN (SELECT Video_id FROM Video_Word WHERE words_id = :wordId)")
-//    Cursor loadAllByWordLabelAsCursor(Long wordId);
+    fun loadAllAsCursor(): Cursor
 
     @Query("SELECT * FROM Video WHERE title = :title")
-    Cursor loadByTitleAsCursor(String title);
+    fun loadByTitleAsCursor(title: String?): Cursor
 
     @Update
-    void update(Video video);
+    fun update(video: Video)
 
     @Query("DELETE FROM Video")
-    void deleteAll();
+    fun deleteAll()
 }
