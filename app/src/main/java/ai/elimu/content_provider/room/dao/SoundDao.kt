@@ -1,40 +1,35 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.Sound;
+import ai.elimu.content_provider.room.entity.Sound
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface SoundDao {
-
+interface SoundDao {
     @Insert
-    void insert(Sound sound);
+    fun insert(sound: Sound)
 
     @Query("SELECT * FROM Sound WHERE id = :id")
-    Sound load(Long id);
+    fun load(id: Long?): Sound?
 
     @Query("SELECT * FROM Sound WHERE id = :id")
-    Cursor load_Cursor(Long id);
+    fun load_Cursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
-    List<Sound> loadAllOrderedByUsageCount();
+    fun loadAllOrderedByUsageCount(): MutableList<Sound>
 
     @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
-    Cursor loadAllOrderedByUsageCount_Cursor();
+    fun loadAllOrderedByUsageCount_Cursor(): Cursor
 
     @Query("SELECT * FROM Sound s WHERE s.id IN (SELECT sounds_id FROM LetterSound_Sound WHERE LetterSound_id = :letterSoundId)")
-    Cursor loadAllByLetterSound(Long letterSoundId);
+    fun loadAllByLetterSound(letterSoundId: Long?): Cursor
 
     @Update
-    void update(Sound sound);
+    fun update(sound: Sound)
 
     @Query("DELETE FROM Sound")
-    void deleteAll();
+    fun deleteAll()
 }
