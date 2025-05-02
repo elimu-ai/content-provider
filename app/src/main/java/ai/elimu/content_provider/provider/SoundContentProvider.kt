@@ -44,7 +44,7 @@ class SoundContentProvider : ContentProvider() {
         when (code) {
             CODE_SOUNDS -> {
                 // Get the Room Cursor
-                val cursor = soundDao.loadAllOrderedByUsageCount_Cursor()
+                val cursor = soundDao.loadAllOrderedByUsageCountCursor()
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
@@ -76,7 +76,7 @@ class SoundContentProvider : ContentProvider() {
                 Log.i(TAG, "soundId: $soundId")
 
                 // Get the Room Cursor
-                val cursor = soundDao.load_Cursor(soundId)
+                val cursor = soundDao.loadCursor(soundId)
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)

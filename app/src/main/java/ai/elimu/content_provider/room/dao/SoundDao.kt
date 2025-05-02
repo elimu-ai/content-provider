@@ -16,13 +16,13 @@ interface SoundDao {
     fun load(id: Long?): Sound?
 
     @Query("SELECT * FROM Sound WHERE id = :id")
-    fun load_Cursor(id: Long?): Cursor
+    fun loadCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
     fun loadAllOrderedByUsageCount(): MutableList<Sound>
 
     @Query("SELECT * FROM Sound ORDER BY usageCount DESC")
-    fun loadAllOrderedByUsageCount_Cursor(): Cursor
+    fun loadAllOrderedByUsageCountCursor(): Cursor
 
     @Query("SELECT * FROM Sound s WHERE s.id IN (SELECT sounds_id FROM LetterSound_Sound WHERE LetterSound_id = :letterSoundId)")
     fun loadAllByLetterSound(letterSoundId: Long?): Cursor
