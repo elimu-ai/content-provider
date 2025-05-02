@@ -42,7 +42,7 @@ class LetterContentProvider : ContentProvider() {
             CODE_LETTERS -> {
 
                 // Get the Room Cursor
-                val cursor: Cursor = letterDao.loadAllOrderedByUsageCount_Cursor()
+                val cursor: Cursor = letterDao.loadAllOrderedByUsageCountCursor()
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
@@ -74,7 +74,7 @@ class LetterContentProvider : ContentProvider() {
                 Log.i(TAG, "letterId: $letterId")
 
                 // Get the Room Cursor
-                val cursor: Cursor = letterDao.load_Cursor(letterId)
+                val cursor: Cursor = letterDao.loadCursor(letterId)
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
