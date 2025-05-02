@@ -7,12 +7,12 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface Image_WordDao {
+interface ImageWordDao {
     @Insert
-    fun insert(image_Word: Image_Word)
+    fun insert(imageWord: Image_Word)
 
     @Update
-    fun update(image_Word: Image_Word)
+    fun update(imageWord: Image_Word)
 
     @Query("DELETE FROM Image_Word WHERE Image_id = :imageId")
     fun delete(imageId: Long)
