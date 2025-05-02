@@ -1,40 +1,35 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.Letter;
+import ai.elimu.content_provider.room.entity.Letter
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface LetterDao {
-
+interface LetterDao {
     @Insert
-    void insert(Letter letter);
+    fun insert(letter: Letter)
 
     @Query("SELECT * FROM Letter WHERE id = :id")
-    Letter load(Long id);
+    fun load(id: Long?): Letter?
 
     @Query("SELECT * FROM Letter WHERE id = :id")
-    Cursor load_Cursor(Long id);
+    fun load_Cursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
-    List<Letter> loadAllOrderedByUsageCount();
+    fun loadAllOrderedByUsageCount(): MutableList<Letter>
 
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
-    Cursor loadAllOrderedByUsageCount_Cursor();
+    fun loadAllOrderedByUsageCount_Cursor(): Cursor
 
     @Query("SELECT * FROM Letter l WHERE l.id IN (SELECT letters_id FROM LetterSound_Letter WHERE LetterSound_id = :letterSoundId)")
-    Cursor loadAllByLetterSound(Long letterSoundId);
+    fun loadAllByLetterSound(letterSoundId: Long?): Cursor
 
     @Update
-    void update(Letter letter);
+    fun update(letter: Letter)
 
     @Query("DELETE FROM Letter")
-    void deleteAll();
+    fun deleteAll()
 }
