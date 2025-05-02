@@ -1,24 +1,22 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import ai.elimu.content_provider.room.entity.Image_Word;
+import ai.elimu.content_provider.room.entity.Image_Word
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface Image_WordDao {
-
+interface Image_WordDao {
     @Insert
-    void insert(Image_Word image_Word);
+    fun insert(image_Word: Image_Word)
 
     @Update
-    void update(Image_Word image_Word);
+    fun update(image_Word: Image_Word)
 
     @Query("DELETE FROM Image_Word WHERE Image_id = :imageId")
-    void delete(Long imageId);
+    fun delete(imageId: Long)
 
     @Query("DELETE FROM Image_Word")
-    void deleteAll();
+    fun deleteAll()
 }
