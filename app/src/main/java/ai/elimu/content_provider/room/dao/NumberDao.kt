@@ -16,13 +16,13 @@ interface NumberDao {
     fun load(id: Long?): Number?
 
     @Query("SELECT * FROM Number WHERE id = :id")
-    fun load_Cursor(id: Long?): Cursor
+    fun loadCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Number ORDER BY value")
     fun loadAllOrderedByValue(): MutableList<Number>
 
     @Query("SELECT * FROM Number ORDER BY value")
-    fun loadAllOrderedByValue_Cursor(): Cursor
+    fun loadAllOrderedByValueCursor(): Cursor
 
     @Update
     fun update(number: Number)
