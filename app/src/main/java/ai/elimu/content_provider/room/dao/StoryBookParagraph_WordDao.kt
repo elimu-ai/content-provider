@@ -1,24 +1,22 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
+import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface StoryBookParagraph_WordDao {
-
+interface StoryBookParagraph_WordDao {
     @Insert
-    void insert(StoryBookParagraph_Word storyBookParagraph_Word);
+    fun insert(storyBookParagraph_Word: StoryBookParagraph_Word)
 
     @Update
-    void update(StoryBookParagraph_Word storyBookParagraph_Word);
+    fun update(storyBookParagraph_Word: StoryBookParagraph_Word)
 
     @Query("DELETE FROM StoryBookParagraph_Word WHERE StoryBookParagraph_id = :storyBookParagraphId")
-    void delete(Long storyBookParagraphId);
+    fun delete(storyBookParagraphId: Long?)
 
     @Query("DELETE FROM StoryBookParagraph_Word")
-    void deleteAll();
+    fun deleteAll()
 }
