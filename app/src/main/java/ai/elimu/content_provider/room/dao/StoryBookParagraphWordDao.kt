@@ -7,12 +7,12 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface StoryBookParagraph_WordDao {
+interface StoryBookParagraphWordDao {
     @Insert
-    fun insert(storyBookParagraph_Word: StoryBookParagraph_Word)
+    fun insert(storyBookParagraphWord: StoryBookParagraph_Word)
 
     @Update
-    fun update(storyBookParagraph_Word: StoryBookParagraph_Word)
+    fun update(storyBookParagraphWord: StoryBookParagraph_Word)
 
     @Query("DELETE FROM StoryBookParagraph_Word WHERE StoryBookParagraph_id = :storyBookParagraphId")
     fun delete(storyBookParagraphId: Long?)

@@ -23,7 +23,7 @@ import ai.elimu.content_provider.room.dao.NumberDao;
 import ai.elimu.content_provider.room.dao.StoryBookChapterDao;
 import ai.elimu.content_provider.room.dao.StoryBookDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
-import ai.elimu.content_provider.room.dao.StoryBookParagraph_WordDao;
+import ai.elimu.content_provider.room.dao.StoryBookParagraphWordDao;
 import ai.elimu.content_provider.room.dao.VideoDao;
 import ai.elimu.content_provider.room.dao.WordDao;
 import ai.elimu.content_provider.room.entity.LetterSound;
@@ -75,7 +75,7 @@ public abstract class RoomDb extends RoomDatabase {
 
     public abstract StoryBookParagraphDao storyBookParagraphDao();
 
-    public abstract StoryBookParagraph_WordDao storyBookParagraph_WordDao();
+    public abstract StoryBookParagraphWordDao storyBookParagraph_WordDao();
 
     public abstract VideoDao videoDao();
 
