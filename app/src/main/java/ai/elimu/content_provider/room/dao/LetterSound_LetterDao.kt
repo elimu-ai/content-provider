@@ -1,17 +1,15 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-
-import ai.elimu.content_provider.room.entity.LetterSound_Letter;
+import ai.elimu.content_provider.room.entity.LetterSound_Letter
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 
 @Dao
-public interface LetterSound_LetterDao {
-
+interface LetterSound_LetterDao {
     @Insert
-    void insert(LetterSound_Letter letterSound_Letter);
+    fun insert(letterSound_Letter: LetterSound_Letter)
 
     @Query("DELETE FROM LetterSound_Letter")
-    void deleteAll();
+    fun deleteAll()
 }
