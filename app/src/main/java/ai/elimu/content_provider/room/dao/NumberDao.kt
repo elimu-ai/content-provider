@@ -1,37 +1,32 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.Number;
+import ai.elimu.content_provider.room.entity.Number
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-public interface NumberDao {
-
+interface NumberDao {
     @Insert
-    void insert(Number number);
+    fun insert(number: Number)
 
     @Query("SELECT * FROM Number WHERE id = :id")
-    Number load(Long id);
+    fun load(id: Long?): Number?
 
     @Query("SELECT * FROM Number WHERE id = :id")
-    Cursor load_Cursor(Long id);
+    fun load_Cursor(id: Long?): Cursor
 
     @Query("SELECT * FROM Number ORDER BY value")
-    List<Number> loadAllOrderedByValue();
+    fun loadAllOrderedByValue(): MutableList<Number>
 
     @Query("SELECT * FROM Number ORDER BY value")
-    Cursor loadAllOrderedByValue_Cursor();
+    fun loadAllOrderedByValue_Cursor(): Cursor
 
     @Update
-    void update(Number number);
+    fun update(number: Number)
 
     @Query("DELETE FROM Number")
-    void deleteAll();
+    fun deleteAll()
 }
