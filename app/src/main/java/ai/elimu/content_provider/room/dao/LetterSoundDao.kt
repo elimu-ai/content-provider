@@ -12,13 +12,13 @@ interface LetterSoundDao {
     fun insert(letterSound: LetterSound)
 
     @Query("SELECT * FROM LetterSound WHERE id = :id")
-    fun load_Cursor(id: Long?): Cursor
+    fun loadCursor(id: Long?): Cursor
 
     @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
     fun loadAll(): MutableList<LetterSound>
 
     @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
-    fun loadAll_Cursor(): Cursor
+    fun loadAllCursor(): Cursor
 
     @Query("DELETE FROM LetterSound")
     fun deleteAll()

@@ -44,7 +44,7 @@ class LetterSoundContentProvider : ContentProvider() {
         when (code) {
             CODE_LETTER_SOUNDS -> {
                 // Get the Room Cursor
-                val cursor = letterSoundDao.loadAll_Cursor()
+                val cursor = letterSoundDao.loadAllCursor()
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
@@ -60,7 +60,7 @@ class LetterSoundContentProvider : ContentProvider() {
                 Log.i(TAG, "id: $id")
 
                 // Get the Room Cursor
-                val cursor = letterSoundDao.load_Cursor(id)
+                val cursor = letterSoundDao.loadCursor(id)
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
