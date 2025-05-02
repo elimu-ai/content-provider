@@ -1,30 +1,25 @@
-package ai.elimu.content_provider.room.dao;
+package ai.elimu.content_provider.room.dao
 
-import android.database.Cursor;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
-
-import java.util.List;
-
-import ai.elimu.content_provider.room.entity.LetterSound;
+import ai.elimu.content_provider.room.entity.LetterSound
+import android.database.Cursor
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 
 @Dao
-public interface LetterSoundDao {
-
+interface LetterSoundDao {
     @Insert
-    void insert(LetterSound letterSound);
+    fun insert(letterSound: LetterSound)
 
     @Query("SELECT * FROM LetterSound WHERE id = :id")
-    Cursor load_Cursor(Long id);
+    fun load_Cursor(id: Long?): Cursor
 
     @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
-    List<LetterSound> loadAll();
+    fun loadAll(): MutableList<LetterSound>
 
     @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
-    Cursor loadAll_Cursor();
+    fun loadAll_Cursor(): Cursor
 
     @Query("DELETE FROM LetterSound")
-    void deleteAll();
+    fun deleteAll()
 }
