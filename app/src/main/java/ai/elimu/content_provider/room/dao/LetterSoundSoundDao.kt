@@ -6,9 +6,9 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface LetterSound_SoundDao {
+interface LetterSoundSoundDao {
     @Insert
-    fun insert(letterSound_Sound: LetterSound_Sound)
+    fun insert(letterSoundSound: LetterSound_Sound)
 
     @Query("DELETE FROM LetterSound_Sound")
     fun deleteAll()
