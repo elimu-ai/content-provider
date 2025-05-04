@@ -1,30 +1,12 @@
-package ai.elimu.content_provider.room.entity;
-
-import androidx.annotation.NonNull;
+package ai.elimu.content_provider.room.entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
-public class Content extends BaseEntity {
+open class Content : BaseEntity() {
+    @JvmField
+    var revisionNumber: Int = 0
 
-    @NonNull
-    private Integer revisionNumber;
-
-    private Integer usageCount;
-
-    public Integer getRevisionNumber() {
-        return revisionNumber;
-    }
-
-    public void setRevisionNumber(Integer revisionNumber) {
-        this.revisionNumber = revisionNumber;
-    }
-
-    public Integer getUsageCount() {
-        return usageCount;
-    }
-
-    public void setUsageCount(Integer usageCount) {
-        this.usageCount = usageCount;
-    }
+    @JvmField
+    var usageCount: Int? = null
 }
