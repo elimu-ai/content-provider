@@ -158,13 +158,13 @@ class LetterSoundsFragment : Fragment() {
                 for ((index, soundGson) in soundGsons.withIndex()) {
                     Log.i(TAG, "soundGson.getId(): " + soundGson.id)
                     val letterSoundSound = LetterSound_Sound()
-                    letterSoundSound.letterSound_id = letterSoundGson.id
+                    letterSoundSound.LetterSound_id = letterSoundGson.id
                     letterSoundSound.sounds_id = soundGson.id
                     letterSoundSound.sounds_ORDER = index
                     letterSoundSoundDao.insert(letterSoundSound)
                     Log.i(
                         TAG,
-                        "Stored LetterSound_Sound in database. LetterSound_id: " + letterSoundSound.letterSound_id + ", sounds_id: " + letterSoundSound.sounds_id
+                        "Stored LetterSound_Sound in database. LetterSound_id: " + letterSoundSound.LetterSound_id + ", sounds_id: " + letterSoundSound.sounds_id
                     )
                 }
             }
