@@ -36,7 +36,7 @@ object GsonToRoomConverter {
 
         // Letter
         letter.text = letterGson.text
-        letter.isDiacritic = letterGson.diacritic
+        letter.diacritic = letterGson.diacritic
 
         return letter
     }

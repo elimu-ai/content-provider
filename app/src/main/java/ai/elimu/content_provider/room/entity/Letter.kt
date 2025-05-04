@@ -1,30 +1,15 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.room.Entity;
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
 @Entity
-public class Letter extends Content {
+class Letter : Content() {
 
-    private String text;
+    @JvmField
+    var text: String? = null
 
-    private Boolean diacritic;
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Boolean isDiacritic() {
-        return diacritic;
-    }
-
-    public void setDiacritic(Boolean isDiacritic) {
-        this.diacritic = isDiacritic;
-    }
+    var diacritic: Boolean? = null
 }
