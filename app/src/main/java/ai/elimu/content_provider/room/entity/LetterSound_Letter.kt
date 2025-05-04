@@ -1,44 +1,17 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
-@Entity(primaryKeys = {"LetterSound_id", "letters_ORDER"})
-public class LetterSound_Letter {
+@Entity(primaryKeys = ["LetterSound_id", "letters_ORDER"])
+class LetterSound_Letter {
+    var LetterSound_id: Long = 0L
 
-    @NonNull
-    private Long LetterSound_id;
+    @JvmField
+    var letters_id: Long = 0L
 
-    @NonNull
-    private Long letters_id;
-
-    @NonNull
-    private Integer letters_ORDER;
-
-    public Long getLetterSound_id() {
-        return LetterSound_id;
-    }
-
-    public void setLetterSound_id(Long letterSound_id) {
-        LetterSound_id = letterSound_id;
-    }
-
-    public Long getLetters_id() {
-        return letters_id;
-    }
-
-    public void setLetters_id(Long letters_id) {
-        this.letters_id = letters_id;
-    }
-
-    public Integer getLetters_ORDER() {
-        return letters_ORDER;
-    }
-
-    public void setLetters_ORDER(Integer letters_ORDER) {
-        this.letters_ORDER = letters_ORDER;
-    }
+    @JvmField
+    var letters_ORDER: Int = 0
 }
