@@ -171,14 +171,14 @@ class StoryBooksFragment : Fragment() {
                             if (wordGson != null) {
                                 Log.i(TAG, "wordGson.getId(): " + wordGson.id)
                                 val storyBookParagraphWord = StoryBookParagraph_Word()
-                                storyBookParagraphWord.storyBookParagraph_id =
+                                storyBookParagraphWord.StoryBookParagraph_id =
                                     storyBookParagraphGson.id
                                 storyBookParagraphWord.words_id = wordGson.id
                                 storyBookParagraphWord.words_ORDER = i
                                 storyBookParagraphWordDao.insert(storyBookParagraphWord)
                                 Log.i(
                                     TAG,
-                                    "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraphWord.storyBookParagraph_id + ", words_id: " + storyBookParagraphWord.words_id + ", words_ORDER: " + storyBookParagraphWord.words_ORDER
+                                    "Stored StoryBookParagraph_Word in database. StoryBookParagraph_id: " + storyBookParagraphWord.StoryBookParagraph_id + ", words_id: " + storyBookParagraphWord.words_id + ", words_ORDER: " + storyBookParagraphWord.words_ORDER
                                 )
                             }
                         }
