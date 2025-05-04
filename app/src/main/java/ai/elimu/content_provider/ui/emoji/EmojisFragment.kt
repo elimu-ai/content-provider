@@ -127,12 +127,12 @@ class EmojisFragment : Fragment() {
                 for (wordGson in wordGsons) {
                     Log.i(TAG, "wordGson.getId(): " + wordGson.id)
                     val emojiWord = Emoji_Word()
-                    emojiWord.emoji_id = emojiGson.id
+                    emojiWord.Emoji_id = emojiGson.id
                     emojiWord.words_id = wordGson.id
                     emojiWordDao.insert(emojiWord)
                     Log.i(
                         TAG,
-                        "Stored Emoji_Word in database. Emoji_id: " + emojiWord.emoji_id + ", words_id: " + emojiWord.words_id
+                        "Stored Emoji_Word in database. Emoji_id: " + emojiWord.Emoji_id + ", words_id: " + emojiWord.words_id
                     )
                 }
             }
