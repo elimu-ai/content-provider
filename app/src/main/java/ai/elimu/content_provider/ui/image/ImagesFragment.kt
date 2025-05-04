@@ -168,12 +168,12 @@ class ImagesFragment : Fragment() {
                 for (wordGson in wordGsons) {
                     Log.i(TAG, "wordGson.getId(): " + wordGson.id)
                     val imageWord = Image_Word()
-                    imageWord.image_id = imageGson.id
+                    imageWord.Image_id = imageGson.id
                     imageWord.words_id = wordGson.id
                     imageWordDao.insert(imageWord)
                     Log.i(
                         TAG,
-                        "Stored Image_Word in database. Image_id: " + imageWord.image_id + ", words_id: " + imageWord.words_id
+                        "Stored Image_Word in database. Image_id: " + imageWord.Image_id + ", words_id: " + imageWord.words_id
                     )
                 }
             }
