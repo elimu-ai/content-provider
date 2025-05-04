@@ -1,55 +1,22 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-
-import ai.elimu.model.v2.enums.ReadingLevel;
+import ai.elimu.model.v2.enums.ReadingLevel
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
 @Entity
-public class StoryBook extends Content {
+class StoryBook : Content() {
+    @JvmField
+    var title: String = ""
 
-    @NonNull
-    private String title;
+    @JvmField
+    var description: String? = null
 
-    private String description;
+    @JvmField
+    var coverImageId: Long = 0
 
-    @NonNull
-    private long coverImageId;
-
-    private ReadingLevel readingLevel;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getCoverImageId() {
-        return coverImageId;
-    }
-
-    public void setCoverImageId(long coverImageId) {
-        this.coverImageId = coverImageId;
-    }
-
-    public ReadingLevel getReadingLevel() {
-        return readingLevel;
-    }
-
-    public void setReadingLevel(ReadingLevel readingLevel) {
-        this.readingLevel = readingLevel;
-    }
+    @JvmField
+    var readingLevel: ReadingLevel? = null
 }
