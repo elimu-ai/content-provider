@@ -1,34 +1,16 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-
-import ai.elimu.model.v2.enums.content.WordType;
+import ai.elimu.model.v2.enums.content.WordType
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
 @Entity
-public class Word extends Content {
+class Word : Content() {
+    @JvmField
+    var text: String = ""
 
-    @NonNull
-    private String text;
-
-    private WordType wordType;
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public WordType getWordType() {
-        return wordType;
-    }
-
-    public void setWordType(WordType wordType) {
-        this.wordType = wordType;
-    }
+    @JvmField
+    var wordType: WordType? = null
 }
