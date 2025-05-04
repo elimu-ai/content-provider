@@ -1,30 +1,15 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.room.Entity;
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
 @Entity
-public class Sound extends Content {
+class Sound : Content() {
+    @JvmField
+    var valueIpa: String? = null
 
-    private String valueIpa;
-
-    private Boolean diacritic;
-
-    public String getValueIpa() {
-        return valueIpa;
-    }
-
-    public void setValueIpa(String valueIpa) {
-        this.valueIpa = valueIpa;
-    }
-
-    public Boolean getDiacritic() {
-        return diacritic;
-    }
-
-    public void setDiacritic(Boolean diacritic) {
-        this.diacritic = diacritic;
-    }
+    @JvmField
+    var diacritic: Boolean? = null
 }
