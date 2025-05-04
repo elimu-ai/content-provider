@@ -1,33 +1,15 @@
-package ai.elimu.content_provider.room.entity;
+package ai.elimu.content_provider.room.entity
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
+import androidx.room.Entity
 
 /**
- * For documentation, see <a href="https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model">model</a>
+ * For documentation, see [model](https://github.com/elimu-ai/webapp/tree/main/src/main/java/ai/elimu/model)
  */
 @Entity
-public class Number extends Content {
+class Number : Content() {
+    @JvmField
+    var value: Int = 0
 
-    @NonNull
-    private Integer value;
-
-    private String symbol;
-
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(@NonNull Integer value) {
-        this.value = value;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+    @JvmField
+    var symbol: String? = null
 }
