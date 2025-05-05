@@ -165,7 +165,7 @@ To perform a release, follow these steps:
 
 1. Merge your PR into the `main` branch
 1. Wait for the ["Gradle Release"](https://github.com/elimu-ai/content-provider/actions/workflows/gradle-release.yml) workflow to complete
-1. Ensure that the new release version appears at https://jitpack.io/#ai.elimu/content-provider with "Status: ok"
+1. Ensure that the new release version appears at https://github.com/elimu-ai/content-provider/releases
 
 > [!IMPORTANT]
 > After you publish a new release, remember to also bump the version in all Android app repos that depend on the `utils` library:
