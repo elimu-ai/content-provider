@@ -1,83 +1,88 @@
-package ai.elimu.content_provider.room.db;
+package ai.elimu.content_provider.room.db
 
-import android.text.TextUtils;
-
-import androidx.room.TypeConverter;
-
-import ai.elimu.model.v2.enums.ReadingLevel;
-import ai.elimu.model.v2.enums.content.ImageFormat;
-import ai.elimu.model.v2.enums.content.VideoFormat;
-import ai.elimu.model.v2.enums.content.WordType;
+import ai.elimu.model.v2.enums.ReadingLevel
+import ai.elimu.model.v2.enums.content.ImageFormat
+import ai.elimu.model.v2.enums.content.VideoFormat
+import ai.elimu.model.v2.enums.content.WordType
+import android.text.TextUtils
+import androidx.room.TypeConverter
 
 /**
- * See <a href="https://developer.android.com/training/data-storage/room/referencing-data">Referencing complex data using Room</a>
+ * See [Referencing complex data using Room](https://developer.android.com/training/data-storage/room/referencing-data)
  */
-public class Converters {
-
+object Converters {
+    @JvmStatic
     @TypeConverter
-    public static ImageFormat fromImageFormat(String value) {
-        ImageFormat imageFormat = null;
+    fun fromImageFormat(value: String?): ImageFormat? {
+        var imageFormat: ImageFormat? = null
         if (!TextUtils.isEmpty(value)) {
-            imageFormat = ImageFormat.valueOf(value);
+            imageFormat = ImageFormat.valueOf(value!!)
         }
-        return imageFormat;
+        return imageFormat
     }
 
+    @JvmStatic
     @TypeConverter
-    public static String toString(ImageFormat imageFormat) {
-        return imageFormat.toString();
+    fun toString(imageFormat: ImageFormat): String {
+        return imageFormat.toString()
     }
 
 
+    @JvmStatic
     @TypeConverter
-    public static VideoFormat fromVideoFormat(String value) {
-        VideoFormat videoFormat = null;
+    fun fromVideoFormat(value: String?): VideoFormat? {
+        var videoFormat: VideoFormat? = null
         if (!TextUtils.isEmpty(value)) {
-            videoFormat = VideoFormat.valueOf(value);
+            videoFormat = VideoFormat.valueOf(value!!)
         }
-        return videoFormat;
+        return videoFormat
     }
 
+    @JvmStatic
     @TypeConverter
-    public static String toString(VideoFormat videoFormat) {
-        return videoFormat.toString();
+    fun toString(videoFormat: VideoFormat): String {
+        return videoFormat.toString()
     }
 
 
+    @JvmStatic
     @TypeConverter
-    public static WordType fromWordType(String value) {
-        WordType wordType = null;
+    fun fromWordType(value: String?): WordType? {
+        var wordType: WordType? = null
         if (!TextUtils.isEmpty(value)) {
-            wordType = WordType.valueOf(value);
+            wordType = WordType.valueOf(value!!)
         }
-        return wordType;
+        return wordType
     }
 
+    @JvmStatic
     @TypeConverter
-    public static String toString(WordType wordType) {
-        String value = null;
+    fun toString(wordType: WordType?): String? {
+        var value: String? = null
         if (wordType != null) {
-            value = wordType.toString();
+            value = wordType.toString()
         }
-        return value;
+        return value
     }
 
 
+    @JvmStatic
     @TypeConverter
-    public static ReadingLevel fromReadingLevel(String value) {
-        ReadingLevel readingLevel = null;
+    fun fromReadingLevel(value: String?): ReadingLevel? {
+        var readingLevel: ReadingLevel? = null
         if (!TextUtils.isEmpty(value)) {
-            readingLevel = ReadingLevel.valueOf(value);
+            readingLevel = ReadingLevel.valueOf(value!!)
         }
-        return readingLevel;
+        return readingLevel
     }
 
+    @JvmStatic
     @TypeConverter
-    public static String toString(ReadingLevel readingLevel) {
-        String value = null;
+    fun toString(readingLevel: ReadingLevel?): String? {
+        var value: String? = null
         if (readingLevel != null) {
-            value = readingLevel.toString();
+            value = readingLevel.toString()
         }
-        return value;
+        return value
     }
 }
