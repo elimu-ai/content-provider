@@ -22,7 +22,7 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 > [!NOTE]
 > Here is how to use the `utils` library in another Android app:
 
-1. Add repository:
+1. Add repository to `./build.gradle`:
 
    ```diff
    allprojects {
@@ -33,7 +33,7 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
    }
    ```
   
-2. Add dependency:
+2. Add dependency to `./app/build.gradle`:
 
    ```diff
    dependencies {
