@@ -24,20 +24,20 @@ The Content Provider comes with a [`utils`](utils) library (`.aar`) which makes 
 
 1. Add repository:
 
-   ```
+   ```diff
    allprojects {
        repositories {
            ...
-           maven { url 'https://jitpack.io' }
+   +        maven { url 'https://jitpack.io' }
        }
    }
    ```
   
 2. Add dependency:
 
-   ```
+   ```diff
    dependencies {
-       implementation 'ai.elimu:content-provider:<version>@aar'
+   +    implementation 'ai.elimu:content-provider:<version>'
    }
    ```
 
