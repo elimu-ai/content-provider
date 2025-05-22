@@ -1,5 +1,3 @@
-[![](https://jitpack.io/v/ai.elimu/content-provider.svg)](https://jitpack.io/#ai.elimu/content-provider)
-
 # elimu.ai Content Provider
 
 Android application which downloads educational content (e.g. letters, words, audios, storybooks, videos, etc) to the 
