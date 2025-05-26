@@ -1,5 +1,5 @@
 [versions]
-elimuAppstore = "2.5.35"
+elimuAppstore = "2.5.37"
 commonsIo = "2.19.0"
 agp = "8.6.1"
 material = "1.12.0"
