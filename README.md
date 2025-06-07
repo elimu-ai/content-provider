@@ -48,7 +48,7 @@ See https://jitpack.io/#ai.elimu/content-provider/ for the latest version availa
 
 1. Publish the library to your local Maven repository:
     ```sh
-    ./gradlew clean utils:publishReleasePublicationToMavenLocal
+    ./gradlew clean build utils:publishAarPublicationToMavenLocal
     ```
 2. In the app that will be testing the `-SNAPSHOT` version of the library, add `mavenLocal()`:
     ```diff
