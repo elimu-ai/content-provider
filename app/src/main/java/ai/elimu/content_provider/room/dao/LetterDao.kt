@@ -24,7 +24,10 @@ interface LetterDao {
     @Query("SELECT * FROM Letter ORDER BY usageCount DESC")
     fun loadAllOrderedByUsageCountCursor(): Cursor
 
-    @Query("SELECT * FROM Letter l WHERE l.id IN (SELECT letters_id FROM LetterSound_Letter WHERE LetterSound_id = :letterSoundId)")
+    @Query("SELECT * FROM Letter l " +
+            "INNER JOIN LetterSound_Letter lsl ON l.id = lsl.letters_id " +
+            "WHERE lsl.LetterSound_id = :letterSoundId " +
+            "ORDER BY lsl.letters_ORDER")
     fun loadAllByLetterSound(letterSoundId: Long?): Cursor
 
     @Update
