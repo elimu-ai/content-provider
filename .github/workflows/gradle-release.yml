@@ -128,7 +128,7 @@ jobs:
             app/build/outputs/apk/release/ai.elimu.content_provider-${{ needs.create_git_tag.outputs.tagName }}.apk.md5
 
       - name: Upload the signed APK file to GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: '${{ needs.create_git_tag.outputs.tagName }}'
           files: |
