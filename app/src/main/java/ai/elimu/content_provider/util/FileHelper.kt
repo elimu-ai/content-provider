@@ -20,7 +20,7 @@ object FileHelper {
             return null
         }
         val imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val fileName = imageGson.fileUrl.substringAfterLast('/').substringBeforeLast('.')
+        val fileName = imageGson.checksumMd5
         return File(
             imagesDirectory, (fileName + "."
                     + imageGson.imageFormat.toString().lowercase(Locale.getDefault()))
