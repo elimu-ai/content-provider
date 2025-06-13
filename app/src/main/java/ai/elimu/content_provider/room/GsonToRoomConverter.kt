@@ -160,6 +160,7 @@ object GsonToRoomConverter {
         // Image
         image.title = imageGson.title
         image.imageFormat = imageGson.imageFormat
+        image.checksumMd5 = imageGson.checksumMd5
 
         // Note: words are stored separately in Image_Word (see ImagesFragment.java)
         return image

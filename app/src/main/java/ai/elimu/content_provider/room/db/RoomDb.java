@@ -43,7 +43,7 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
 
-@Database(version = 29, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 30, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -114,7 +114,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_25_26,
                                     MIGRATION_26_27,
                                     MIGRATION_27_28,
-                                    MIGRATION_28_29
+                                    MIGRATION_28_29,
+                                    MIGRATION_29_30
                             )
                             .build();
                 }
@@ -394,6 +395,17 @@ public abstract class RoomDb extends RoomDatabase {
 
             sql = "CREATE TABLE IF NOT EXISTS `LetterSound_Sound` (`LetterSound_id` INTEGER NOT NULL, `sounds_id` INTEGER NOT NULL, `sounds_ORDER` INTEGER NOT NULL, PRIMARY KEY(`LetterSound_id`, `sounds_ORDER`))";
             Log.i(getClass().getName(), "sql: " + sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_29_30 = new Migration(29, 30) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getName(), "migrate (29 --> 30)");
+
+            String sql = "ALTER TABLE Image ADD COLUMN `checksumMd5` TEXT NOT NULL DEFAULT ''";
+            Log.i("migrate sql: %s", sql);
             database.execSQL(sql);
         }
     };
