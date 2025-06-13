@@ -11,4 +11,5 @@ class Image : Content() {
     lateinit var title: String
 
     lateinit var imageFormat: ImageFormat
+    lateinit var checksumMd5: String
 }

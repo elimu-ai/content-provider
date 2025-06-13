@@ -36,8 +36,7 @@ object FileHelper {
         }
         val imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File(
-            imagesDirectory, (imageGson.id
-                .toString() + "_r" + imageGson.revisionNumber + "."
+            imagesDirectory, (imageGson.checksumMd5 + "."
                     + imageGson.imageFormat.toString().lowercase(Locale.getDefault()))
         )
     }
