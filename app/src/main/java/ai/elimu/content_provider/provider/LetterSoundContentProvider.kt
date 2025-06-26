@@ -51,14 +51,7 @@ class LetterSoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", LetterSound::id.name)
-                    putString("revision_number", LetterSound::revisionNumber.name)
-                    putString("usage_count", LetterSound::usageCount.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -76,14 +69,7 @@ class LetterSoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", LetterSound::id.name)
-                    putString("revision_number", LetterSound::revisionNumber.name)
-                    putString("usage_count", LetterSound::usageCount.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -91,6 +77,20 @@ class LetterSoundContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", LetterSound::id.name)
+            putString("revision_number", LetterSound::revisionNumber.name)
+            putString("usage_count", LetterSound::usageCount.name)
+        }
+        return bundle
     }
 
     override fun getType(uri: Uri): String? {

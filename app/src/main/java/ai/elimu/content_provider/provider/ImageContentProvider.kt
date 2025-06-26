@@ -60,17 +60,7 @@ class ImageContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Image::id.name)
-                    putString("revision_number", Image::revisionNumber.name)
-                    putString("usage_count", Image::usageCount.name)
-                    putString("title", Image::title.name)
-                    putString("image_format", Image::imageFormat.name)
-                    putString("checksum_md5", Image::checksumMd5.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -88,17 +78,7 @@ class ImageContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Image::id.name)
-                    putString("revision_number", Image::revisionNumber.name)
-                    putString("usage_count", Image::usageCount.name)
-                    putString("title", Image::title.name)
-                    putString("image_format", Image::imageFormat.name)
-                    putString("checksum_md5", Image::checksumMd5.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -116,17 +96,7 @@ class ImageContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Image::id.name)
-                    putString("revision_number", Image::revisionNumber.name)
-                    putString("usage_count", Image::usageCount.name)
-                    putString("title", Image::title.name)
-                    putString("image_format", Image::imageFormat.name)
-                    putString("checksum_md5", Image::checksumMd5.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -134,6 +104,23 @@ class ImageContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", Image::id.name)
+            putString("revision_number", Image::revisionNumber.name)
+            putString("usage_count", Image::usageCount.name)
+            putString("title", Image::title.name)
+            putString("image_format", Image::imageFormat.name)
+            putString("checksum_md5", Image::checksumMd5.name)
+        }
+        return bundle
     }
 
     /**

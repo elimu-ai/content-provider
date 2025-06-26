@@ -60,18 +60,7 @@ class StoryBookContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", StoryBook::id.name)
-                    putString("revision_number", StoryBook::revisionNumber.name)
-                    putString("usage_count", StoryBook::usageCount.name)
-                    putString("title", StoryBook::title.name)
-                    putString("description", StoryBook::description.name)
-                    putString("cover_image_id", StoryBook::coverImageId.name)
-                    putString("reading_level", StoryBook::readingLevel.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -92,18 +81,7 @@ class StoryBookContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", StoryBook::id.name)
-                    putString("revision_number", StoryBook::revisionNumber.name)
-                    putString("usage_count", StoryBook::usageCount.name)
-                    putString("title", StoryBook::title.name)
-                    putString("description", StoryBook::description.name)
-                    putString("cover_image_id", StoryBook::coverImageId.name)
-                    putString("reading_level", StoryBook::readingLevel.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -124,18 +102,7 @@ class StoryBookContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", StoryBook::id.name)
-                    putString("revision_number", StoryBook::revisionNumber.name)
-                    putString("usage_count", StoryBook::usageCount.name)
-                    putString("title", StoryBook::title.name)
-                    putString("description", StoryBook::description.name)
-                    putString("cover_image_id", StoryBook::coverImageId.name)
-                    putString("reading_level", StoryBook::readingLevel.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -155,18 +122,7 @@ class StoryBookContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", StoryBook::id.name)
-                    putString("revision_number", StoryBook::revisionNumber.name)
-                    putString("usage_count", StoryBook::usageCount.name)
-                    putString("title", StoryBook::title.name)
-                    putString("description", StoryBook::description.name)
-                    putString("cover_image_id", StoryBook::coverImageId.name)
-                    putString("reading_level", StoryBook::readingLevel.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -174,6 +130,24 @@ class StoryBookContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", StoryBook::id.name)
+            putString("revision_number", StoryBook::revisionNumber.name)
+            putString("usage_count", StoryBook::usageCount.name)
+            putString("title", StoryBook::title.name)
+            putString("description", StoryBook::description.name)
+            putString("cover_image_id", StoryBook::coverImageId.name)
+            putString("reading_level", StoryBook::readingLevel.name)
+        }
+        return bundle
     }
 
     /**

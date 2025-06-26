@@ -61,16 +61,7 @@ class VideoContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Video::id.name)
-                    putString("revision_number", Video::revisionNumber.name)
-                    putString("usage_count", Video::usageCount.name)
-                    putString("title", Video::title.name)
-                    putString("video_format", Video::videoFormat.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -88,16 +79,7 @@ class VideoContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Video::id.name)
-                    putString("revision_number", Video::revisionNumber.name)
-                    putString("usage_count", Video::usageCount.name)
-                    putString("title", Video::title.name)
-                    putString("video_format", Video::videoFormat.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -114,16 +96,7 @@ class VideoContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Video::id.name)
-                    putString("revision_number", Video::revisionNumber.name)
-                    putString("usage_count", Video::usageCount.name)
-                    putString("title", Video::title.name)
-                    putString("video_format", Video::videoFormat.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -131,6 +104,22 @@ class VideoContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", Video::id.name)
+            putString("revision_number", Video::revisionNumber.name)
+            putString("usage_count", Video::usageCount.name)
+            putString("title", Video::title.name)
+            putString("video_format", Video::videoFormat.name)
+        }
+        return bundle
     }
 
     /**

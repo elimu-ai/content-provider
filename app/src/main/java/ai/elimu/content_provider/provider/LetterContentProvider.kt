@@ -49,16 +49,7 @@ class LetterContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Letter::id.name)
-                    putString("revision_number", Letter::revisionNumber.name)
-                    putString("usage_count", Letter::usageCount.name)
-                    putString("text", Letter::text.name)
-                    putString("diacritic", Letter::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -76,16 +67,7 @@ class LetterContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Letter::id.name)
-                    putString("revision_number", Letter::revisionNumber.name)
-                    putString("usage_count", Letter::usageCount.name)
-                    putString("text", Letter::text.name)
-                    putString("diacritic", Letter::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -103,16 +85,7 @@ class LetterContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Letter::id.name)
-                    putString("revision_number", Letter::revisionNumber.name)
-                    putString("usage_count", Letter::usageCount.name)
-                    putString("text", Letter::text.name)
-                    putString("diacritic", Letter::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -120,6 +93,22 @@ class LetterContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", Letter::id.name)
+            putString("revision_number", Letter::revisionNumber.name)
+            putString("usage_count", Letter::usageCount.name)
+            putString("text", Letter::text.name)
+            putString("diacritic", Letter::diacritic.name)
+        }
+        return bundle
     }
 
     override fun getType(uri: Uri): String? {

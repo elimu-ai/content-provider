@@ -51,16 +51,7 @@ class SoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Sound::id.name)
-                    putString("revision_number", Sound::revisionNumber.name)
-                    putString("usage_count", Sound::usageCount.name)
-                    putString("value_ipa", Sound::valueIpa.name)
-                    putString("diacritic", Sound::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -78,16 +69,7 @@ class SoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Sound::id.name)
-                    putString("revision_number", Sound::revisionNumber.name)
-                    putString("usage_count", Sound::usageCount.name)
-                    putString("value_ipa", Sound::valueIpa.name)
-                    putString("diacritic", Sound::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -105,16 +87,7 @@ class SoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
-                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
-                val bundle = Bundle().apply {
-                    putInt("version_code", BuildConfig.VERSION_CODE)
-                    putString("id", Sound::id.name)
-                    putString("revision_number", Sound::revisionNumber.name)
-                    putString("usage_count", Sound::usageCount.name)
-                    putString("value_ipa", Sound::valueIpa.name)
-                    putString("diacritic", Sound::diacritic.name)
-                }
-                cursor.extras = bundle
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -122,6 +95,22 @@ class SoundContentProvider : ContentProvider() {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", Sound::id.name)
+            putString("revision_number", Sound::revisionNumber.name)
+            putString("usage_count", Sound::usageCount.name)
+            putString("value_ipa", Sound::valueIpa.name)
+            putString("diacritic", Sound::diacritic.name)
+        }
+        return bundle
     }
 
     override fun getType(uri: Uri): String? {
