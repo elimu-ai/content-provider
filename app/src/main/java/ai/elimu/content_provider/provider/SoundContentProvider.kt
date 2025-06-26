@@ -2,11 +2,13 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Sound
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 
 class SoundContentProvider : ContentProvider() {
@@ -49,6 +51,17 @@ class SoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Sound::id.name)
+                    putString("revision_number", Sound::revisionNumber.name)
+                    putString("usage_count", Sound::usageCount.name)
+                    putString("value_ipa", Sound::valueIpa.name)
+                    putString("diacritic", Sound::diacritic.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_SOUNDS_BY_LETTER_SOUND_ID -> {
@@ -65,6 +78,17 @@ class SoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Sound::id.name)
+                    putString("revision_number", Sound::revisionNumber.name)
+                    putString("usage_count", Sound::usageCount.name)
+                    putString("value_ipa", Sound::valueIpa.name)
+                    putString("diacritic", Sound::diacritic.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_SOUND_ID -> {
@@ -80,6 +104,17 @@ class SoundContentProvider : ContentProvider() {
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Sound::id.name)
+                    putString("revision_number", Sound::revisionNumber.name)
+                    putString("usage_count", Sound::usageCount.name)
+                    putString("value_ipa", Sound::valueIpa.name)
+                    putString("diacritic", Sound::diacritic.name)
+                }
+                cursor.extras = bundle
 
                 return cursor
             }

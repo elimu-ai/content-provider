@@ -2,11 +2,13 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Letter
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 
 class LetterContentProvider : ContentProvider() {
@@ -47,6 +49,17 @@ class LetterContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Letter::id.name)
+                    putString("revision_number", Letter::revisionNumber.name)
+                    putString("usage_count", Letter::usageCount.name)
+                    putString("text", Letter::text.name)
+                    putString("diacritic", Letter::diacritic.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_LETTERS_BY_LETTER_SOUND_ID -> {
@@ -63,6 +76,17 @@ class LetterContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Letter::id.name)
+                    putString("revision_number", Letter::revisionNumber.name)
+                    putString("usage_count", Letter::usageCount.name)
+                    putString("text", Letter::text.name)
+                    putString("diacritic", Letter::diacritic.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_LETTER_ID -> {
@@ -78,6 +102,17 @@ class LetterContentProvider : ContentProvider() {
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Letter::id.name)
+                    putString("revision_number", Letter::revisionNumber.name)
+                    putString("usage_count", Letter::usageCount.name)
+                    putString("text", Letter::text.name)
+                    putString("diacritic", Letter::diacritic.name)
+                }
+                cursor.extras = bundle
 
                 return cursor
             }

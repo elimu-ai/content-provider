@@ -2,12 +2,14 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Image
 import ai.elimu.content_provider.util.FileHelper.getImageFile
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import java.io.FileNotFoundException
@@ -58,6 +60,18 @@ class ImageContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Image::id.name)
+                    putString("revision_number", Image::revisionNumber.name)
+                    putString("usage_count", Image::usageCount.name)
+                    putString("title", Image::title.name)
+                    putString("image_format", Image::imageFormat.name)
+                    putString("checksum_md5", Image::checksumMd5.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_IMAGE_ID -> {
@@ -74,6 +88,18 @@ class ImageContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Image::id.name)
+                    putString("revision_number", Image::revisionNumber.name)
+                    putString("usage_count", Image::usageCount.name)
+                    putString("title", Image::title.name)
+                    putString("image_format", Image::imageFormat.name)
+                    putString("checksum_md5", Image::checksumMd5.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_IMAGES_BY_WORD_LABEL_ID -> {
@@ -89,6 +115,18 @@ class ImageContentProvider : ContentProvider() {
                 Log.i(javaClass.name, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Image::id.name)
+                    putString("revision_number", Image::revisionNumber.name)
+                    putString("usage_count", Image::usageCount.name)
+                    putString("title", Image::title.name)
+                    putString("image_format", Image::imageFormat.name)
+                    putString("checksum_md5", Image::checksumMd5.name)
+                }
+                cursor.extras = bundle
 
                 return cursor
             }

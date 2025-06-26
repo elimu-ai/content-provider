@@ -2,11 +2,13 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Word
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import androidx.core.net.toUri
 
@@ -59,6 +61,17 @@ class WordContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Word::id.name)
+                    putString("revision_number", Word::revisionNumber.name)
+                    putString("usage_count", Word::usageCount.name)
+                    putString("text", Word::text.name)
+                    putString("word_type", Word::wordType.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_WORDS_BY_STORYBOOK_PARAGRAPH_ID -> {
@@ -75,6 +88,17 @@ class WordContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Word::id.name)
+                    putString("revision_number", Word::revisionNumber.name)
+                    putString("usage_count", Word::usageCount.name)
+                    putString("text", Word::text.name)
+                    putString("word_type", Word::wordType.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_WORD_ID -> {
@@ -90,6 +114,17 @@ class WordContentProvider : ContentProvider() {
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Word::id.name)
+                    putString("revision_number", Word::revisionNumber.name)
+                    putString("usage_count", Word::usageCount.name)
+                    putString("text", Word::text.name)
+                    putString("word_type", Word::wordType.name)
+                }
+                cursor.extras = bundle
 
                 return cursor
             }

@@ -2,12 +2,14 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Video
 import ai.elimu.content_provider.util.FileHelper
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import java.io.FileNotFoundException
@@ -59,6 +61,17 @@ class VideoContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Video::id.name)
+                    putString("revision_number", Video::revisionNumber.name)
+                    putString("usage_count", Video::usageCount.name)
+                    putString("title", Video::title.name)
+                    putString("video_format", Video::videoFormat.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_VIDEO_ID -> {
@@ -75,6 +88,17 @@ class VideoContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Video::id.name)
+                    putString("revision_number", Video::revisionNumber.name)
+                    putString("usage_count", Video::usageCount.name)
+                    putString("title", Video::title.name)
+                    putString("video_format", Video::videoFormat.name)
+                }
+                cursor.extras = bundle
+
                 return cursor
             }
             CODE_VIDEO_TITLE -> {
@@ -89,6 +113,17 @@ class VideoContentProvider : ContentProvider() {
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                // Set DB column names needed by the Cursor-to-Gson converter in the :utils module
+                val bundle = Bundle().apply {
+                    putInt("version_code", BuildConfig.VERSION_CODE)
+                    putString("id", Video::id.name)
+                    putString("revision_number", Video::revisionNumber.name)
+                    putString("usage_count", Video::usageCount.name)
+                    putString("title", Video::title.name)
+                    putString("video_format", Video::videoFormat.name)
+                }
+                cursor.extras = bundle
 
                 return cursor
             }
