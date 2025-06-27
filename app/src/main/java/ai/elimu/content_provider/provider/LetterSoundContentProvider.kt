@@ -2,11 +2,13 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.LetterSound
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 
 class LetterSoundContentProvider : ContentProvider() {
@@ -49,6 +51,8 @@ class LetterSoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                cursor.extras = prepareBundle()
+
                 return cursor
             }
             CODE_LETTER_SOUND_ID -> {
@@ -65,12 +69,28 @@ class LetterSoundContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                cursor.extras = prepareBundle()
+
                 return cursor
             }
             else -> {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", LetterSound::id.name)
+            putString("revision_number", LetterSound::revisionNumber.name)
+            putString("usage_count", LetterSound::usageCount.name)
+        }
+        return bundle
     }
 
     override fun getType(uri: Uri): String? {

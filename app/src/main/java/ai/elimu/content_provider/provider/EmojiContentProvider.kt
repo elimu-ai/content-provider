@@ -2,11 +2,13 @@ package ai.elimu.content_provider.provider
 
 import ai.elimu.content_provider.BuildConfig
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Emoji
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 
 class EmojiContentProvider : ContentProvider() {
@@ -51,6 +53,8 @@ class EmojiContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                cursor.extras = prepareBundle()
+
                 return cursor
             }
             CODE_EMOJI_ID -> {
@@ -66,6 +70,8 @@ class EmojiContentProvider : ContentProvider() {
                 Log.i(TAG, "cursor: $cursor")
 
                 cursor.setNotificationUri(context.contentResolver, uri)
+
+                cursor.extras = prepareBundle()
 
                 return cursor
             }
@@ -83,12 +89,31 @@ class EmojiContentProvider : ContentProvider() {
 
                 cursor.setNotificationUri(context.contentResolver, uri)
 
+                cursor.extras = prepareBundle()
+
                 return cursor
             }
             else -> {
                 throw IllegalArgumentException("Unknown URI: $uri")
             }
         }
+    }
+
+    /**
+     * Prepare database column names needed by the Cursor-to-Gson converter in the `:utils` module.
+     */
+    private fun prepareBundle(): Bundle {
+        Log.i(this::class.simpleName, "prepareBundle")
+        val bundle = Bundle().apply {
+            putInt("version_code", BuildConfig.VERSION_CODE)
+            putString("id", Emoji::id.name)
+            putString("revision_number", Emoji::revisionNumber.name)
+            putString("usage_count", Emoji::usageCount.name)
+            putString("glyph", Emoji::glyph.name)
+            putString("unicode_version", Emoji::unicodeVersion.name)
+            putString("unicode_emoji_version", Emoji::unicodeEmojiVersion.name)
+        }
+        return bundle
     }
 
     /**
