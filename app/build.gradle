@@ -15,8 +15,8 @@ android {
         applicationId "ai.elimu.content_provider"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 1004027
-        versionName "1.4.27"
+        versionCode 1004028
+        versionName "1.4.28-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
