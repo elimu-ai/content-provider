@@ -1,6 +1,5 @@
 package ai.elimu.content_provider.utils.converter
 
-import ai.elimu.model.v2.enums.analytics.LearningEventType
 import ai.elimu.model.v2.gson.analytics.WordLearningEventGson
 import android.database.Cursor
 import android.util.Log
@@ -43,11 +42,6 @@ object CursorToWordLearningEventGsonConverter {
         val wordText = cursor.getString(columnWordText)
         Log.i(TAG, "wordText: \"$wordText\"")
 
-        val columnLearningEventType = cursor.getColumnIndex("learningEventType")
-        val learningEventTypeAsString = cursor.getString(columnLearningEventType)
-        val learningEventType = LearningEventType.valueOf(learningEventTypeAsString)
-        Log.i(TAG, "learningEventType: $learningEventType")
-
         val wordLearningEventGson = WordLearningEventGson()
         wordLearningEventGson.id = id
         wordLearningEventGson.androidId = androidId
@@ -55,7 +49,6 @@ object CursorToWordLearningEventGsonConverter {
         wordLearningEventGson.timestamp = time
         wordLearningEventGson.wordId = wordId
         wordLearningEventGson.wordText = wordText
-        wordLearningEventGson.learningEventType = learningEventType
 
         return wordLearningEventGson
     }
