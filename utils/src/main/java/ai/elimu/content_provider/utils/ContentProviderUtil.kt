@@ -150,9 +150,9 @@ object ContentProviderUtil {
                 "wordGson.getText(): \"" + wordGson.text + "\""
             )
             val wordAssessmentEventGsons = EventProviderUtil.getWordAssessmentEventGsonsByWord(
-                wordGson,
-                context,
-                analyticsApplicationId
+                wordGson = wordGson,
+                context = context,
+                analyticsApplicationId = analyticsApplicationId
             )
             Log.i(
                 TAG,
