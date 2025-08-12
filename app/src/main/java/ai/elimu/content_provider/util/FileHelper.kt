@@ -19,7 +19,7 @@ object FileHelper {
         if ((imageGson.id == null) || (imageGson.revisionNumber == null)) {
             return null
         }
-        val imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imagesDirectory = getImagesDirectory(context)
         val fileName = imageGson.checksumMd5
         return File(
             imagesDirectory, (fileName + "."
@@ -34,7 +34,7 @@ object FileHelper {
         if ((imageGson.id == null) || (imageGson.revisionNumber == null)) {
             return null
         }
-        val imagesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imagesDirectory = getImagesDirectory(context)
         return File(
             imagesDirectory, (imageGson.checksumMd5 + "."
                     + imageGson.imageFormat.toString().lowercase(Locale.getDefault()))
@@ -78,6 +78,15 @@ object FileHelper {
         val videosDirectory = languageIsoCode?.let { isoCode ->
             context.getExternalFilesDir(Environment.DIRECTORY_MOVIES + "/lang-" + isoCode.uppercase())
         } ?: context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        return videosDirectory
+    }
+
+    private fun getImagesDirectory(context: Context): File? {
+        val languageIsoCode: String? = SharedPreferencesHelper.getLanguage(context)?.isoCode
+
+        val videosDirectory = languageIsoCode?.let { isoCode ->
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/lang-" + isoCode.uppercase())
+        } ?: context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return videosDirectory
     }
 }
