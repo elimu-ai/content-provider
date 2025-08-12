@@ -47,7 +47,7 @@ object FileHelper {
         if ((videoGson.id == null) || (videoGson.revisionNumber == null)) {
             return null
         }
-        val videosDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        val videosDirectory = getVideosDirectory(context)
         val file = File(
             videosDirectory,
             videoGson.id.toString() + "_r" + videoGson.revisionNumber + "." + videoGson.videoFormat.toString()
@@ -64,11 +64,20 @@ object FileHelper {
         if ((videoGson.id == null) || (videoGson.revisionNumber == null)) {
             return null
         }
-        val videosDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        val videosDirectory = getVideosDirectory(context)
         return File(
             videosDirectory, (videoGson.id
                 .toString() + "_r" + videoGson.revisionNumber + "."
                     + videoGson.videoFormat.toString().lowercase(Locale.getDefault()))
         )
+    }
+
+    private fun getVideosDirectory(context: Context): File? {
+        val languageIsoCode: String? = SharedPreferencesHelper.getLanguage(context)?.isoCode
+
+        val videosDirectory = languageIsoCode?.let { isoCode ->
+            context.getExternalFilesDir(Environment.DIRECTORY_MOVIES + "/lang-" + isoCode.uppercase())
+        } ?: context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        return videosDirectory
     }
 }
