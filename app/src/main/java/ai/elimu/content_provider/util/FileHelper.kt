@@ -73,19 +73,19 @@ object FileHelper {
     }
 
     private fun getVideosDirectory(context: Context): File? {
-        val languageIsoCode: String? = SharedPreferencesHelper.getLanguage(context)?.isoCode
+        val language: String? = SharedPreferencesHelper.getLanguage(context)?.name
 
-        val videosDirectory = languageIsoCode?.let { isoCode ->
-            context.getExternalFilesDir(Environment.DIRECTORY_MOVIES + "/lang-" + isoCode.uppercase())
+        val videosDirectory = language?.let { language ->
+            context.getExternalFilesDir(Environment.DIRECTORY_MOVIES + "/lang-" + language)
         } ?: context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
         return videosDirectory
     }
 
     private fun getImagesDirectory(context: Context): File? {
-        val languageIsoCode: String? = SharedPreferencesHelper.getLanguage(context)?.isoCode
+        val language: String? = SharedPreferencesHelper.getLanguage(context)?.name
 
-        val videosDirectory = languageIsoCode?.let { isoCode ->
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/lang-" + isoCode.uppercase())
+        val videosDirectory = language?.let { language ->
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/lang-" + language)
         } ?: context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return videosDirectory
     }
