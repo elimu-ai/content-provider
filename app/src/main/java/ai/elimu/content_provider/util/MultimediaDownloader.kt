@@ -40,9 +40,8 @@ object MultimediaDownloader {
                 inputStream = httpURLConnection.errorStream
                 val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 var response = ""
-                var line: String
-                while ((bufferedReader.readLine().also { line = it ?: "" }) != null) {
-                    response += line
+                bufferedReader.useLines { lines ->
+                    response = lines.joinToString("")
                 }
                 Log.e(
                     TAG,
