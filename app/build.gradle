@@ -8,13 +8,13 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
     namespace 'ai.elimu.content_provider'
 
     defaultConfig {
         applicationId "ai.elimu.content_provider"
-        minSdkVersion 26
-        targetSdkVersion 35
+        minSdkVersion 29
+        targetSdkVersion 36
         versionCode 1004063
         versionName "1.4.63-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
