@@ -16,7 +16,7 @@ android {
         minSdkVersion 29
         targetSdkVersion 36
         versionCode 1004063
-        versionName "1.4.63-SNAPSHOT"
+        versionName "1.4.63"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
