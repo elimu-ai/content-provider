@@ -98,8 +98,8 @@ object CursorToStoryBookParagraphGsonConverter {
 
                 var wordGsonMatch: WordGson? = null
                 for (wordGson in wordGsons) {
-                    Log.i(TAG, "wordGson.getText(): \"" + wordGson.text + "\"")
-                    if (wordGson.text == wordInOriginalText) {
+                    Log.i(TAG, "wordGson: \"" + wordGson + "\"")
+                    if (wordGson.toString() == wordInOriginalText) {
                         wordGsonMatch = wordGson
                         break
                     }
