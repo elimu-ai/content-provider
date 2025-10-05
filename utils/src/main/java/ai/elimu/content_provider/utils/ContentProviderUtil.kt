@@ -147,7 +147,7 @@ object ContentProviderUtil {
         for (wordGson in allWordGsons) {
             Log.i(
                 TAG,
-                "wordGson.getText(): \"" + wordGson.text + "\""
+                "wordGson: \"" + wordGson + "\""
             )
             val wordAssessmentEventGsons = EventProviderUtil.getWordAssessmentEventGsonsByWord(
                 wordGson = wordGson,

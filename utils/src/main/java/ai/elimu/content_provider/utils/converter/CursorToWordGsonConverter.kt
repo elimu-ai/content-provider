@@ -44,7 +44,6 @@ object CursorToWordGsonConverter {
         word.id = id
         word.revisionNumber = revisionNumber
         word.usageCount = usageCount
-        word.text = text
         word.wordType = wordType
 
         return word
