@@ -94,7 +94,7 @@ object GsonToRoomConverter {
             word.usageCount = wordGson.usageCount
 
             // Word
-            word.text = wordGson.text
+            word.text = wordGson.toString()
             word.wordType = wordGson.wordType
 
             return word
