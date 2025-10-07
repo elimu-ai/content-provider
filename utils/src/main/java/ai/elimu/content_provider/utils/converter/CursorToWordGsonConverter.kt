@@ -51,7 +51,7 @@ object CursorToWordGsonConverter {
                 letterSoundsCursor.moveToNext()
 
                 // Convert from Room to Gson
-                val letterSoundGson = CursorToLetterSoundGsonConverter.getLetterSoundGson(cursor, context, contentProviderApplicationId)
+                val letterSoundGson = CursorToLetterSoundGsonConverter.getLetterSoundGson(letterSoundsCursor, context, contentProviderApplicationId)
                 letterSoundGsons.add(letterSoundGson)
 
                 isLast = letterSoundsCursor.isLast
