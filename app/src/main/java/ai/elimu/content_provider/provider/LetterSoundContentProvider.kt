@@ -55,6 +55,24 @@ class LetterSoundContentProvider : ContentProvider() {
 
                 return cursor
             }
+            CODE_LETTER_SOUNDS_BY_WORD_ID -> {
+                // Extract the Word ID from the URI
+                val pathSegments = uri.pathSegments
+                Log.i(this::class.simpleName, "pathSegments: ${pathSegments}")
+                val wordIdAsString = pathSegments[2]
+                val wordId = wordIdAsString.toLong()
+                Log.i(this::class.simpleName, "wordId: ${wordId}")
+
+                // Get the Room Cursor
+                val cursor = letterSoundDao.loadAllByWord(wordId)
+                Log.i(this::class.simpleName, "cursor: ${cursor}")
+
+                cursor.setNotificationUri(context.contentResolver, uri)
+
+                cursor.extras = prepareBundle()
+
+                return cursor
+            }
             CODE_LETTER_SOUND_ID -> {
                 // Extract the LetterSound ID from the URI
                 val pathSegments = uri.pathSegments
@@ -128,11 +146,13 @@ class LetterSoundContentProvider : ContentProvider() {
         private const val TABLE_LETTER_SOUNDS = "letter_sounds"
         private const val CODE_LETTER_SOUNDS = 1
         private const val CODE_LETTER_SOUND_ID = 2
+        private const val CODE_LETTER_SOUNDS_BY_WORD_ID = 3
         private val MATCHER = UriMatcher(UriMatcher.NO_MATCH)
 
         init {
             MATCHER.addURI(AUTHORITY, TABLE_LETTER_SOUNDS, CODE_LETTER_SOUNDS)
             MATCHER.addURI(AUTHORITY, "$TABLE_LETTER_SOUNDS/#", CODE_LETTER_SOUND_ID)
+            MATCHER.addURI(AUTHORITY, "$TABLE_LETTER_SOUNDS/by-word-id/#", CODE_LETTER_SOUNDS_BY_WORD_ID)
         }
     }
 }

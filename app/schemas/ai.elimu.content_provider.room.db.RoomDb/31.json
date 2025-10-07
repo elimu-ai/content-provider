@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 31,
-    "identityHash": "0ce90877430c0d369ba13cc370af5cf3",
+    "identityHash": "4689cb559e35a6793ed61cbab92fbf4d",
     "entities": [
       {
         "tableName": "Letter",
@@ -206,6 +206,37 @@
           "autoGenerate": false,
           "columnNames": [
             "id"
+          ]
+        }
+      },
+      {
+        "tableName": "Word_LetterSound",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Word_id` INTEGER NOT NULL, `letterSounds_id` INTEGER NOT NULL, `letterSounds_ORDER` INTEGER NOT NULL, PRIMARY KEY(`Word_id`, `letterSounds_ORDER`))",
+        "fields": [
+          {
+            "fieldPath": "Word_id",
+            "columnName": "Word_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "letterSounds_id",
+            "columnName": "letterSounds_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "letterSounds_ORDER",
+            "columnName": "letterSounds_ORDER",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "Word_id",
+            "letterSounds_ORDER"
           ]
         }
       },
@@ -584,7 +615,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ce90877430c0d369ba13cc370af5cf3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4689cb559e35a6793ed61cbab92fbf4d')"
     ]
   }
 }

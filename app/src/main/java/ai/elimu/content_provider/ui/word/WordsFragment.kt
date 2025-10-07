@@ -6,6 +6,8 @@ import ai.elimu.content_provider.databinding.FragmentWordsBinding
 import ai.elimu.content_provider.rest.WordsService
 import ai.elimu.content_provider.room.GsonToRoomConverter.getWord
 import ai.elimu.content_provider.room.db.RoomDb
+import ai.elimu.content_provider.room.entity.Word_LetterSound
+import ai.elimu.model.v2.gson.content.LetterSoundGson
 import ai.elimu.model.v2.gson.content.WordGson
 import android.os.Bundle
 import android.util.Log
@@ -113,8 +115,10 @@ class WordsFragment : Fragment() {
 
                 val roomDb = RoomDb.getDatabase(context)
                 val wordDao = roomDb.wordDao()
+                val word_LetterSoundDao = roomDb.word_letterSoundDao()
 
                 // Empty the database table before downloading up-to-date content
+                word_LetterSoundDao.deleteAll()
                 wordDao.deleteAll()
 
                 for (wordGson in wordGsons) {
@@ -124,6 +128,19 @@ class WordsFragment : Fragment() {
                     getWord(wordGson)?.let { word ->
                         wordDao.insert(word)
                         Log.i(javaClass.name, "Stored Word in database with ID " + word.id)
+                    }
+
+                    // Store all the Word's letter-sounds in the database
+                    val letterSoundGsons: List<LetterSoundGson> = wordGson.letterSounds
+                    Log.i(this::class.simpleName, "letterSoundGsons.size: ${letterSoundGsons.size}")
+                    for ((index, letterSoundGson) in letterSoundGsons.withIndex()) {
+                        Log.i(this::class.simpleName, "letterSoundGson.id: ${letterSoundGson.id}")
+                        val word_LetterSound = Word_LetterSound()
+                        word_LetterSound.Word_id = wordGson.id
+                        word_LetterSound.letterSounds_id = letterSoundGson.id
+                        word_LetterSound.letterSounds_ORDER = index
+                        word_LetterSoundDao.insert(word_LetterSound)
+                        Log.i(this::class.simpleName, "Stored Word_LetterSound in database. word_LetterSound.Word_id: ${word_LetterSound.Word_id}, word_LetterSound.letterSounds_id: ${word_LetterSound.letterSounds_id}")
                     }
                 }
 

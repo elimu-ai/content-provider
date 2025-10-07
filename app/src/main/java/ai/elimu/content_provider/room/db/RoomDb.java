@@ -26,6 +26,7 @@ import ai.elimu.content_provider.room.dao.StoryBookParagraphDao;
 import ai.elimu.content_provider.room.dao.StoryBookParagraphWordDao;
 import ai.elimu.content_provider.room.dao.VideoDao;
 import ai.elimu.content_provider.room.dao.WordDao;
+import ai.elimu.content_provider.room.dao.Word_LetterSoundDao;
 import ai.elimu.content_provider.room.entity.LetterSound;
 import ai.elimu.content_provider.room.entity.LetterSound_Letter;
 import ai.elimu.content_provider.room.entity.LetterSound_Sound;
@@ -42,8 +43,9 @@ import ai.elimu.content_provider.room.entity.StoryBookParagraph;
 import ai.elimu.content_provider.room.entity.StoryBookParagraph_Word;
 import ai.elimu.content_provider.room.entity.Video;
 import ai.elimu.content_provider.room.entity.Word;
+import ai.elimu.content_provider.room.entity.Word_LetterSound;
 
-@Database(version = 31, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
+@Database(version = 31, entities = {Letter.class, Sound.class, LetterSound.class, LetterSound_Letter.class, LetterSound_Sound.class, Word.class, Word_LetterSound.class, Number.class, Emoji.class, Emoji_Word.class, Image.class, Image_Word.class, StoryBook.class, StoryBookChapter.class, StoryBookParagraph.class, StoryBookParagraph_Word.class, Video.class})
 @TypeConverters({Converters.class})
 public abstract class RoomDb extends RoomDatabase {
 
@@ -52,29 +54,23 @@ public abstract class RoomDb extends RoomDatabase {
     public abstract SoundDao soundDao();
 
     public abstract LetterSoundDao letterSoundDao();
-
     public abstract LetterSoundLetterDao letterSound_LetterDao();
-
     public abstract LetterSoundSoundDao letterSound_SoundDao();
 
     public abstract WordDao wordDao();
+    public abstract Word_LetterSoundDao word_letterSoundDao();
 
     public abstract NumberDao numberDao();
 
     public abstract EmojiDao emojiDao();
-
     public abstract EmojiWordDao emojiWordDao();
 
     public abstract ImageDao imageDao();
-
     public abstract ImageWordDao image_WordDao();
 
     public abstract StoryBookDao storyBookDao();
-
     public abstract StoryBookChapterDao storyBookChapterDao();
-
     public abstract StoryBookParagraphDao storyBookParagraphDao();
-
     public abstract StoryBookParagraphWordDao storyBookParagraph_WordDao();
 
     public abstract VideoDao videoDao();
@@ -115,7 +111,8 @@ public abstract class RoomDb extends RoomDatabase {
                                     MIGRATION_26_27,
                                     MIGRATION_27_28,
                                     MIGRATION_28_29,
-                                    MIGRATION_29_30
+                                    MIGRATION_29_30,
+                                    MIGRATION_30_31
                             )
                             .build();
                 }
@@ -406,6 +403,17 @@ public abstract class RoomDb extends RoomDatabase {
 
             String sql = "ALTER TABLE Image ADD COLUMN `checksumMd5` TEXT NOT NULL DEFAULT ''";
             Log.i("migrate sql: %s", sql);
+            database.execSQL(sql);
+        }
+    };
+
+    private static final Migration MIGRATION_30_31 = new Migration(30, 31) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.i(getClass().getSimpleName(), "migrate (30 --> 31)");
+
+            String sql = "CREATE TABLE IF NOT EXISTS `Word_LetterSound` (`Word_id` INTEGER NOT NULL, `letterSounds_id` INTEGER NOT NULL, `letterSounds_ORDER` INTEGER NOT NULL, PRIMARY KEY(`Word_id`, `letterSounds_ORDER`))";
+            Log.i(getClass().getSimpleName(), "migrate sql: ${sql}");
             database.execSQL(sql);
         }
     };

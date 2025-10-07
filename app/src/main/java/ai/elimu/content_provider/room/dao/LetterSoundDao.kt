@@ -20,6 +20,12 @@ interface LetterSoundDao {
     @Query("SELECT * FROM LetterSound ORDER BY usageCount DESC")
     fun loadAllCursor(): Cursor
 
+    @Query("SELECT * FROM LetterSound ls " +
+            "INNER JOIN Word_LetterSound wls ON ls.id = wls.letterSounds_id " +
+            "WHERE wls.Word_id = :wordId " +
+            "ORDER BY wls.letterSounds_ORDER")
+    fun loadAllByWord(wordId: Long): Cursor
+
     @Query("DELETE FROM LetterSound")
     fun deleteAll()
 }
