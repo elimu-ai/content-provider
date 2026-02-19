@@ -57,7 +57,7 @@ object CursorToStoryBookParagraphGsonConverter {
                     wordsCursor.moveToNext()
 
                     // Convert from Room to Gson
-                    val wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor, context, contentProviderApplicationId)
+                    val wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor)
                     wordGsons.add(wordGson)
 
                     isLast = wordsCursor.isLast
