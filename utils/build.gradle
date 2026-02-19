@@ -15,7 +15,7 @@ android {
         minSdkVersion 29
         targetSdkVersion 36
         versionCode 1004067
-        versionName "1.4.67-SNAPSHOT"
+        versionName "1.4.67"
     }
 
     buildTypes {
