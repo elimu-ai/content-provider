@@ -202,7 +202,7 @@ object ContentProviderUtil {
                     wordsCursor.moveToNext()
 
                     // Convert from Room to Gson
-                    val wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor, context, contentProviderApplicationId)
+                    val wordGson = CursorToWordGsonConverter.getWordGson(wordsCursor)
 
                     wordGsons.add(wordGson)
 
@@ -249,7 +249,7 @@ object ContentProviderUtil {
                 wordCursor.moveToFirst()
 
                 // Convert from Room to Gson
-                wordGson = CursorToWordGsonConverter.getWordGson(wordCursor, context, contentProviderApplicationId)
+                wordGson = CursorToWordGsonConverter.getWordGson(wordCursor)
 
                 wordCursor.close()
                 Log.i(
