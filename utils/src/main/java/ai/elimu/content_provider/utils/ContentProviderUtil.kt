@@ -34,7 +34,7 @@ object ContentProviderUtil {
      * This method is only meant to be used for testing purposes during development. For production,
      * use [.getAvailableLetterGsons] instead.
      */
-    @Deprecated("")
+    @Deprecated("Use getAllLetterSoundGsons instead")
     fun getAllLetterGsons(
         context: Context,
         contentProviderApplicationId: String
