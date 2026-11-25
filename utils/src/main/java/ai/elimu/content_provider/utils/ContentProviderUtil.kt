@@ -540,7 +540,7 @@ object ContentProviderUtil {
         return storyBookChapterGsons
     }
 
-    suspend fun getAllVideoGSONs(
+    suspend fun getAllVideoGsons(
         context: Context,
         contentProviderApplicationId: String
     ): List<VideoGson> {
