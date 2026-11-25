@@ -354,6 +354,50 @@ object ContentProviderUtil {
         return imageGson
     }
 
+    fun getAllImageGsons(
+        context: Context,
+        contentProviderApplicationId: String
+    ): List<ImageGson> {
+        Log.i(TAG, "getAllImageGsons")
+
+        val imageGsons: MutableList<ImageGson> = ArrayList()
+
+        val imagesUri =
+            "content://$contentProviderApplicationId.provider.image_provider/images".toUri()
+        Log.i(TAG, "imagesUri: $imagesUri")
+
+        val imagesCursor = context.contentResolver.query(imagesUri, null, null, null, null)
+        Log.i(TAG, "imagesCursor: $imagesCursor")
+
+        if (imagesCursor == null) {
+            Log.e(TAG, "imagesCursor == null")
+            Toast.makeText(context, "imagesCursor == null", Toast.LENGTH_LONG).show()
+        } else {
+            Log.i(TAG, "imagesCursor.getCount(): ${imagesCursor.count}")
+
+            if (imagesCursor.count == 0) {
+                Log.e(TAG, "imagesCursor.getCount() == 0")
+            } else {
+                var isLast = false
+                while (!isLast) {
+                    imagesCursor.moveToNext()
+
+                    // Convert from Cursor to Gson
+                    val imageGson = CursorToImageGsonConverter.getImageGson(imagesCursor)
+                    imageGsons.add(imageGson)
+
+                    isLast = imagesCursor.isLast
+                }
+
+                imagesCursor.close()
+                Log.i(TAG, "imagesCursor.isClosed(): ${imagesCursor.isClosed}")
+            }
+        }
+        Log.i(TAG, "imageGsons.size(): ${imageGsons.size}")
+
+        return imageGsons
+    }
+
     fun getAllStoryBookGsons(
         context: Context,
         contentProviderApplicationId: String
