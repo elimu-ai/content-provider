@@ -398,6 +398,89 @@ object ContentProviderUtil {
         return imageGsons
     }
 
+    /**
+     * Returns the images labelled with the given word, e.g. images of a cat for the word "cat".
+     *
+     * Matches are looked up in the `Image_Word` table. Returns an empty list if no images are
+     * labelled with the word.
+     */
+    fun getImageGsons(
+        wordId: Long,
+        context: Context,
+        contentProviderApplicationId: String
+    ): List<ImageGson> {
+        Log.i(TAG, "getImageGsons")
+
+        val imageGsons: MutableList<ImageGson> = ArrayList()
+
+        val imagesUri =
+            "content://$contentProviderApplicationId.provider.image_provider/images/by-word-label-id/$wordId".toUri()
+        Log.i(TAG, "imagesUri: $imagesUri")
+
+        val imagesCursor = context.contentResolver.query(imagesUri, null, null, null, null)
+        Log.i(TAG, "imagesCursor: $imagesCursor")
+
+        if (imagesCursor == null) {
+            Log.e(TAG, "imagesCursor == null")
+            Toast.makeText(context, "imagesCursor == null", Toast.LENGTH_LONG).show()
+        } else {
+            Log.i(TAG, "imagesCursor.getCount(): ${imagesCursor.count}")
+
+            imagesCursor.use {
+                while (it.moveToNext()) {
+                    // Convert from Cursor to Gson
+                    val imageGson = CursorToImageGsonConverter.getImageGson(it)
+                    imageGsons.add(imageGson)
+                }
+            }
+            Log.i(TAG, "imagesCursor.isClosed(): ${imagesCursor.isClosed}")
+        }
+        Log.i(TAG, "imageGsons.size(): ${imageGsons.size}")
+
+        return imageGsons
+    }
+
+    /**
+     * Returns the words (labels) of the given image, e.g. the word "cat" for an image of a cat.
+     *
+     * Returns an empty list if the image has no words.
+     */
+    fun getImageWordGsons(
+        imageId: Long,
+        context: Context,
+        contentProviderApplicationId: String
+    ): List<WordGson> {
+        Log.i(TAG, "getImageWordGsons")
+
+        val wordGsons: MutableList<WordGson> = ArrayList()
+
+        val imageWordsUri =
+            "content://$contentProviderApplicationId.provider.image_word_provider/image_words/by-image-id/$imageId".toUri()
+        Log.i(TAG, "imageWordsUri: $imageWordsUri")
+
+        val imageWordsCursor = context.contentResolver.query(imageWordsUri, null, null, null, null)
+        Log.i(TAG, "imageWordsCursor: $imageWordsCursor")
+
+        if (imageWordsCursor == null) {
+            Log.e(TAG, "imageWordsCursor == null")
+            Toast.makeText(context, "imageWordsCursor == null", Toast.LENGTH_LONG).show()
+        } else {
+            Log.i(TAG, "imageWordsCursor.getCount(): ${imageWordsCursor.count}")
+
+            imageWordsCursor.use {
+                while (it.moveToNext()) {
+                    // Convert from Cursor to Gson
+                    val wordGson = CursorToWordGsonConverter.getWordGson(it)
+                    wordGsons.add(wordGson)
+                }
+            }
+            Log.i(TAG, "imageWordsCursor.isClosed(): ${imageWordsCursor.isClosed}")
+        }
+        Log.i(TAG, "wordGsons.size(): ${wordGsons.size}")
+
+        return wordGsons
+    }
+
     fun getAllStoryBookGsons(
         context: Context,
         contentProviderApplicationId: String
